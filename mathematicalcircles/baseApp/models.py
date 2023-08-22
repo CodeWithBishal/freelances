@@ -8,8 +8,8 @@ class ResourceCategory(models.Model):
 
 
     class Meta:
-        verbose_name = "Resources Category"
-        verbose_name_plural = "Resources Category"
+        verbose_name = "Resource Category"
+        verbose_name_plural = "Resource Category"
 
     def __str__(self):
         return self.name
