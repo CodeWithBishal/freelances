@@ -1,12 +1,12 @@
 from django.db import models
-from django.urls import reverse
 
 # Create your models here.
-class ResourcesCategory(models.Model):
+class ResourceCategory(models.Model):
     sno = models.AutoField(primary_key=True)
     name=models.CharField(max_length=130,null=False, blank=False)
     link=models.CharField(max_length=255,null=False, blank=False)
-    
+
+
     class Meta:
         verbose_name = "Resources Category"
         verbose_name_plural = "Resources Category"
