@@ -1,5 +1,6 @@
 {% extends 'include/base.html' %}
 {% load static %}
+{% load custom_filters %}
 {% block header %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.8/slick.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.8/slick-theme.min.css">
@@ -40,19 +41,19 @@
 <section id="exam" class="mt-4">
     <div class="container ml-lg-5">
         <div class="row" id="carousel">
-            {% for resourcecategory in resourceCategory %}
+            {% for exam in Exam %}
             <div class="col-md-4 px-3 sort-by-exam">
-                    <a href="/resources/{{resourcecategory.link}}" class="link text-black pointer">
+                    <a href="/resources/{{exam.link}}" class="link text-black pointer">
                     <div class="card position-relative justify-content-center border-0 mb-4 shadow-sm row h-15vh">
                         <div class="col-3">
-                            <img src="{{resourcecategory.imageLink}}" alt="{{resourcecategory.name}}" class="img-fluid">
+                            <img src="{{exam.image_Link}}" alt="{{exam.exam_Name}}" class="img-fluid">
                         </div>
                         <div class="col-9 h-100 overflow-hidden d-flex flex-column justify-content-center">
                             <div class="">
-                                <h5>{{resourcecategory}}</h5>
+                                <h5>{{exam}}</h5>
                             </div>
                             <div class="">
-                                <p class="text-black-50">654 Resources</p>
+                                <p class="text-black-50">{{ exam.exam_Name |count_matching_resources }} Resources</p>
                             </div>
                         </div>
                     </div>

@@ -4,6 +4,6 @@ from .models import *
 
 def index(request):
     latestNews = LatestNews.objects.order_by("-sno")
-    resourceCategory = ResourceCategory.objects.all()
-    context={'latestNews': latestNews, 'resourceCategory':resourceCategory}
+    exam = Exam.objects.all()
+    context={'latestNews': latestNews, 'Exam':exam}
     return render(request,"index.html", context=context)
