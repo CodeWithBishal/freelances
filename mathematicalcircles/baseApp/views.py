@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from .models import ResourceCategory, LatestNews
+from .models import *
 # Create your views here.
 
 def index(request):
     latestNews = LatestNews.objects.order_by("-sno")
-    # resourceCategory = LatestNews.objects.order_by("-sno")
-    context={'latestNews': latestNews}
+    resourceCategory = ResourceCategory.objects.all()
+    context={'latestNews': latestNews, 'resourceCategory':resourceCategory}
     return render(request,"index.html", context=context)

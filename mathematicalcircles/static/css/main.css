@@ -5,6 +5,7 @@
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 500;
 }
+
 body {
     width: 100%;
     display: flex;
@@ -13,22 +14,32 @@ body {
     overflow-x: hidden;
     background-color: #f7f9fb !important;
 }
+
 .header-notification {
     width: 100%;
     display: block;
     height: 10vh;
     background-color: #acc8f7;
 }
-marquee > p > a{
+
+marquee>p>a {
     text-decoration: none !important;
     color: #dc3545 !important;
 }
-.header-notification > .w-90{
+.link {
+    text-decoration: none !important;
+}
+.pointer{
+    cursor: pointer !important;
+}
+.header-notification>.w-90 {
     width: 90%;
 }
-.h-15vh{
-    height: 15vh;
+
+.h-15vh {
+    height: 10vh;
 }
+
 .carousel-control-prev,
 .carousel-control-next {
     background-color: #afafaf;
@@ -38,6 +49,7 @@ marquee > p > a{
     top: 50%;
     transform: translateY(-50%);
 }
+
 .slick-prev,
 .slick-next {
     background-color: #e1e1e1 !important;
@@ -48,31 +60,37 @@ marquee > p > a{
     transform: translateY(-50%) !important;
     z-index: 1;
 }
-.sort-by-exam{
+
+.sort-by-exam {
     cursor: grab;
 }
-.sort-by-exam:active{
+
+.sort-by-exam:active {
     cursor: grabbing;
 }
-.img{
-    background-size: contain;
-}
+
+/* .sort-by-exam > .card > .col-3 > img{
+    transform: scale(1.2);
+} */
 .card {
     z-index: -1 !important;
 }
 
-.h-90{
+.h-90 {
     height: 90%;
 }
 
+.slick-next {
+    display: none !important;
+}
+
+.slick-prev {
+    display: none !important;
+}
+
 @media only screen and (max-width: 768px) {
-    .slick-next{
-        right: -13px !important;
-    }
-    #exam{
+
+    #exam {
         width: 90% !important;
-    }
-    .slick-prev{
-        left: -13px !important;
     }
 }
