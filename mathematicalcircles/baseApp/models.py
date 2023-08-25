@@ -33,7 +33,7 @@ class LatestNews(models.Model):
     
 class ResourcesByExam(models.Model):
     sno = models.AutoField(primary_key=True)
-    exam_Name=models.ForeignKey(Exam, on_delete=models.CASCADE)
+    exam_Name = models.ForeignKey(Exam, on_delete=models.CASCADE)
     resource_Name=models.CharField(max_length=255,null=False, blank=False)
     resource_Thumbnail=models.CharField(max_length=255,null=False, blank=False)
     resource_Summary=models.TextField()

@@ -53,7 +53,7 @@
                                 <h5>{{exam}}</h5>
                             </div>
                             <div class="">
-                                <p class="text-black-50">{{ exam.exam_Name | count_matching_resources }} Resources</p>
+                                <p class="text-black-50">{{ exam | count_matching_resources }} Resources</p>
                             </div>
                         </div>
                     </div>
@@ -69,12 +69,12 @@
         <div>
             <h3 class="mt-4 w-100 ms-5">{{exam}}</h3>
         </div>
-        <a href="/resources/{{exam.link}}" class="me-md-5 text-bg-primary btn btn-primary w-6em h-3em me-4 ms-3" id="view-all">View All</a>
+        <a href="/resources/{{exam.link}}" class="me-md-5 text-bg-primary btn btn-primary w-6em me-4 ms-3" id="view-all">View All</a>
     </div>
     <div class="d-grid resources-grid ms-md-5">
-        {% comment %} {% for exam in particularExamReources[exam] %}
-        <div class="card shadow-sm border-0">exam.exam_Name</div>
-        {% endfor %} {% endcomment %}
+        {% for res in exam|show_matching_resources %}
+        <div class="card shadow-sm border-0">{{res.resource_Name}}</div>
+        {% endfor %}
     </div>
     {% endfor %}
 </section>
