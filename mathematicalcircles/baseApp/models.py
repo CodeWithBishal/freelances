@@ -22,7 +22,7 @@ class Exam(models.Model):
 class LatestNews(models.Model):
     sno = models.AutoField(primary_key=True)
     news = models.TextField()
-    link=models.CharField(max_length=255,null=False, blank=False)
+    link=models.CharField(max_length=255,null=True, blank=True)
 
     class Meta:
         verbose_name = "LatestNews"
@@ -44,5 +44,5 @@ class ResourcesByExam(models.Model):
         verbose_name_plural = "Resources By Exam"
 
     def __str__(self):
-        return str(self.exam_Name)
+        return self.resource_Name+" -- "+str(self.exam_Name)
 

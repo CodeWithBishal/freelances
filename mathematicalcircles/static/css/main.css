@@ -40,6 +40,11 @@ marquee>p>a {
     height: 10vh;
 }
 
+.cover-top{
+    object-position: top;
+    object-fit: cover;
+}
+
 .carousel-control-prev,
 .carousel-control-next {
     background-color: #afafaf;
@@ -114,6 +119,20 @@ marquee>p>a {
     border-radius: 20px !important;
     height: 30vh;
 }
+.resources-grid > .card > div >img{
+    border-top-left-radius: 20px !important;
+    border-top-right-radius: 20px !important;
+}
+.h-80{
+    height: 80%;
+}
+.h-20{
+    height: 20%;
+}
+/* 
+.overflow-ellipsis{
+    text-overflow: ellipsis !important;
+} */
 @media only screen and (max-width: 768px) {
     .resources-grid{
         grid-template-columns: repeat(auto-fill, 150px);

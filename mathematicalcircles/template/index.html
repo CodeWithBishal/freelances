@@ -50,10 +50,10 @@
                         </div>
                         <div class="col-9 h-100 overflow-hidden d-flex flex-column justify-content-center">
                             <div class="">
-                                <h5>{{exam}}</h5>
+                                <h5>{{exam|safe|truncatechars:15}}</h5>
                             </div>
                             <div class="">
-                                <p class="text-black-50">{{ exam | count_matching_resources }} Resources</p>
+                                <p class="text-black-50 mb-0">{{ exam | count_matching_resources }} Resources</p>
                             </div>
                         </div>
                     </div>
@@ -67,13 +67,20 @@
     {% for exam in Exam %}
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h3 class="mt-4 w-100 ms-5">{{exam}}</h3>
+            <h3 class="mt-4 w-100 ms-5">{{exam|safe|truncatechars:15}}</h3>
         </div>
         <a href="/resources/{{exam.link}}" class="me-md-5 text-bg-primary btn btn-primary w-6em me-4 ms-3" id="view-all">View All</a>
     </div>
     <div class="d-grid resources-grid ms-md-5">
         {% for res in exam|show_matching_resources %}
-        <div class="card shadow-sm border-0">{{res.resource_Name}}</div>
+        <div class="card shadow-sm border-0">
+            <div class="h-80">
+                <img src="{{res.resource_Thumbnail}}" alt="{{res.resource_Name}}" class="img-fluid h-100 w-100 cover-top">
+            </div>
+            <div class="text-center fw-bold d-flex align-items-center overflow-hidden justify-content-center h-20 overflow-ellipsis">
+                {{res.resource_Name|safe|truncatechars:22}}
+            </div>
+        </div>
         {% endfor %}
     </div>
     {% endfor %}
