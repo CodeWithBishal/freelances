@@ -88,8 +88,57 @@ marquee>p>a {
     display: none !important;
 }
 
-@media only screen and (max-width: 768px) {
+.w-6em{
+    width: 6em !important;
+}
 
+.h-3em{
+    height: 3em !important;
+}
+#view-all{
+    color: #2196f3 !important;
+    background-color: rgba(227, 242, 253,1) !important;
+    position: relative;
+    overflow: hidden;
+    transition: background 400ms;
+    outline: 0;
+    border: 0;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.resources-grid{
+    grid-template-columns: repeat(auto-fill, 200px);
+    justify-content: center;
+    grid-gap: 2vw;
+    /* overflow:  visible; */
+}
+
+.resources-grid > .card{
+    border-radius: 20px !important;
+    height: 30vh;
+}
+
+span.ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple 600ms linear;
+    background-color: rgba(213, 234, 249,0.6);
+  }
+  
+  @keyframes ripple {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+  
+@media only screen and (max-width: 768px) {
+    .resources-grid{
+        grid-template-columns: repeat(auto-fill, 150px);
+        grid-gap: 5vw;
+    }
     #exam {
         width: 90% !important;
     }

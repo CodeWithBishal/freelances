@@ -43,7 +43,7 @@
         <div class="row" id="carousel">
             {% for exam in Exam %}
             <div class="col-md-4 px-3 sort-by-exam">
-                    <a href="/resources/{{exam.link}}" class="link text-black pointer">
+                <a href="/resources/{{exam.link}}" class="link text-black pointer">
                     <div class="card position-relative justify-content-center border-0 mb-4 shadow-sm row h-15vh">
                         <div class="col-3">
                             <img src="{{exam.image_Link}}" alt="{{exam.exam_Name}}" class="img-fluid">
@@ -53,17 +53,31 @@
                                 <h5>{{exam}}</h5>
                             </div>
                             <div class="">
-                                <p class="text-black-50">{{ exam.exam_Name |count_matching_resources }} Resources</p>
+                                <p class="text-black-50">{{ exam.exam_Name | count_matching_resources }} Resources</p>
                             </div>
                         </div>
                     </div>
-                    </a>
-                </div>
+                </a>
+            </div>
             {% endfor %}
         </div>
     </div>
 </section>
-</div>
+<section class="w-100">
+    {% for exam in Exam %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="mt-4 w-100 ms-5">{{exam}}</h3>
+        </div>
+        <a href="/resources/{{exam.link}}" class="me-md-5 text-bg-primary btn btn-primary w-6em h-3em me-4 ms-3" id="view-all">View All</a>
+    </div>
+    <div class="d-grid resources-grid ms-md-5">
+        {% comment %} {% for exam in particularExamReources[exam] %}
+        <div class="card shadow-sm border-0">exam.exam_Name</div>
+        {% endfor %} {% endcomment %}
+    </div>
+    {% endfor %}
+</section>
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
 <noscript>
@@ -79,4 +93,5 @@
     integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/static/js/carousel.js"></script>
+<script src="/static/js/ripple.js"></script>
 {% endblock body %}
