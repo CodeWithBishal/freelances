@@ -114,22 +114,6 @@ marquee>p>a {
     border-radius: 20px !important;
     height: 30vh;
 }
-
-span.ripple {
-    position: absolute;
-    border-radius: 50%;
-    transform: scale(0);
-    animation: ripple 600ms linear;
-    background-color: rgba(213, 234, 249,0.6);
-  }
-  
-  @keyframes ripple {
-    to {
-      transform: scale(4);
-      opacity: 0;
-    }
-  }
-  
 @media only screen and (max-width: 768px) {
     .resources-grid{
         grid-template-columns: repeat(auto-fill, 150px);
