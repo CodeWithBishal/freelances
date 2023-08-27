@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import *
 # Create your views here.
 
@@ -9,3 +9,13 @@ def index(request):
 
 
     return render(request,"index.html", context=context)
+
+def resources(request, slug):
+    exam = Exam.objects.get(link="jee-mains")
+    resourcesByExam = ResourcesByExam.objects.filter(exam_Name=exam)
+    eName = resourcesByExam[0].exam_Name
+    context={"resourcesByExam":resourcesByExam, 'eName':eName}
+    return render(request, "resources.html", context=context)
+
+def redirectHome(context):
+    return redirect('/')

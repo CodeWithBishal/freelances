@@ -19,6 +19,14 @@
             href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Unica+One&display=swap"
             rel="stylesheet">
     </noscript>
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript>
+            <link
+                href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+                rel="stylesheet">
+        </noscript>
     <!-- fonts  -->
     {% endblock canonical %}
     {% block header %}{% endblock header %}
@@ -26,6 +34,33 @@
 </head>
 
 <body>
+    <div class="header-notification d-flex justify-content-around align-items-center">
+        <div class="row align-items-center w-90 h-50">
+            <div class="col-lg-3 col-md-10 text-center">
+                <div class="home-content">
+                    <div class="title">
+                        <h4 class="mb-30 fw-bold">LATEST EXAM NEWS</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 h-100">
+                <div class="text-center h-100 d-flex align-items-center text-lg-start float-right text-danger" id="second">
+                    <marquee onmouseover="this.stop();" onmouseout="this.start();">
+                        <p>{% for latestnews in latestNews %}
+                            {% if latestnews.link %}
+                            <span style="width: 10vw; display: inline-block;"></span> <a href="{{latestnews.link}}"
+                                target="_blank" rel="noopener noreferrer" title="{{latestnews.link}}">{{latestnews.news}} <i
+                                    class="fas fa-external-link-square-alt"></i></a>
+                            {% else %}
+                            <span style="width: 10vw; display: inline-block;"></span> {{latestnews.news}}
+                            {% endif %}
+                            {% endfor %}
+                        </p>
+                    </marquee>
+                </div>
+            </div>
+        </div>
+    </div>
     {% block body %}{% endblock body %}
 </body>
 

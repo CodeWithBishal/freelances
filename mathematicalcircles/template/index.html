@@ -7,43 +7,14 @@
 {% endblock header %}
 {% block title %}Home{% endblock title %}
 {% block body %}
-
-<div class="header-notification d-flex justify-content-around align-items-center">
-    <div class="row align-items-center w-90 h-50">
-        <div class="col-lg-3 col-md-10 text-center">
-            <div class="home-content">
-                <div class="title">
-                    <h4 class="mb-30 fw-bold">LATEST EXAM NEWS</h4>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-9 h-100">
-            <div class="text-center h-100 d-flex align-items-center text-lg-start float-right text-danger" id="second">
-                <marquee onmouseover="this.stop();" onmouseout="this.start();">
-                    <p>{% for latestnews in latestNews %}
-                        {% if latestnews.link %}
-                        <span style="width: 10vw; display: inline-block;"></span> <a href="{{latestnews.link}}"
-                            target="_blank" rel="noopener noreferrer" title="{{latestnews.link}}">{{latestnews.news}} <i
-                                class="fas fa-external-link-square-alt"></i></a>
-                        {% else %}
-                        <span style="width: 10vw; display: inline-block;"></span> {{latestnews.news}}
-                        {% endif %}
-                        {% endfor %}
-                    </p>
-                </marquee>
-            </div>
-        </div>
-    </div>
-</div>
-
-<h3 class="mt-4 w-100 ms-5">Sort Resources by Exam</h3>
+<h3 class="mt-4 w-100 ms-5 playfair fw-bolder">Sort Resources by Exam</h3>
 
 <section id="exam" class="mt-4">
     <div class="container ml-lg-5">
         <div class="row" id="carousel">
             {% for exam in Exam %}
             <div class="col-md-4 px-3 sort-by-exam">
-                <a href="/resources/{{exam.link}}" class="link text-black pointer">
+                <a href="/resources/{{exam.link}}" target="_blank" rel="noopener noreferrer" class="link text-black pointer">
                     <div class="card position-relative justify-content-center border-0 mb-4 shadow-sm row h-15vh">
                         <div class="col-3">
                             <img src="{{exam.image_Link}}" alt="{{exam.exam_Name}}" class="img-fluid">
@@ -65,22 +36,26 @@
 </section>
 <section class="w-100">
     {% for exam in Exam %}
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
         <div>
-            <h3 class="mt-4 w-100 ms-5">{{exam|safe|truncatechars:15}}</h3>
+            <h3 class="playfair w-100 #ms-5 sec-heading">{{exam|safe|truncatechars:15}}</h3>
         </div>
-        <a href="/resources/{{exam.link}}" class="me-md-5 text-bg-primary btn btn-primary w-6em me-4 ms-3" id="view-all">View All</a>
+        <div>
+            <a href="/resources/{{exam.link}}" target="_blank" rel="noopener noreferrer" class="me-md-5 text-bg-primary btn btn-primary w-6em me-4 ms-3" id="view-all">View All</a>
+        </div>
     </div>
     <div class="d-grid resources-grid ms-md-5">
         {% for res in exam|show_matching_resources %}
+        <a href="{{res.resource_Link}}" target="_blank" rel="noopener noreferrer">
         <div class="card shadow-sm border-0">
-            <div class="h-80">
-                <img src="{{res.resource_Thumbnail}}" alt="{{res.resource_Name}}" class="img-fluid h-100 w-100 cover-top">
+                <div class="h-80">
+                    <img src="{{res.resource_Thumbnail}}" alt="{{res.resource_Name}}" class="img-fluid h-100 w-100 cover-top">
+                </div>
+                <div class="text-center fw-bold d-flex align-items-center overflow-hidden justify-content-center h-20 hide-line">
+                    {{res.resource_Name|safe|truncatechars:18}}
+                </div>
             </div>
-            <div class="text-center fw-bold d-flex align-items-center overflow-hidden justify-content-center h-20 overflow-ellipsis">
-                {{res.resource_Name|safe|truncatechars:22}}
-            </div>
-        </div>
+        </a>
         {% endfor %}
     </div>
     {% endfor %}

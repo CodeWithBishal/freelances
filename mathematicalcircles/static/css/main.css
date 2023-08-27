@@ -109,33 +109,56 @@ marquee>p>a {
 }
 
 .resources-grid{
-    grid-template-columns: repeat(auto-fill, 200px);
+    grid-template-columns: repeat(auto-fill, 185px);
     justify-content: center;
     grid-gap: 2vw;
     /* overflow:  visible; */
 }
 
-.resources-grid > .card{
+.resources-grid > a > .card{
     border-radius: 20px !important;
     height: 30vh;
 }
-.resources-grid > .card > div >img{
+.resources-grid > a > .card > div >img{
     border-top-left-radius: 20px !important;
     border-top-right-radius: 20px !important;
 }
+.sec-heading::before{
+    content: '';
+    width: 100%;
+    border: 20px solid #f98546 !important;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    position: relative;
+    z-index: -1;
+    transform: translate(17px,10px);;
+    opacity: .5;
+    left: 10px;
+}
+
+.resources-grid > a {
+    text-decoration: none;
+    color: black !important;
+}
+
 .h-80{
     height: 80%;
 }
 .h-20{
     height: 20%;
 }
-/* 
-.overflow-ellipsis{
-    text-overflow: ellipsis !important;
-} */
+
+.playfair{
+    font-family: 'Playfair Display';
+}
+ 
+.hide-line{
+    overflow: hidden !important;
+}
 @media only screen and (max-width: 768px) {
     .resources-grid{
-        grid-template-columns: repeat(auto-fill, 150px);
+        grid-template-columns: repeat(auto-fill, 170px);
         grid-gap: 5vw;
     }
     #exam {
