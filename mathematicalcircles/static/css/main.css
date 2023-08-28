@@ -12,6 +12,7 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     overflow-x: hidden;
+    min-height: 100vh;
     background-color: #f7f9fb !important;
 }
 
@@ -123,6 +124,11 @@ marquee>p>a {
     border-top-left-radius: 20px !important;
     border-top-right-radius: 20px !important;
 }
+
+.h-75vh{
+    height: 75vh;
+}
+
 .sec-heading::before{
     content: '';
     width: 100%;
@@ -151,6 +157,10 @@ marquee>p>a {
 
 .playfair{
     font-family: 'Playfair Display';
+}
+
+.min-vh-80{
+    min-height: 80vh !important;
 }
  
 .hide-line{

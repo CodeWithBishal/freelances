@@ -36,6 +36,7 @@
 </section>
 <section class="w-100">
     {% for exam in Exam %}
+    {% if exam|count_matching_resources %}
     <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
         <div>
             <h3 class="playfair w-100 #ms-5 sec-heading">{{exam|safe|truncatechars:15}}</h3>
@@ -44,6 +45,7 @@
             <a href="/resources/{{exam.link}}" target="_blank" rel="noopener noreferrer" class="me-md-5 text-bg-primary btn btn-primary w-6em me-4 ms-3" id="view-all">View All</a>
         </div>
     </div>
+    {% endif %}
     <div class="d-grid resources-grid ms-md-5">
         {% for res in exam|show_matching_resources %}
         <a href="{{res.resource_Link}}" target="_blank" rel="noopener noreferrer">

@@ -12,9 +12,13 @@ def index(request):
 
 def resources(request, slug):
     latestNews = LatestNews.objects.order_by("-sno")
-    exam = Exam.objects.get(link="jee-mains")
+    exam = Exam.objects.get(link=slug)
     resourcesByExam = ResourcesByExam.objects.filter(exam_Name=exam)
-    eName = resourcesByExam[0].exam_Name
+    if resourcesByExam:
+        eName = resourcesByExam[0].exam_Name
+    else:
+        context={'latestNews': latestNews}
+        return render(request, "resources.html", context=context)
     context={"resourcesByExam":resourcesByExam, 'eName':eName, 'latestNews': latestNews}
     return render(request, "resources.html", context=context)
 
