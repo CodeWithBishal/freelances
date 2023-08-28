@@ -4,7 +4,8 @@ from django.db import models
 class Exam(models.Model):
     sno = models.AutoField(primary_key=True)
     exam_Name=models.CharField(max_length=130,null=False, blank=False)
-    image_Link=models.CharField(max_length=255,null=False, blank=False)
+    #image_Link=models.CharField(max_length=255,null=False, blank=False)
+    image_Link=models.ImageField(upload_to="static/uploaded-images")
     link=models.CharField(max_length=255, default='',null=True, blank=True, editable=False)
 
     class Meta:
@@ -35,7 +36,8 @@ class ResourcesByExam(models.Model):
     sno = models.AutoField(primary_key=True)
     exam_Name = models.ForeignKey(Exam, on_delete=models.CASCADE)
     resource_Name=models.CharField(max_length=255,null=False, blank=False)
-    resource_Thumbnail=models.CharField(max_length=255,null=False, blank=False)
+    #resource_Thumbnail=models.CharField(max_length=255,null=False, blank=False)
+    resource_Thumbnail=models.ImageField(upload_to="static/resource-thumbnail")
     resource_Summary=models.TextField()
     resource_Link=models.CharField(max_length=255,null=False, blank=False)
 

@@ -32,7 +32,7 @@ marquee>p>a {
 .pointer{
     cursor: pointer !important;
 }
-.header-notification>.w-90 {
+.w-90 {
     width: 90%;
 }
 

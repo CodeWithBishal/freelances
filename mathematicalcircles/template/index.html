@@ -17,7 +17,7 @@
                 <a href="/resources/{{exam.link}}" target="_blank" rel="noopener noreferrer" class="link text-black pointer">
                     <div class="card position-relative justify-content-center border-0 mb-4 shadow-sm row h-15vh">
                         <div class="col-3">
-                            <img src="{{exam.image_Link}}" alt="{{exam.exam_Name}}" class="img-fluid">
+                            <img src="/{{exam.image_Link}}" alt="{{exam.exam_Name}}" class="img-fluid">
                         </div>
                         <div class="col-9 h-100 overflow-hidden d-flex flex-column justify-content-center">
                             <div class="">
@@ -49,7 +49,7 @@
         <a href="{{res.resource_Link}}" target="_blank" rel="noopener noreferrer">
         <div class="card shadow-sm border-0">
                 <div class="h-80">
-                    <img src="{{res.resource_Thumbnail}}" alt="{{res.resource_Name}}" class="img-fluid h-100 w-100 cover-top">
+                    <img src="/{{res.resource_Thumbnail}}" alt="{{res.resource_Name}}" class="img-fluid h-100 w-100 cover-top">
                 </div>
                 <div class="text-center fw-bold d-flex align-items-center overflow-hidden justify-content-center h-20 hide-line">
                     {{res.resource_Name|safe|truncatechars:18}}
