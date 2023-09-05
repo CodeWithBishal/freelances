@@ -38,7 +38,7 @@ class ResourcesByExam(models.Model):
     resource_Name=models.CharField(max_length=255,null=False, blank=False)
     #resource_Thumbnail=models.CharField(max_length=255,null=False, blank=False)
     resource_Thumbnail=models.ImageField(upload_to="static/resource-thumbnail")
-    resource_Summary=models.TextField()
+    #resource_Summary=models.TextField()
     resource_Link=models.CharField(max_length=255,null=False, blank=False)
 
     class Meta:
