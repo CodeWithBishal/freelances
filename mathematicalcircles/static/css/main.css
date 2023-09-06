@@ -27,6 +27,10 @@ marquee>p>a {
     text-decoration: none !important;
     color: #dc3545 !important;
 }
+marquee>span>a,marquee>span>a:hover{
+    text-decoration: none !important;
+    color: #000;
+}
 .link {
     text-decoration: none !important;
 }
@@ -134,7 +138,9 @@ marquee>p>a {
 .btn-hover-show:hover .show-btn-on-hover{
     display: block !important;
 }
-
+.bg-new-danger{
+    background:#dc3546ec;
+}
 .z-1{
     z-index: 1 !important;
 }

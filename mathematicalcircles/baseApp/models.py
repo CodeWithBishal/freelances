@@ -63,4 +63,15 @@ class ProblemsOfTheWeek(models.Model):
     def __str__(self):
         return self.name
 
+class ProblemsOfTheWeekAnnouncement(models.Model):
+    sno = models.AutoField(primary_key=True)
+    announcement = models.TextField()
+    link=models.CharField(max_length=255,null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Problem Of The Week Announcement"
+        verbose_name_plural = "Problem Of The Week Announcement"
+
+    def __str__(self):
+        return self.announcement
 

@@ -61,6 +61,20 @@
             </div>
         </div>
     </div>
+    {% if problemsOfTheWeekAnnouncement %}
+    <div class="bg-new-danger w-100 d-flex p-2">
+        <marquee onmouseover="this.stop();" onmouseout="this.start();">Problem of The Week Announcement: <span>
+            {% for potwa in problemsOfTheWeekAnnouncement %}
+            {% if potwa.link %}
+            <span style="width: 5vw; display: inline-block;"></span> <a href="{{potwa.link}}"
+                target="_blank" rel="noopener noreferrer" title="{{potwa.link}}">{{potwa.announcement}}</a>
+            {% else %}
+            <span style="width: 5vw; display: inline-block;"></span> {{potwa.announcement}}
+            {% endif %}
+            {% endfor %}
+        </span></marquee>
+    </div>
+    {% endif %}
     {% block body %}{% endblock body %}
     <footer style="min-height:50px;" class="d-flex flex-column flex-md-row mt-3 justify-content-center align-items-center">
         <div>

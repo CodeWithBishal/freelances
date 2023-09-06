@@ -3,6 +3,7 @@
 {% load custom_filters %}
 {% block title %}{{eName}}{% endblock title %}
 {% block body %}
+{% if resourcesByExam %}
 <section class="w-100 min-vh-80">
     <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
         {% if eName %}
@@ -33,4 +34,44 @@
         {% endfor %}
     </div>
 </section>
+{% else %}
+<section class="w-100 min-vh-80">
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
+        {% if eName %}
+        <div>
+            <h3 class="playfair w-100 #ms-5 sec-heading">{{eName}}</h3>
+        </div>
+        {% else %}
+        <div class="w-100 h-75vh">
+            <h3 class="playfair w-100 h-100 align-items-center #ms-5 d-flex w-100 justify-content-center flex-direction-column">No Resources
+                Found</h3>
+            {% endif %}
+        </div>
+    </div>
+    <div class="d-grid resources-grid ms-md-5">
+        {% for potw in problemsoftheweek %}
+        <div class="card h-40vh shadow-sm border-0 br-20 z-1 btn-hover-show">
+                <div class="h-80 cont">
+                    <img src="/{{potw.resource_Thumbnail}}" alt="{{res.resource_Name}}" class="img-fluid h-100 w-100 cover-top">
+                    <a class="show-btn-on-hover shadow-sm btn-show-over-image-1 text-center fw-bold d-flex z-i-4 align-items-center overflow-hidden justify-content-center hide-line bg-white border-0 text-primary btn btn-primary my-1" href="{{potw.questionLink}}">
+                        View Ques.
+                    </a>
+                    {% if potw.answerLink != None %}
+                    <a class="show-btn-on-hover shadow-sm btn-show-over-image-2 text-center fw-bold d-flex z-i-4 align-items-center overflow-hidden justify-content-center hide-line bg-white border-0 text-primary btn btn-primary my-1" href="{{potw.answerLink}}">
+                        View Ans.
+                    </a>
+                    {% else %}
+                    <a class="show-btn-on-hover shadow-sm btn-show-over-image-2 text-center fw-bold d-flex z-i-4 align-items-center overflow-hidden justify-content-center hide-line bg-white border-0 text-primary btn btn-primary my-1" href="mailto:submissions@mathematicalcircles.com?subject={{potw.name}}%20Submission">
+                        Answer
+                    </a>
+                    {% endif %}
+                </div>
+                    <div class="text-center fw-bold d-flex align-items-center overflow-hidden justify-content-center h-20 hide-line">
+                        {{potw.name|safe|truncatechars:18}}
+                    </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
 {% endblock body %}

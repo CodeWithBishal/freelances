@@ -7,6 +7,7 @@ from django.contrib.auth.models import Group
 admin.site.register(Exam)
 admin.site.register(LatestNews)
 admin.site.register(ResourcesByExam)
+admin.site.register(ProblemsOfTheWeekAnnouncement)
 admin.site.register(ProblemsOfTheWeek)
 admin.site.unregister(User)
 admin.site.unregister(Group)
