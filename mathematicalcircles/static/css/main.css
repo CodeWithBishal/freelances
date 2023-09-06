@@ -116,15 +116,57 @@ marquee>p>a {
     /* overflow:  visible; */
 }
 
-.resources-grid > a > .card{
+.resources-grid > a > .card, .br-20{
     border-radius: 20px !important;
     height: 30vh;
 }
-.resources-grid > a > .card > div >img{
+.resources-grid > a > .card > div >img, .br-20 > div > img{
     border-top-left-radius: 20px !important;
     border-top-right-radius: 20px !important;
 }
 
+.h-40vh{
+    height: 30vh;
+}
+.show-btn-on-hover{
+    display: none !important;
+}
+.btn-hover-show:hover .show-btn-on-hover{
+    display: block !important;
+}
+
+.z-1{
+    z-index: 1 !important;
+}
+
+.btn-show-over-image-1 {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #555;
+    color: white;
+    font-size: 16px;
+    padding: 6px 4px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.btn-show-over-image-2 {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #555;
+    color: white;
+    font-size: 16px;
+    padding: 6px 4px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
 .h-75vh{
     height: 75vh;
 }

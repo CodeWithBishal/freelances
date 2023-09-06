@@ -5,7 +5,8 @@ from .models import *
 def index(request):
     latestNews = LatestNews.objects.order_by("-sno")
     exam = Exam.objects.all()
-    context={'latestNews': latestNews, 'Exam':exam}
+    problemsoftheweek = ProblemsOfTheWeek.objects.all()
+    context={'latestNews': latestNews, 'Exam':exam, 'problemsoftheweek':problemsoftheweek}
 
 
     return render(request,"index.html", context=context)

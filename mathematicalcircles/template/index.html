@@ -35,6 +35,38 @@
     </div>
 </section>
 <section class="w-100">
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
+        <div>
+            <h3 class="playfair w-100 #ms-5 sec-heading">Problem of The Week</h3>
+        </div>
+        <div>
+            <a href="/problem-of-the-week" target="_blank" rel="noopener noreferrer" class="me-md-5 text-bg-primary btn btn-primary w-6em me-4 ms-3" id="view-all">View All</a>
+        </div>
+    </div>
+    <div class="d-grid resources-grid ms-md-5">
+        {% for potw in problemsoftheweek %}
+        <div class="card h-40vh shadow-sm border-0 br-20 z-1 btn-hover-show">
+                <div class="h-80 cont">
+                    <img src="/{{potw.resource_Thumbnail}}" alt="{{res.resource_Name}}" class="img-fluid h-100 w-100 cover-top">
+                    <a class="show-btn-on-hover shadow-sm btn-show-over-image-1 text-center fw-bold d-flex z-i-4 align-items-center overflow-hidden justify-content-center hide-line bg-white border-0 text-primary btn btn-primary my-1" href="{{potw.questionLink}}">
+                        View Ques.
+                    </a>
+                    {% if potw.answerLink != None %}
+                    <a class="show-btn-on-hover shadow-sm btn-show-over-image-2 text-center fw-bold d-flex z-i-4 align-items-center overflow-hidden justify-content-center hide-line bg-white border-0 text-primary btn btn-primary my-1" href="{{potw.answerLink}}">
+                        View Ans.
+                    </a>
+                    {% else %}
+                    <a class="show-btn-on-hover shadow-sm btn-show-over-image-2 text-center fw-bold d-flex z-i-4 align-items-center overflow-hidden justify-content-center hide-line bg-white border-0 text-primary btn btn-primary my-1" href="mailto:submissions@mathematicalcircles.com?subject={{potw.name}}%20Submission">
+                        Answer
+                    </a>
+                    {% endif %}
+                </div>
+                    <div class="text-center fw-bold d-flex align-items-center overflow-hidden justify-content-center h-20 hide-line">
+                        {{potw.name|safe|truncatechars:18}}
+                    </div>
+            </div>
+        {% endfor %}
+    </div>
     {% for exam in Exam %}
     {% if exam|count_matching_resources %}
     <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
@@ -77,4 +109,9 @@
     integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/static/js/carousel.js"></script>
+<script>
+    function myFunction() {
+      alert("I am an alert box!");
+    }
+    </script>
 {% endblock body %}

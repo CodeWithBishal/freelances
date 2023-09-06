@@ -47,4 +47,20 @@ class ResourcesByExam(models.Model):
 
     def __str__(self):
         return self.resource_Name+" -- "+str(self.exam_Name)
+    
+class ProblemsOfTheWeek(models.Model):
+    sno = models.AutoField(primary_key=True)
+    name=models.CharField(max_length=255,null=False, blank=False)
+    questionLink=models.CharField(max_length=255,null=False, blank=False)
+    answerLink=models.CharField(max_length=255,null=True, blank=True)
+    resource_Thumbnail=models.ImageField(upload_to="static/potw")
+
+
+    class Meta:
+        verbose_name = "Problem Of The Week"
+        verbose_name_plural = "Problem Of The Week"
+
+    def __str__(self):
+        return self.name
+
 
