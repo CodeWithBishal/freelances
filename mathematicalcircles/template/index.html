@@ -17,7 +17,7 @@
                 <a href="/resources/{{exam.link}}" target="_blank" rel="noopener noreferrer" class="link text-black pointer">
                     <div class="card position-relative justify-content-center border-0 mb-4 shadow-sm row h-15vh">
                         <div class="col-3">
-                            <img src="/{{exam.image_Link}}" alt="{{exam.exam_Name}}" class="img-fluid">
+                            <img src="/media/{{exam.image_Link}}" alt="{{exam.exam_Name}}" class="img-fluid">
                         </div>
                         <div class="col-9 h-100 overflow-hidden d-flex flex-column justify-content-center">
                             <div class="">
@@ -48,7 +48,7 @@
         {% for potw in problemsoftheweek %}
         <div class="card h-40vh shadow-sm border-0 br-20 z-1 btn-hover-show">
                 <div class="h-80 cont">
-                    <img src="/{{potw.resource_Thumbnail}}" alt="{{res.resource_Name}}" class="img-fluid h-100 w-100 cover-top">
+                    <img src="/media/{{potw.resource_Thumbnail}}" alt="{{res.resource_Name}}" class="img-fluid h-100 w-100 cover-top">
                     <a class="show-btn-on-hover shadow-sm btn-show-over-image-1 text-center fw-bold d-flex z-i-4 align-items-center overflow-hidden justify-content-center hide-line bg-white border-0 text-primary btn btn-primary my-1" href="{{potw.questionLink}}">
                         View Ques.
                     </a>
@@ -85,7 +85,7 @@
         <a href="{{res.resource_Link}}" target="_blank" rel="noopener noreferrer">
         <div class="card shadow-sm border-0">
                 <div class="h-80">
-                    <img src="/{{res.resource_Thumbnail}}" alt="{{res.resource_Name}}" class="img-fluid h-100 w-100 cover-top">
+                    <img src="/media/{{res.resource_Thumbnail}}" alt="{{res.resource_Name}}" class="img-fluid h-100 w-100 cover-top">
                 </div>
                 <div class="text-center fw-bold d-flex align-items-center overflow-hidden justify-content-center h-20 hide-line">
                     {{res.resource_Name|safe|truncatechars:18}}

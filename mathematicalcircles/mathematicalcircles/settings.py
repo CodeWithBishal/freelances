@@ -25,7 +25,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['127.0.0.1','mathematicalcircles.com']
+ALLOWED_HOSTS = ['127.0.0.1','mathematicalcircles.com','34.135.238.35']
 
 
 # Application definition
@@ -129,6 +129,8 @@ if DEBUG:
 else:
     STATIC_ROOT =  os.path.join(BASE_DIR, "static/")
 
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 
 # Default primary key field type
