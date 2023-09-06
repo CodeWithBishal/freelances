@@ -5,7 +5,10 @@ from .models import *
 def index(request):
     latestNews = LatestNews.objects.order_by("-sno")
     exam = Exam.objects.all()
-    problemsoftheweek = ProblemsOfTheWeek.objects.order_by("-sno")[:6]
+    if ProblemsOfTheWeek.objects.count() != 0:
+        problemsoftheweek = ProblemsOfTheWeek.objects.order_by("-sno")[:6]
+    else:
+        problemsoftheweek=False
     if ProblemsOfTheWeekAnnouncement.objects.count() != 0:
         problemsOfTheWeekAnnouncement = ProblemsOfTheWeekAnnouncement.objects.order_by("-sno")
     else:

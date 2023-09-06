@@ -35,6 +35,7 @@
     </div>
 </section>
 <section class="w-100">
+    {% if problemsoftheweek %}
     <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
         <div>
             <h3 class="playfair w-100 #ms-5 sec-heading">Problem of The Week</h3>
@@ -67,6 +68,7 @@
             </div>
         {% endfor %}
     </div>
+    {% endif %}
     {% for exam in Exam %}
     {% if exam|count_matching_resources %}
     <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
