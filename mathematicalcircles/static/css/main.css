@@ -228,4 +228,7 @@ marquee>span>a,marquee>span>a:hover{
     .potw-fs{
         font-size: 20px;
     }
+    .text-xs-center{
+        text-align: center;
+    }
 }
