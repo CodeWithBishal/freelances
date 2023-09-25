@@ -159,6 +159,10 @@ marquee>span>a,marquee>span>a:hover{
     cursor: pointer;
     border-radius: 5px;
 }
+.logo{
+    width: 45%!important;
+    margin-right: 10px;
+}
 .btn-show-over-image-2 {
     position: absolute;
     top: 60%;
@@ -230,5 +234,8 @@ marquee>span>a,marquee>span>a:hover{
     }
     .text-xs-center{
         text-align: center;
+    }
+    .header-notification{
+        height: 13vh !important;
     }
 }
