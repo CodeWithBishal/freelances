@@ -2,4 +2,4 @@ django==4.2.5
 mysqlclient==2.1.1
 python-decouple==3.8
 virtualenv==20.24.3
-Pillow==10.0.0
+Pillow==10.0.1
