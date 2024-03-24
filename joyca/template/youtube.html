@@ -1,0 +1,26 @@
+<!-- youtube.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Entries</title>
+</head>
+<body>
+    <h1>YouTube Entries</h1>
+    <ul>
+        {% for entry in youtube %}
+            <li>
+                <h2>{{ entry.videoTitleYT }}</h2>
+                <p><strong>Published:</strong> {{ entry.publishDateYT }}</p>
+                <p><strong>ID:</strong> {{ entry.videoIdYT }}</p>
+                <p><a href="https://www.youtube.com/watch?v={{ entry.videoIdYT }}">https://www.youtube.com/watch?v={{ entry.videoIdYT }}</a></p>
+                <p><strong>Views:</strong> {{ entry.viewsYT }}</p>
+                <p><strong>Description:</strong> {{ entry.descriptionYT }}</p>
+                <p><a href="{{ entry.thumbnailYT }}" target="_blank"><img src="{{ entry.thumbnailYT }}" alt="{{ entry.videoTitleYT }}"></a></p>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
