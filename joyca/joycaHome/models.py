@@ -7,14 +7,15 @@ class StoreLastIDs(models.Model):
     lastID = models.CharField(max_length=255, blank=False)
     lastRun = models.DateTimeField(default=now)
 
-class storeYTData(models.Model):
+class storeData(models.Model):
     sno = models.AutoField(primary_key=True)
     storeTime = models.DateTimeField(default=now)
     #get from views.py
-    dataURL = models.CharField(max_length=255, blank=False)
+    channelNameYT = models.CharField(max_length=255)
+    dataURL = models.CharField(max_length=255)
     publishDateYT = models.DateTimeField(blank=False)
-    videoIdYT = models.CharField(max_length=255, blank=False)
-    videoTitleYT = models.CharField(max_length=255, blank=False)
-    viewsYT = models.CharField(max_length=255, blank=False)
-    thumbnailYT = models.CharField(max_length=255, blank=False)
-    descriptionYT = models.TextField(blank=True)
+    videoIdYT = models.CharField(max_length=255)
+    videoTitleYT = models.CharField(max_length=255)
+    viewsYT = models.CharField(max_length=255)
+    thumbnailYT = models.CharField(max_length=255)
+    platform = models.CharField(max_length=255, blank=False)

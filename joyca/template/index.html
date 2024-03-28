@@ -1,173 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./static/style.css" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
-        crossorigin="anonymous" />
-    <title>Joyca.fr</title>
+<head class="overflow-x-hidden">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joyca.fr</title>
+  <link rel="shortcut icon" href="{{ytPfp}}">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" /> 
 </head>
 
-<body>
-    <div class="sidebar">
-        <i class="fab fa-twitter"></i>
-        <div class="sidebarOption active">
-            <span class="material-icons"> home </span>
-            <h2>Home</h2>
-        </div>
+<body class="bg-black text-white">
+  <div class="overflow-x-hidden flex md:container mx-auto my-4">
+    <div class="sidebar-main w-16 md:w-[40%]">
 
-        <div class="sidebarOption">
-            <span class="material-icons"> search </span>
-            <h2>Explore</h2>
-        </div>
-
-        <div class="sidebarOption">
-            <span class="material-icons"> notifications_none </span>
-            <h2>Notifications</h2>
-        </div>
-
-        <div class="sidebarOption">
-            <span class="material-icons"> mail_outline </span>
-            <h2>Messages</h2>
-        </div>
-
-        <div class="sidebarOption">
-            <span class="material-icons"> bookmark_border </span>
-            <h2>Bookmarks</h2>
-        </div>
-
-        <div class="sidebarOption">
-            <span class="material-icons"> list_alt </span>
-            <h2>Lists</h2>
-        </div>
-
-        <div class="sidebarOption">
-            <span class="material-icons"> perm_identity </span>
-            <h2>Profile</h2>
-        </div>
-
-        <div class="sidebarOption">
-            <span class="material-icons"> more_horiz </span>
-            <h2>More</h2>
-        </div>
-        <button class="sidebar__tweet">Tweet</button>
-    </div>
-     <!-- feed starts -->
-     <div class="feed">
-        <div class="feed__header">
-          <h2>Home</h2>
-        </div>
-
-        <!-- post starts -->
-        <a class="twitter-timeline" href="https://twitter.com/JoycaOff?ref_src=twsrc%5Etfw">Tweets by JoycaOff</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-        <div class="post">
+      <div class="sidebar flex md:items-end  flex-col sticky top-0">
+        <div class="md:h-[25vh]"></div>
+        <ul class="flex flex-col text-2xl space-y-3 md:px-11 font-bold w-full  ">
+          <li
+            class="flex md:justify-start items-center gap-3 justify-center  mr-4 md:w-fit  hover:bg-gray-900 hover:cursor-pointer px-5 py-3 hover:rounded-full">
+            <span class="text-3xl material-symbols-outlined"> home </span> <span class="hidden md:block">Home</span>
+          </li>
+          <li
+            class="flex md:justify-start items-center gap-3 justify-center  mr-4 md:w-fit  hover:bg-gray-900 hover:cursor-pointer px-5 py-3 hover:rounded-full">
+            <span class="text-3xl material-symbols-outlined"> youtube_activity </span><span
+              class="hidden md:block">YouTube</span>
+          </li>
+          <li
+            class="flex md:justify-start items-center gap-3 justify-center  mr-4 md:w-fit  hover:bg-gray-900 hover:cursor-pointer px-5 py-3 hover:rounded-full">
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="invert w-8 m-auto r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-lrsllp r-1nao33i r-16y2uox r-8kz0gk"><g><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></g></svg>
+                    <span class="hidden md:block">Twitter</span>
+          </li>
+          <li
+            class="flex md:justify-start items-center gap-3 justify-center  mr-4 md:w-fit  hover:bg-gray-900 hover:cursor-pointer px-5 py-3 hover:rounded-full">
             
-          <div class="post__avatar">
-            <img
-              src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
-              alt=""
-            />
-          </div>
-  
-          <div class="post__body">
-            <div class="post__header">
-              <div class="post__headerText">
-                <h3>
-                  Somanath Goudar
-                  <span class="post__headerSpecial"
-                    ><span class="material-icons post__badge"> verified </span>@somanathg</span
-                  >
-                </h3>
-              </div>
-              <div class="post__headerDescription">
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
-              </div>
-            </div>
-            <img
-              src="https://www.focus2move.com/wp-content/uploads/2020/01/Tesla-Roadster-2020-1024-03.jpg"
-              alt=""
-            />
-            <div class="post__footer">
-              <span class="material-icons"> repeat </span>
-              <span class="material-icons"> favorite_border </span>
-              <span class="material-icons"> publish </span>
-            </div>
-          </div>
-        </div>
-        <!-- post ends -->
-  
-        <!-- post starts -->
-        <div class="post">
-          <div class="post__avatar">
-            <img
-              src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
-              alt=""
-            />
-          </div>
-  
-          <div class="post__body">
-            <div class="post__header">
-              <div class="post__headerText">
-                <h3>
-                  Somanath Goudar
-                  <span class="post__headerSpecial"
-                    ><span class="material-icons post__badge"> verified </span>@somanathg</span
-                  >
-                </h3>
-              </div>
-              <div class="post__headerDescription">
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
-              </div>
-            </div>
-            <img
-              src="https://www.focus2move.com/wp-content/uploads/2020/01/Tesla-Roadster-2020-1024-03.jpg"
-              alt=""
-            />
-            <div class="post__footer">
-              <span class="material-icons"> repeat </span>
-              <span class="material-icons"> favorite_border </span>
-              <span class="material-icons"> publish </span>
-            </div>
-          </div>
-        </div>
-        <!-- post ends -->
-      </div>
-      <!-- feed ends -->
-  
-      <!-- widgets starts -->
-      <div class="widgets">
-        <div class="widgets__input">
-          <span class="material-icons widgets__searchIcon"> search </span>
-          <input type="text" placeholder="Search Twitter" />
-        </div>
-  
-        <div class="widgets__widgetContainer">
-          <h2>What's happening?</h2>
-          <blockquote class="twitter-tweet">
-            <p lang="en" dir="ltr">
-              Sunsets don&#39;t get much better than this one over
-              <a href="https://twitter.com/GrandTetonNPS?ref_src=twsrc%5Etfw">@GrandTetonNPS</a>.
-              <a href="https://twitter.com/hashtag/nature?src=hash&amp;ref_src=twsrc%5Etfw"
-                >#nature</a
-              >
-              <a href="https://twitter.com/hashtag/sunset?src=hash&amp;ref_src=twsrc%5Etfw"
-                >#sunset</a
-              >
-              <a href="http://t.co/YuKy2rcjyU">pic.twitter.com/YuKy2rcjyU</a>
-            </p>
-            &mdash; US Department of the Interior (@Interior)
-            <a href="https://twitter.com/Interior/status/463440424141459456?ref_src=twsrc%5Etfw"
-              >May 5, 2014</a
-            >
-          </blockquote>
-          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-        </div>
-      </div>
-      <!-- widgets ends -->
-</body>
 
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2476 2476" class="invert w-8 m-auto" id="instagram"><path d="M825.4 1238c0-227.9 184.7-412.7 412.6-412.7 227.9 0 412.7 184.8 412.7 412.7 0 227.9-184.8 412.7-412.7 412.7-227.9 0-412.6-184.8-412.6-412.7m-223.1 0c0 351.1 284.6 635.7 635.7 635.7s635.7-284.6 635.7-635.7-284.6-635.7-635.7-635.7S602.3 886.9 602.3 1238m1148-660.9c0 82 66.5 148.6 148.6 148.6 82 0 148.6-66.6 148.6-148.6s-66.5-148.5-148.6-148.5-148.6 66.5-148.6 148.5M737.8 2245.7c-120.7-5.5-186.3-25.6-229.9-42.6-57.8-22.5-99-49.3-142.4-92.6-43.3-43.3-70.2-84.5-92.6-142.3-17-43.6-37.1-109.2-42.6-229.9-6-130.5-7.2-169.7-7.2-500.3s1.3-369.7 7.2-500.3c5.5-120.7 25.7-186.2 42.6-229.9 22.5-57.8 49.3-99 92.6-142.4 43.3-43.3 84.5-70.2 142.4-92.6 43.6-17 109.2-37.1 229.9-42.6 130.5-6 169.7-7.2 500.2-7.2 330.6 0 369.7 1.3 500.3 7.2 120.7 5.5 186.2 25.7 229.9 42.6 57.8 22.4 99 49.3 142.4 92.6 43.3 43.3 70.1 84.6 92.6 142.4 17 43.6 37.1 109.2 42.6 229.9 6 130.6 7.2 169.7 7.2 500.3 0 330.5-1.2 369.7-7.2 500.3-5.5 120.7-25.7 186.3-42.6 229.9-22.5 57.8-49.3 99-92.6 142.3-43.3 43.3-84.6 70.1-142.4 92.6-43.6 17-109.2 37.1-229.9 42.6-130.5 6-169.7 7.2-500.3 7.2-330.5 0-369.7-1.2-500.2-7.2M727.6 7.5c-131.8 6-221.8 26.9-300.5 57.5-81.4 31.6-150.4 74-219.3 142.8C139 276.6 96.6 345.6 65 427.1 34.4 505.8 13.5 595.8 7.5 727.6 1.4 859.6 0 901.8 0 1238s1.4 378.4 7.5 510.4c6 131.8 26.9 221.8 57.5 300.5 31.6 81.4 73.9 150.5 142.8 219.3 68.8 68.8 137.8 111.1 219.3 142.8 78.8 30.6 168.7 51.5 300.5 57.5 132.1 6 174.2 7.5 510.4 7.5 336.3 0 378.4-1.4 510.4-7.5 131.8-6 221.8-26.9 300.5-57.5 81.4-31.7 150.4-74 219.3-142.8 68.8-68.8 111.1-137.9 142.8-219.3 30.6-78.7 51.6-168.7 57.5-300.5 6-132.1 7.4-174.2 7.4-510.4s-1.4-378.4-7.4-510.4c-6-131.8-26.9-221.8-57.5-300.5-31.7-81.4-74-150.4-142.8-219.3C2199.4 139 2130.3 96.6 2049 65c-78.8-30.6-168.8-51.6-300.5-57.5-132-6-174.2-7.5-510.4-7.5-336.3 0-378.4 1.4-510.5 7.5"></path></svg><span class="hidden md:block">Instagram</span>
+          </li>
+        </ul>
+
+      </div>
+
+
+    </div>
+    <div class="main-feed w-full max-sm:w-[83%] border-[1px] border-x-gray-600 border-y-black ">
+      <div class="top flex p-3 sticky top-0 bg-black backdrop-blur-3xl opacity-80">
+        <div class="absolute w-16 h-1 rounded-full bg-blue-500 bottom-0 left-[44%] z-10"></div>
+        <div class="left bg-red-3001 w-full flex justify-center font-bold text-lg">For You</div>
+      </div>
+      <div class="h-[1px] w-full bg-gray-700"></div>
+
+
+      <div class="posts">
+        {% for data in allData %}
+        {% if data.platform == "YouTube" %}
+        <div class="post">
+          <div class="flex">
+            <div class="image max-sm:hidden m-4">
+              <img class="w-16 rounded-full max-sm:hidden" src="https://twitter.com/JoycaOff/header_photo"
+                alt="">
+            </div>
+            <div class="content my-3 ml-3">
+              <a href="https://www.youtube.com/channel/UCow2IGnug1l3Xazkrc5jM_Q" target="_blank"><span class="font-bold hover:underline cursor-pointer text-white">{{data.channelNameYT}}</span></a> <span
+                class="text-gray-500">@{{data.platform}} · {{data.publishDateYT}} · 👁️ {{data.viewsYT}}</span>
+              <div>{{data.videoTitleYT}}</div>
+              <div class="postimg m-4 ml-0">
+                {% comment %} <img class="rounded-xl" src="https://pbs.twimg.com/media/GEGqnodacAAoyCO?format=jpg&name=900x900"
+                  alt=""> {% endcomment %}
+                  <video id="{{entry.videoIdYT}}" class="video-js vjs-default-skin" controls width="550" height="264"
+                data-setup='{ "techOrder": ["youtube"], "preload": "false", "sources": [{ "type": "video/youtube", "src": "https://www.youtube.com/watch?v={{ data.videoIdYT }}"}] }'>
+            </video>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="info w-[50%] bg-red-5044 hidden md:block">
+
+      <div class="whats w-full sticky top-0 m-3 bg-[#16181c] w-1/2 py-5 rounded-xl space-y-3">
+        {% comment %} <h1 class="text-xl w-full font-bold px-3">Whats Happening</h1> {% endcomment %}
+        <div class="item p-3 hover:bg-gray-800 cursor-pointer px-3">
+          <img src="https://pbs.twimg.com/profile_banners/735416416434851845/1548452986/1500x500" alt="">
+        </div>
+
+        <div class="item p-3 hover:bg-gray-800 cursor-pointer px-3">
+          <div class="text-sm text-gray-200">Trending in India</div>
+          <div class="font-bold">#Harry</div>
+          <div class="text-sm text-gray-200">40.2k Posts</div>
+        </div>
+
+        <div class="item p-3 hover:bg-gray-800 cursor-pointer px-3">
+          <div class="text-sm text-gray-200">Trending in India</div>
+          <div class="font-bold">#Sigma Course</div>
+          <div class="text-sm text-gray-200">40.2k Posts</div>
+        </div>
+
+        <div class="item p-3 hover:bg-gray-800 cursor-pointer px-3">
+          <div class="text-sm text-gray-200">Trending in India</div>
+          <div class="font-bold">#CodeWithHarry</div>
+          <div class="text-sm text-gray-200">40.2k Posts</div>
+        </div>
+      </div>
+    </div>
+</body>
+ <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+<script src="/static/Youtube.min.js"></script>
+<script>
+    const videoElements = document.querySelectorAll('video');
+
+    videoElements.forEach((videoElement) => {
+        player.on('play', () => {
+            videoElements.forEach((otherVideo) => {
+                if (otherVideo !== videoElement) {
+                    const otherPlayer = videojs(otherVideo);
+                    otherPlayer.pause();
+                }
+            });
+        });
+    });
+
+</script>
+<style>
+  .vjs-poster{
+    display:none;
+  }
+  @media only screen and (max-width: 768px) {
+    .video-js{
+      height: 30vh;
+      width: 70vw;
+    }
+  }
+</style>
 </html>
