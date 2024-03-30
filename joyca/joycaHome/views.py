@@ -65,12 +65,18 @@ def youtubeFetchAPI(request):
                 # Check if the entry already exists in the database to avoid duplicates
                 if not storeData.objects.filter(videoIdYT=entry_data['video_id']).exists():
                     # Create a new record
+                    if int(entry_data['views']) >= 1000 and int(entry_data['views'])<1000000:
+                        viewsFormat = str(round(int(entry_data['views'])/1000,2))+"K"
+                    elif int(entry_data['views']) >= 1000000:
+                        viewsFormat = str(round(int(entry_data['views'])/1000000,2))+"M"
+                    else:
+                        viewsFormat = entry_data['views']
                     storeData.objects.create(
                         dataURL=url,
                         publishDateYT=entry_data['published'],
                         videoIdYT=entry_data['video_id'],
                         videoTitleYT=entry_data['title'],
-                        viewsYT=entry_data['views'],
+                        viewsYT=viewsFormat,
                         thumbnailYT=entry_data['thumbnail_url'],
                         platform="YouTube",
                         channelNameYT="Joyca"
