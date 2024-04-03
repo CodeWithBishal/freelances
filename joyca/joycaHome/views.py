@@ -6,8 +6,8 @@ from .models import *
 import json
 
 # Create your views here.
-# youtubePfp = "https://www.googleapis.com/youtube/v3/channels?part=snippet&id=UCow2IGnug1l3Xazkrc5jM_Q&fields=items(id%2Csnippet%2Fthumbnails)&key=AIzaSyCsZ-F4iyCL-ScTOoE5WGlllQzpFry1zNY" #TODO
-youtubeBannerURL = "https://www.googleapis.com/youtube/v3/channels?part=brandingSettings&id=UCow2IGnug1l3Xazkrc5jM_Q&key=AIzaSyCsZ-F4iyCL-ScTOoE5WGlllQzpFry1zNY"
+# youtubePfp = "https://www.googleapis.com/youtube/v3/channels?part=snippet&id=UCow2IGnug1l3Xazkrc5jM_Q&fields=items(id%2Csnippet%2Fthumbnails)&key=AIzaSyDkJ3at6Kz5clyVJeykvZYfstdpGC2dmHs" #TODO
+youtubeBannerURL = "https://www.googleapis.com/youtube/v3/channels?part=brandingSettings&id=UCow2IGnug1l3Xazkrc5jM_Q&key=AIzaSyDkJ3at6Kz5clyVJeykvZYfstdpGC2dmHs"
 def index(request):
     # response = requests.get(youtubePfp)
     # if response.status_code == 200:
@@ -16,14 +16,14 @@ def index(request):
     # headers = {'User-Agent': request.headers.get('HTTP_USER_AGENT')}
     # response = requests.get("https://twitter.com/JoycaOff/header_photo", headers=headers)
     # print(response.content)
-    allData = storeData.objects.order_by("storeTime")[:6]
+    allData = storeData.objects.order_by("-publishDateYT")[:6]
     context = {"allData":allData}
     return render(request,"index.html", context=context)
 
 def youtube(request):
-    dataYT = storeData.objects.filter(platform="YouTube")
-    context={"youtube":dataYT}
-    return render(request,"youtube.html", context=context)
+    allData = storeData.objects.filter(platform="YouTube").order_by("-publishDateYT")[:6]
+    context = {"allData":allData}
+    return render(request,"index.html", context=context)
 
 def youtubeFetchAPI(request):
     url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCow2IGnug1l3Xazkrc5jM_Q"
@@ -59,28 +59,29 @@ def youtubeFetchAPI(request):
         if last_id_obj[0].lastID != first_entry_id:
             last_id_obj[0].platform = "YouTube"
             last_id_obj[0].lastID = first_entry_id
-            last_id_obj[0].save()
             # Save new entries to the database
-            for video_id, entry_data in entries.items():
+            for videoData in entries.values():
+                # print(storeData.objects.filter(videoIdYT=videoData["video_id"]).exists())
                 # Check if the entry already exists in the database to avoid duplicates
-                if not storeData.objects.filter(videoIdYT=entry_data['video_id']).exists():
+                if not storeData.objects.filter(videoIdYT=videoData['video_id']).exists():
                     # Create a new record
-                    if int(entry_data['views']) >= 1000 and int(entry_data['views'])<1000000:
-                        viewsFormat = str(round(int(entry_data['views'])/1000,2))+"K"
-                    elif int(entry_data['views']) >= 1000000:
-                        viewsFormat = str(round(int(entry_data['views'])/1000000,2))+"M"
+                    if int(videoData['views']) >= 1000 and int(videoData['views'])<1000000:
+                        viewsFormat = str(round(int(videoData['views'])/1000,2))+"K"
+                    elif int(videoData['views']) >= 1000000:
+                        viewsFormat = str(round(int(videoData['views'])/1000000,2))+"M"
                     else:
-                        viewsFormat = entry_data['views']
+                        viewsFormat = videoData['views']
                     storeData.objects.create(
                         dataURL=url,
-                        publishDateYT=entry_data['published'],
-                        videoIdYT=entry_data['video_id'],
-                        videoTitleYT=entry_data['title'],
+                        publishDateYT=videoData['published'],
+                        videoIdYT=videoData['video_id'],
+                        videoTitleYT=videoData['title'],
                         viewsYT=viewsFormat,
-                        thumbnailYT=entry_data['thumbnail_url'],
+                        thumbnailYT=videoData['thumbnail_url'],
                         platform="YouTube",
                         channelNameYT="Joyca"
                     )
+            last_id_obj[0].save()
         return HttpResponse(f"Status code: {response.status_code}")
 
     else:

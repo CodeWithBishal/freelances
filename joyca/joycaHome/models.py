@@ -10,10 +10,11 @@ class StoreLastIDs(models.Model):
 class storeData(models.Model):
     sno = models.AutoField(primary_key=True)
     storeTime = models.DateTimeField(default=now)
+    # common for all 
+    publishDateYT = models.DateTimeField(blank=False)
     #get from views.py
     channelNameYT = models.CharField(max_length=255)
     dataURL = models.CharField(max_length=255)
-    publishDateYT = models.DateTimeField(blank=False)
     videoIdYT = models.CharField(max_length=255)
     videoTitleYT = models.CharField(max_length=255)
     viewsYT = models.CharField(max_length=255)
