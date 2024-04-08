@@ -4,10 +4,13 @@ from django.http import HttpResponse
 import requests
 from .models import *
 import json
+from django.utils.timezone import now
 
 # Create your views here.
 # youtubePfp = "https://www.googleapis.com/youtube/v3/channels?part=snippet&id=UCow2IGnug1l3Xazkrc5jM_Q&fields=items(id%2Csnippet%2Fthumbnails)&key=AIzaSyDkJ3at6Kz5clyVJeykvZYfstdpGC2dmHs" #TODO
-youtubeBannerURL = "https://www.googleapis.com/youtube/v3/channels?part=brandingSettings&id=UCow2IGnug1l3Xazkrc5jM_Q&key=AIzaSyDkJ3at6Kz5clyVJeykvZYfstdpGC2dmHs"
+
+
+bearerToken = "AAAAAAAAAAAAAAAAAAAAADrgtAEAAAAAf0vC%2Fi2dZ5vgrs5XhK4hZoUL7Jo%3DV1Qe9k6MfOzMi6lZqI03mXmRUB0Ake24k6rw7r5Si6tCiLT4gn"
 def index(request):
     # response = requests.get(youtubePfp)
     # if response.status_code == 200:
@@ -17,7 +20,8 @@ def index(request):
     # response = requests.get("https://twitter.com/JoycaOff/header_photo", headers=headers)
     # print(response.content)
     allData = storeData.objects.order_by("-publishDateYT")[:6]
-    context = {"allData":allData}
+    bannerYTData = bannerYT.objects.get()
+    context = {"allData":allData, "YTBanner":bannerYTData}
     return render(request,"index.html", context=context)
 
 def youtube(request):
@@ -26,11 +30,11 @@ def youtube(request):
     return render(request,"index.html", context=context)
 
 def youtubeFetchAPI(request):
-    url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCow2IGnug1l3Xazkrc5jM_Q"
-    response = requests.get(url)
+    url = "https://www.instagram.com/joyca/?__a=1"
+    response = requests.get(url["profile_pic_url"])
     if response.status_code == 200:
         xml_data = response.content
-
+        print(xml_data)
         # Parse XML content
         root = ET.fromstring(xml_data)
 
@@ -59,6 +63,7 @@ def youtubeFetchAPI(request):
         if last_id_obj[0].lastID != first_entry_id:
             last_id_obj[0].platform = "YouTube"
             last_id_obj[0].lastID = first_entry_id
+            last_id_obj[0].lastRun = now()
             # Save new entries to the database
             for videoData in entries.values():
                 # print(storeData.objects.filter(videoIdYT=videoData["video_id"]).exists())
@@ -82,7 +87,56 @@ def youtubeFetchAPI(request):
                         channelNameYT="Joyca"
                     )
             last_id_obj[0].save()
+        else:
+            for videoData in entries.values():
+                data = storeData.objects.filter(videoIdYT=videoData["video_id"]).order_by("-publishDateYT")
+                if int(videoData['views']) >= 1000 and int(videoData['views'])<1000000:
+                    viewsFormat = str(round(int(videoData['views'])/1000,2))+"K"
+                elif int(videoData['views']) >= 1000000:
+                    viewsFormat = str(round(int(videoData['views'])/1000000,2))+"M"
+                else:
+                    viewsFormat = videoData['views']
+                data[0].dataURL = url,
+                data[0].publishDateYT=videoData['published'],
+                data[0].videoIdYT=videoData['video_id'],
+                data[0].videoTitleYT=videoData['title'],
+                data[0].viewsYT=viewsFormat,
+                data[0].thumbnailYT=videoData['thumbnail_url'],
+                data[0].platform="YouTube",
+                data[0].channelNameYT="Joyca",
+                data[0].storeTime=now()
+                print(viewsFormat)
+                data[0].save()
         return HttpResponse(f"Status code: {response.status_code}")
 
     else:
         return HttpResponse(f"Failed to fetch XML data. Status code: {response.status_code}")
+
+def fetchBanner(request):
+    youtubeBannerURL = "https://www.googleapis.com/youtube/v3/channels?part=brandingSettings&id=UCow2IGnug1l3Xazkrc5jM_Q&key=AIzaSyDkJ3at6Kz5clyVJeykvZYfstdpGC2dmHs"
+    response = requests.get(youtubeBannerURL)
+    ytSubsCount = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCow2IGnug1l3Xazkrc5jM_Q&fields=items/statistics/subscriberCount&key=AIzaSyDkJ3at6Kz5clyVJeykvZYfstdpGC2dmHs"
+    responseytSubsCount = requests.get(ytSubsCount)
+    a = requests.get("https://mobile.twitter.com/joycaoff")
+    print(a.content)
+    if response.status_code == 200 and responseytSubsCount.status_code == 200:
+        #youtubeBanner
+        jsonRes  =response.json()
+        image = jsonRes["items"][0]["brandingSettings"]["image"]["bannerExternalUrl"]
+        bannerModel = bannerYT.objects.get_or_create()
+        bannerModel[0].dataURL = image
+        bannerModel[0].storeTime = now()
+        #youtubeSubsCount
+        jsonRes =responseytSubsCount.json()
+        count = jsonRes["items"][0]["statistics"]["subscriberCount"]
+        if int(count) >= 1000 and int(count)<1000000:
+            subsFormat = str(round(int(count)/1000,2))+"K"
+        elif int(count) >= 1000000:
+            subsFormat = str(round(int(count)/1000000,2))+"M"
+        else:
+            subsFormat = count
+        bannerModel[0].subsCount = subsFormat
+        bannerModel[0].save()
+        return HttpResponse(f"Status code: {response.status_code}")
+    else:
+        return HttpResponse(f"Failed to fetch data. Status code: {response.status_code}")

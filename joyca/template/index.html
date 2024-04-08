@@ -8,20 +8,49 @@
   <link rel="shortcut icon" href="{{ytPfp}}">
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .profile-pic {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+    }
+
+    .twitter{
+      background: linear-gradient(rgba(29, 161, 242, 0.4), rgba(29, 161, 242, 0.4)), url("https://pbs.twimg.com/profile_banners/735416416434851845/1548452986/1500x500");
+      height:17vh;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    .instagram{
+      background: linear-gradient(45DEG, rgba(64, 93, 230, 0.4), rgba(88, 81, 219, 0.4), rgba(131, 58, 180, 0.4), rgba(193, 53, 132, 0.4), rgba(225, 48, 108, 0.4), rgba(253, 29, 29,0.4)), url("/static/image.png");
+      height:17vh;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    .youtube{
+      background: linear-gradient(rgba(255, 0, 0,0.4),rgba(255, 0, 0,0.4)), url("{{YTBanner.dataURL}}");
+      height:17vh;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    
+  </style>
   <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" /> 
 </head>
 
 <body class="bg-black text-white">
   <div class="overflow-x-hidden flex md:container mx-auto my-4">
-    <div class="sidebar-main w-16 md:w-[40%]">
+    <div class="sidebar-main w-16 md:w-[30%]">
 
       <div class="sidebar flex md:items-end  flex-col sticky top-0">
         <div class="md:h-[25vh]"></div>
         <ul class="flex flex-col text-2xl space-y-3 md:px-11 font-bold w-full  ">
           <li
             class="flex md:justify-start items-center gap-3 justify-center  mr-4 md:w-fit  hover:bg-gray-900 hover:cursor-pointer px-5 py-3 hover:rounded-full">
-            <span class="text-3xl material-symbols-outlined"> home </span> <span class="hidden md:block">Home</span>
+            <span class="text-3xl material-symbols-outlined"> home </span> <a href="/"><span class="hidden md:block">Home</span></a>
           </li>
           <li
             class="flex md:justify-start items-center gap-3 justify-center  mr-4 md:w-fit  hover:bg-gray-900 hover:cursor-pointer px-5 py-3 hover:rounded-full">
@@ -45,7 +74,7 @@
 
 
     </div>
-    <div class="main-feed w-full max-sm:w-[83%] border-[1px] border-x-gray-600 border-y-black ">
+    <div class="main-feed w-90 max-sm:w-[83%] border-[1px] border-x-gray-600 border-y-black ">
       <div class="top flex p-3 sticky top-0 bg-black backdrop-blur-3xl opacity-80">
         <div class="absolute w-16 h-1 rounded-full bg-blue-500 bottom-0 left-[44%] z-10"></div>
         <div class="left bg-red-3001 w-full flex justify-center font-bold text-lg">For You</div>
@@ -80,32 +109,55 @@
         {% endfor %}
       </div>
     </div>
-    <div class="info w-[50%] bg-red-5044 hidden md:block">
+    <div class="info w-[50%] bg-red-5044 sticky top-0  hidden md:block">
 
-      <div class="whats w-full sticky top-0 m-3 bg-[#16181c] w-1/2 py-5 rounded-xl space-y-3">
-        {% comment %} <h1 class="text-xl w-full font-bold px-3">Whats Happening</h1> {% endcomment %}
-        <div class="item p-3 hover:bg-gray-800 cursor-pointer px-3">
-          <img src="https://pbs.twimg.com/profile_banners/735416416434851845/1548452986/1500x500" alt="">
-        </div>
-
-        <div class="item p-3 hover:bg-gray-800 cursor-pointer px-3">
-          <div class="text-sm text-gray-200">Trending in India</div>
-          <div class="font-bold">#Harry</div>
-          <div class="text-sm text-gray-200">40.2k Posts</div>
-        </div>
-
-        <div class="item p-3 hover:bg-gray-800 cursor-pointer px-3">
-          <div class="text-sm text-gray-200">Trending in India</div>
-          <div class="font-bold">#Sigma Course</div>
-          <div class="text-sm text-gray-200">40.2k Posts</div>
-        </div>
-
-        <div class="item p-3 hover:bg-gray-800 cursor-pointer px-3">
-          <div class="text-sm text-gray-200">Trending in India</div>
-          <div class="font-bold">#CodeWithHarry</div>
-          <div class="text-sm text-gray-200">40.2k Posts</div>
+     <div class="">
+       <div class="whats w-full sticky top-0 m-3 bg-[#16181c] w-1/2 rounded-xl space-y-3">
+        <div class="item hover:bg-gray-800 hover:rounded-xl cursor-pointer relative">
+          <div class="twitter"></div>
+          <div class="h-[80px] ml-[20px] flex row items-center justify-start">
+          <div>
+            <img src="https://unavatar.io/twitter/JoycaOff" alt="Profile Picture" class="profile-pic">
+          </div>
+          <div>
+            <a href="https://twitter.com/JoycaOff" class="text-2xl pl-3 " target="_blank" rel="noopener noreferrer">@JoycaOff</a> 2.2M Followers
+          </div>
+          </div>
         </div>
       </div>
+    </div>
+<div class="h-[20px]"></div>
+<div class="">
+  <div class="whats w-full sticky top-0 m-3 bg-[#16181c] w-1/2 rounded-xl space-y-3">
+   <div class="item hover:bg-gray-800 hover:rounded-xl cursor-pointer relative">
+     <div class="youtube"></div>
+     <div class="h-[80px] ml-[20px] flex row items-center justify-start">
+     <div>
+       <img src="https://unavatar.io/youtube/joyca" alt="Profile Picture" class="profile-pic">
+     </div>
+     <div>
+       <a href="https://www.youtube.com/@joyca" class="text-2xl pl-3 " target="_blank" rel="noopener noreferrer">@Joyca</a> {{YTBanner.subsCount}} Subscribers
+     </div>
+     </div>
+   </div>
+ </div>
+</div>
+<div class="h-[20px]"></div>
+<div class="">
+  <div class="whats w-full sticky top-0 m-3 bg-[#16181c] w-1/2 rounded-xl space-y-3">
+   <div class="item hover:bg-gray-800 hover:rounded-xl cursor-pointer relative">
+     <div class="instagram"></div>
+     <div class="h-[80px] ml-[20px] flex row items-center justify-start">
+     <div>
+       <img src="/static/image.png" alt="Profile Picture" class="profile-pic">
+     </div>
+     <div>
+       <a href="https://www.instagram.com/joyca/" class="text-2xl pl-3 " target="_blank" rel="noopener noreferrer">@Joyca</a> 3.4M Followers
+     </div>
+     </div>
+   </div>
+ </div>
+</div>
     </div>
 </body>
  <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>

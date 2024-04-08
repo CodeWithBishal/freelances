@@ -20,3 +20,16 @@ class storeData(models.Model):
     viewsYT = models.CharField(max_length=255)
     thumbnailYT = models.CharField(max_length=255)
     platform = models.CharField(max_length=255, blank=False)
+
+class bannerYT(models.Model):
+    sno = models.AutoField(primary_key=True)
+    storeTime = models.DateTimeField(default=now)
+    # common for all
+    dataURL = models.TextField()
+    subsCount = models.CharField(max_length=255)
+
+class dpInsta(models.Model):
+    sno = models.AutoField(primary_key=True)
+    storeTime = models.DateTimeField(default=now)
+    # common for all
+    dataURL = models.TextField()
