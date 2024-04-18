@@ -178,13 +178,14 @@ def twitterScape(request):
     twitterDetsModel = twitterDP.objects.get_or_create()
     joyca_tweets = scraper.get_tweets("joycaoff", mode='user' ,number=30)
     for tweet in joyca_tweets['tweets']:
-        if tweet["is-retweet"] == False and not tweet["quoted-post"]:
+        dataExist =  storeData.objects.filter(tweetText = tweet["text"])
+        if tweet["is-retweet"] == False and not tweet["quoted-post"] and not dataExist.exists():
             isVid = False
             mediaURL = ""
             if tweet["videos"]:
                 isVid = True
                 mediaURL = tweet["videos"][0]
-            else:
+            elif tweet["pictures"]:
                 isVid = False
                 mediaURL = tweet["pictures"][0]
             
@@ -202,7 +203,7 @@ def twitterScape(request):
     
     
     joyca_information = scraper.get_profile_info("joycaoff")
-    twitterDetsModel[0].followerCount = joyca_information["stats"]["followers"]
-    twitterDP[0].storeTime=now()
-    twitterDP[0].save()
+    twitterDetsModel[0].followerCount = format_count(joyca_information["stats"]["followers"])
+    twitterDetsModel[0].storeTime=now()
+    twitterDetsModel[0].save()
     return HttpResponse("Status: OK")
