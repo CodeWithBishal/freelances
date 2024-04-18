@@ -1,5 +1,9 @@
 from django.db import models
 from django.utils.timezone import now
+
+class MediaLinks(models.Model):
+    mediaURL = models.TextField()
+
 # Create your models here.
 class StoreLastIDs(models.Model):
     sno = models.AutoField(primary_key=True)
@@ -12,6 +16,7 @@ class storeData(models.Model):
     storeTime = models.DateTimeField(default=now)
     # common for all 
     publishDateYT = models.DateTimeField(blank=False)
+    platform = models.CharField(max_length=255, blank=False)
     #get from views.py
     channelNameYT = models.CharField(max_length=255)
     dataURL = models.CharField(max_length=255)
@@ -19,7 +24,22 @@ class storeData(models.Model):
     videoTitleYT = models.CharField(max_length=255)
     viewsYT = models.CharField(max_length=255)
     thumbnailYT = models.CharField(max_length=255)
-    platform = models.CharField(max_length=255, blank=False)
+    # InstaData
+    instaThumbnailURL = models.TextField()
+    instaIsVideo = models.CharField(max_length=255)
+    instaVideoURL = models.TextField()
+    instaPostID = models.CharField(max_length=255)
+    instaIsSingle = models.CharField(max_length=255)
+    instaMediaLinks = models.JSONField()
+
+    #Twitter
+    twitterThumbnailURL = models.TextField()
+    tweetText = models.TextField()
+    twitterLikes = models.CharField(max_length=255)
+    tweetLink = models.TextField()
+    twitterIsVideo = models.CharField(max_length=255)
+    twitterMediaURL = models.TextField()
+    twitterPostID = models.CharField(max_length=255)
 
 class bannerYT(models.Model):
     sno = models.AutoField(primary_key=True)
@@ -33,3 +53,19 @@ class dpInsta(models.Model):
     storeTime = models.DateTimeField(default=now)
     # common for all
     dataURL = models.TextField()
+    followerCount = models.CharField(max_length=255)
+
+class twitterDP(models.Model):
+    sno = models.AutoField(primary_key=True)
+    storeTime = models.DateTimeField(default=now)
+    # common for all
+    dataURL = models.TextField()
+    followerCount = models.CharField(max_length=255)
+
+
+# TODO:
+# Pagination
+# instagram content
+# twitter content
+# twitter count
+# Setup cron job

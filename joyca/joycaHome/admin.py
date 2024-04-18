@@ -4,3 +4,5 @@ from .models import *
 admin.site.register(StoreLastIDs)
 admin.site.register(storeData)
 admin.site.register(bannerYT)
+admin.site.register(dpInsta)
+admin.site.register(twitterDP)

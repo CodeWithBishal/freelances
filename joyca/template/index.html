@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head class="overflow-x-hidden">
+<head class="max-sm:overflow-x-hidden">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Joyca.fr</title>
@@ -19,22 +19,31 @@
     }
 
     .twitter{
-      background: linear-gradient(rgba(29, 161, 242, 0.4), rgba(29, 161, 242, 0.4)), url("https://pbs.twimg.com/profile_banners/735416416434851845/1548452986/1500x500");
+      background:url("{{twitterData.dataURL}}");
       height:17vh;
       background-repeat: no-repeat;
       background-size: cover;
+    }
+    .twitter-bg{
+      background: linear-gradient(rgba(29, 161, 242, 0.4), rgba(29, 161, 242, 0.4));
     }
     .instagram{
-      background: linear-gradient(45DEG, rgba(64, 93, 230, 0.4), rgba(88, 81, 219, 0.4), rgba(131, 58, 180, 0.4), rgba(193, 53, 132, 0.4), rgba(225, 48, 108, 0.4), rgba(253, 29, 29,0.4)), url("/static/image.png");
+      background: url("/static/instagram.jpg");
       height:17vh;
       background-repeat: no-repeat;
       background-size: cover;
     }
+    .instagram-bg{
+      background: linear-gradient(45DEG, rgba(64, 93, 230, 0.4), rgba(88, 81, 219, 0.4), rgba(131, 58, 180, 0.4), rgba(193, 53, 132, 0.4), rgba(225, 48, 108, 0.4), rgba(253, 29, 29,0.4))
+    }
     .youtube{
-      background: linear-gradient(rgba(255, 0, 0,0.4),rgba(255, 0, 0,0.4)), url("{{YTBanner.dataURL}}");
+      background: url("{{YTBanner.dataURL}}");
       height:17vh;
       background-repeat: no-repeat;
       background-size: cover;
+    }
+    .youtube-bg{
+      background: linear-gradient(rgba(255, 0, 0,0.4),rgba(255, 0, 0,0.4));
     }
     
   </style>
@@ -42,7 +51,7 @@
 </head>
 
 <body class="bg-black text-white">
-  <div class="overflow-x-hidden flex md:container mx-auto my-4">
+  <div class="max-sm:overflow-x-hidden flex md:container mx-auto my-4">
     <div class="sidebar-main w-16 md:w-[30%]">
 
       <div class="sidebar flex md:items-end  flex-col sticky top-0">
@@ -75,8 +84,8 @@
 
     </div>
     <div class="main-feed w-90 max-sm:w-[83%] border-[1px] border-x-gray-600 border-y-black ">
-      <div class="top flex p-3 sticky top-0 bg-black backdrop-blur-3xl opacity-80">
-        <div class="absolute w-16 h-1 rounded-full bg-blue-500 bottom-0 left-[44%] z-10"></div>
+      <div class="top flex p-3 sticky z-[999] top-0 bg-black backdrop-blur-3xl opacity-80">
+        <div class="absolute w-16 h-1 rounded-full bg-blue-500 bottom-0 left-[44%] "></div>
         <div class="left bg-red-3001 w-full flex justify-center font-bold text-lg">For You</div>
       </div>
       <div class="h-[1px] w-full bg-gray-700"></div>
@@ -109,31 +118,31 @@
         {% endfor %}
       </div>
     </div>
-    <div class="info w-[50%] bg-red-5044 sticky top-0  hidden md:block">
+    <div class="info w-[50%] bg-red-5044 sticky top-0 hidden md:block">
 
-     <div class="">
-       <div class="whats w-full sticky top-0 m-3 bg-[#16181c] w-1/2 rounded-xl space-y-3">
+     <div class="sticky top-0 z-[999]">
+       <div class="whats w-full m-3 bg-[#16181c] w-1/2 rounded-xl space-y-3">
         <div class="item hover:bg-gray-800 hover:rounded-xl cursor-pointer relative">
           <div class="twitter"></div>
-          <div class="h-[80px] ml-[20px] flex row items-center justify-start">
+          <div class="h-[80px] w-full twitter-bg flex row rounded-b-xl items-center justify-start">
           <div>
-            <img src="https://unavatar.io/twitter/JoycaOff" alt="Profile Picture" class="profile-pic">
+            <img src="https://unavatar.io/twitter/JoycaOff" alt="Profile Picture" class="profile-pic ml-[20px]">
           </div>
           <div>
-            <a href="https://twitter.com/JoycaOff" class="text-2xl pl-3 " target="_blank" rel="noopener noreferrer">@JoycaOff</a> 2.2M Followers
+            <a href="https://twitter.com/JoycaOff" class="text-2xl pl-3 " target="_blank" rel="noopener noreferrer">@JoycaOff</a> {{twitterData.followerCount}} Followers
           </div>
           </div>
         </div>
       </div>
     </div>
 <div class="h-[20px]"></div>
-<div class="">
+<div class="sticky top-0 z-[999]">
   <div class="whats w-full sticky top-0 m-3 bg-[#16181c] w-1/2 rounded-xl space-y-3">
    <div class="item hover:bg-gray-800 hover:rounded-xl cursor-pointer relative">
      <div class="youtube"></div>
-     <div class="h-[80px] ml-[20px] flex row items-center justify-start">
+     <div class="h-[80px] youtube-bg flex rounded-b-xl row items-center justify-start">
      <div>
-       <img src="https://unavatar.io/youtube/joyca" alt="Profile Picture" class="profile-pic">
+       <img src="https://unavatar.io/youtube/joyca" alt="Profile Picture" class="ml-[20px] profile-pic">
      </div>
      <div>
        <a href="https://www.youtube.com/@joyca" class="text-2xl pl-3 " target="_blank" rel="noopener noreferrer">@Joyca</a> {{YTBanner.subsCount}} Subscribers
@@ -143,21 +152,22 @@
  </div>
 </div>
 <div class="h-[20px]"></div>
-<div class="">
+<div class="sticky top-0 z-[999]">
   <div class="whats w-full sticky top-0 m-3 bg-[#16181c] w-1/2 rounded-xl space-y-3">
    <div class="item hover:bg-gray-800 hover:rounded-xl cursor-pointer relative">
      <div class="instagram"></div>
-     <div class="h-[80px] ml-[20px] flex row items-center justify-start">
+     <div class="h-[80px] instagram-bg rounded-b-xl flex row items-center justify-start">
      <div>
-       <img src="/static/image.png" alt="Profile Picture" class="profile-pic">
+       <img src="/static/instagram.jpg" alt="Profile Picture" class="profile-pic ml-[20px]">
      </div>
      <div>
-       <a href="https://www.instagram.com/joyca/" class="text-2xl pl-3 " target="_blank" rel="noopener noreferrer">@Joyca</a> 3.4M Followers
+       <a href="https://www.instagram.com/joyca/" class="text-2xl pl-3 " target="_blank" rel="noopener noreferrer">@Joyca</a> {{instaData.followerCount}} Followers
      </div>
      </div>
    </div>
  </div>
 </div>
+  <div class="h-[50px] w-full sticky top-0 z-[999] ml-[18px] bg-red-500">eqwe</div>
     </div>
 </body>
  <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
