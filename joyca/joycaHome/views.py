@@ -174,35 +174,35 @@ def fetchBanner(request):
 
 def twitterScape(request):
     #Twitter
-        scraper = Nitter(log_level=1, skip_instance_check=False)
-        twitterDetsModel = twitterDP.objects.get_or_create()
-        joyca_tweets = scraper.get_tweets("joycaoff", mode='user' ,number=30)
-        for tweet in joyca_tweets['tweets']:
-            if tweet["is-retweet"] == False and not tweet["quoted-post"]:
+    scraper = Nitter(log_level=1, skip_instance_check=False)
+    twitterDetsModel = twitterDP.objects.get_or_create()
+    joyca_tweets = scraper.get_tweets("joycaoff", mode='user' ,number=30)
+    for tweet in joyca_tweets['tweets']:
+        if tweet["is-retweet"] == False and not tweet["quoted-post"]:
+            isVid = False
+            mediaURL = ""
+            if tweet["videos"]:
+                isVid = True
+                mediaURL = tweet["videos"][0]
+            else:
                 isVid = False
-                mediaURL = ""
-                if tweet["videos"]:
-                    isVid = True
-                    mediaURL = tweet["videos"][0]
-                else:
-                    isVid = False
-                    mediaURL = tweet["pictures"][0]
-                
-                input_datetime = datetime.strptime(tweet["date"], "%b %d, %Y · %I:%M %p %Z")
-                formatted_datetime = input_datetime.strftime("%Y-%m-%d %H:%M:%S.%U")
-                storeData.objects.create(
-                    tweetText = tweet["text"],
-                    twitterLikes = tweet["stats"]["likes"],
-                    tweetLink = tweet["link"],
-                    twitterIsVideo = isVid,
-                    twitterMediaURL= mediaURL,
-                    platform = "Twitter",
-                    publishDateYT = formatted_datetime,
-                )
-        
-        
-        joyca_information = scraper.get_profile_info("joycaoff")
-        twitterDetsModel[0].followerCount = joyca_information["stats"]["followers"]
-        twitterDP[0].storeTime=now()
-        twitterDP[0].save()
-        return HttpResponse("Status: OK")
+                mediaURL = tweet["pictures"][0]
+            
+            input_datetime = datetime.strptime(tweet["date"], "%b %d, %Y · %I:%M %p %Z")
+            formatted_datetime = input_datetime.strftime("%Y-%m-%d %H:%M:%S.%U")
+            storeData.objects.create(
+                tweetText = tweet["text"],
+                twitterLikes = tweet["stats"]["likes"],
+                tweetLink = tweet["link"],
+                twitterIsVideo = isVid,
+                twitterMediaURL= mediaURL,
+                platform = "Twitter",
+                publishDateYT = formatted_datetime,
+            )
+    
+    
+    joyca_information = scraper.get_profile_info("joycaoff")
+    twitterDetsModel[0].followerCount = joyca_information["stats"]["followers"]
+    twitterDP[0].storeTime=now()
+    twitterDP[0].save()
+    return HttpResponse("Status: OK")

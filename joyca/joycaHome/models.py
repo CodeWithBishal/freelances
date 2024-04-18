@@ -30,7 +30,7 @@ class storeData(models.Model):
     instaVideoURL = models.TextField()
     instaPostID = models.CharField(max_length=255)
     instaIsSingle = models.CharField(max_length=255)
-    instaMediaLinks = models.JSONField()
+    instaMediaLinks = models.JSONField(blank=True, null=True)
 
     #Twitter
     twitterThumbnailURL = models.TextField()
