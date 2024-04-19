@@ -154,6 +154,33 @@ def fetchBanner(request):
         instaModel[0].dataURL = image
         instaModel[0].storeTime = now()
         
+        mediaLinks = []
+        for data in jsonRes["data"]["user"]["edge_owner_to_timeline_media"]["edges"]:
+            IsVideo = data["node"]["is_video"]
+            instaPostID = data["node"]["id"]
+            if IsVideo:
+                instaVideoURL = data["node"]["video_url"]
+                instaThumbnailURL = data["node"]["display_url"]
+            else:
+                if len(data["node"]["edge_sidecar_to_children"]["edges"])>1:
+                    instaIsSingle = False
+                    for imLinks in data["node"]["edge_sidecar_to_children"]["edges"]:
+                        mediaLinks.append(imLinks["node"]["display_url"])
+                else:
+                    instaIsSingle = True
+                    mediaLinks.append(data["node"]["edge_sidecar_to_children"]["edges"][0]["node"]["display_url"])
+            postMessage = data["node"]["edge_media_to_caption"]["edges"][0]["node"]["text"]
+            if not storeData.objects.filter(instaPostID = instaPostID).exists():
+                storeData.objects.create(
+                    instaThumbnailURL = instaThumbnailURL,
+                    instaIsVideo = IsVideo,
+                    instaVideoURL = instaVideoURL,
+                    instaDesc = postMessage,
+                    instaPostID = instaPostID,
+                    instaIsSingle = instaIsSingle,
+                    instaMediaLinks = mediaLinks,
+                )
+        
         BASE_DIR = Path(__file__).resolve().parent.parent
         directory = os.path.join(BASE_DIR, "static")
         if not os.path.exists(directory):

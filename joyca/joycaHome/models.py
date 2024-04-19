@@ -28,6 +28,7 @@ class storeData(models.Model):
     instaThumbnailURL = models.TextField()
     instaIsVideo = models.CharField(max_length=255)
     instaVideoURL = models.TextField()
+    instaDesc = models.TextField()
     instaPostID = models.CharField(max_length=255)
     instaIsSingle = models.CharField(max_length=255)
     instaMediaLinks = models.JSONField(blank=True, null=True)
