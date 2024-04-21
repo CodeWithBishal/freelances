@@ -27,7 +27,7 @@ class storeData(models.Model):
     # InstaData
     instaThumbnailURL = models.TextField()
     instaIsVideo = models.CharField(max_length=255)
-    instaVideoURL = models.TextField()
+    instaVideoURL = models.TextField(blank=True,null=True)
     instaDesc = models.TextField()
     instaPostLink = models.TextField()
     instaLikes = models.TextField()
@@ -36,13 +36,11 @@ class storeData(models.Model):
     instaMediaLinks = models.JSONField(blank=True, null=True)
 
     #Twitter
-    twitterThumbnailURL = models.TextField()
     tweetText = models.TextField()
     twitterLikes = models.CharField(max_length=255)
     tweetLink = models.TextField()
     twitterIsVideo = models.CharField(max_length=255)
     twitterMediaURL = models.TextField()
-    twitterPostID = models.CharField(max_length=255)
     def __str__(self):
         return f"{self.sno} - {self.platform}"
 

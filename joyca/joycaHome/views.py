@@ -31,7 +31,6 @@ def download_video(url, filename, folder):
             os.makedirs(directory)
         filenameDir = os.path.join(directory, filename)
         response = requests.get(url)
-        print(response.status_code)
         if response.status_code == 200:
             with open(filenameDir, 'wb') as f:
                 print("done")
@@ -60,7 +59,7 @@ def youtube(request):
     return render(request,"index.html", context=context)
 def twitter(request):
     twitterData = twitterDP.objects.get()
-    allData = storeData.objects.filter(platform="Twitter").order_by("-publishDateYT")[:6]
+    allData = storeData.objects.filter(platform="Twitter").order_by("-publishDateYT").distinct()
     context = {"allData":allData,"twitterData":twitterData}
     return render(request,"index.html", context=context)
 def instagram(request):
@@ -161,7 +160,6 @@ def fetchBanner(request):
 
     if response.status_code == 200 and responseytSubsCount.status_code == 200 and instaBannerAndfollow.status_code == 200:
         #youtubeBanner
-        print(instaBannerAndfollow.content)
         jsonRes  =response.json()
         image = jsonRes["items"][0]["brandingSettings"]["image"]["bannerExternalUrl"]
         bannerModel = bannerYT.objects.get_or_create()
@@ -179,9 +177,12 @@ def fetchBanner(request):
         instaModel[0].dataURL = image
         instaModel[0].storeTime = now()
         
-        mediaLinks = []
-        instaIsSingle = False
         for data in jsonRes["data"]["user"]["edge_owner_to_timeline_media"]["edges"]:
+            instaIsSingle = False
+            IsVideo = False
+            videoURLInsta = None
+            mediaLinks = []
+            localMedLinks = []
             IsVideo = data["node"]["is_video"]
             instaPostID = data["node"]["id"]
             if IsVideo:
@@ -202,31 +203,39 @@ def fetchBanner(request):
             if not storeData.objects.filter(instaPostID = instaPostID).exists():
                 if IsVideo == True:
                     download_video(instaVideoURL,f"{instaPostID}.mp4","static/instagram/videos")
+                    videoURLInsta = f"{instaPostID}.mp4"
+                if instaThumbnailURL != "":
+                    download_video(instaThumbnailURL,f"{data["node"]["shortcode"]}.jpg",f"static/instagram/thumbnail/{data["node"]["shortcode"]}")
+                if mediaLinks != [] or mediaLinks != "":
+                    print(mediaLinks)
+                    for index,value in enumerate(mediaLinks):
+                        download_video(value,f"{data["node"]["shortcode"]}-{index}.jpg",f"static/instagram/media/{data["node"]["shortcode"]}")
+                        localMedLinks.append(f"{data["node"]["shortcode"]}-{index}.jpg")
                 storeData.objects.create(
-                    instaThumbnailURL = instaThumbnailURL,
+                    instaThumbnailURL = f"{data["node"]["shortcode"]}.jpg",
                     instaIsVideo = IsVideo,
-                    instaVideoURL = f"{instaPostID}.mp4",
+                    instaVideoURL = videoURLInsta,
                     instaDesc = postMessage,
                     instaPostID = instaPostID,
                     instaIsSingle = instaIsSingle,
-                    instaMediaLinks = mediaLinks,
+                    instaMediaLinks = localMedLinks,
                     platform = "Instagram",
                     publishDateYT = postedTime,
                     instaLikes = likes,
                     instaPostLink = data["node"]["shortcode"]
                 )
             else:
-               instaDataa= storeData.objects.filter(instaPostID = instaPostID).first()
-               instaDataa.instaThumbnailURL=instaThumbnailURL
-               instaDataa.instaIsVideo=IsVideo
-               instaDataa.instaVideoURL=instaVideoURL
-               instaDataa.instaDesc=postMessage
-               instaDataa.instaPostID=instaPostID
-               instaDataa.instaIsSingle=instaIsSingle
-               instaDataa.instaMediaLinks=mediaLinks
-               instaDataa.instaLikes=likes
-               instaDataa.instaPostLink = data["node"]["shortcode"]
-               instaDataa.save()
+                instaDataa= storeData.objects.filter(instaPostID = instaPostID).first()
+                # instaDataa.instaThumbnailURL=instaThumbnailURL
+                instaDataa.instaIsVideo=IsVideo
+                # instaVideoURL = videoURLInsta,
+                instaDataa.instaDesc=postMessage
+                instaDataa.instaPostID=instaPostID
+                instaDataa.instaIsSingle=instaIsSingle
+                # instaDataa.instaMediaLinks=mediaLinks
+                instaDataa.instaLikes=likes
+                instaDataa.instaPostLink = data["node"]["shortcode"]
+                instaDataa.save()
         
         BASE_DIR = Path(__file__).resolve().parent.parent
         directory = os.path.join(BASE_DIR, "static")
@@ -252,7 +261,7 @@ def twitterScape(request):
     twitterDetsModel = twitterDP.objects.get_or_create()
     joyca_tweets = scraper.get_tweets("joycaoff", mode='user' ,number=30)
     for tweet in joyca_tweets['tweets']:
-        dataExist =  storeData.objects.filter(tweetText = tweet["text"]).exists()
+        dataExist =  storeData.objects.filter(tweetLink = tweet["link"]).exists()
         if tweet["is-retweet"] == False and not tweet["quoted-post"] and not dataExist:
             print(tweet["text"])
             isVid = False
@@ -280,7 +289,7 @@ def twitterScape(request):
             twitterDataa.tweetText = tweet["text"]
             twitterDataa.twitterLikes = format_count(tweet["stats"]["likes"])
             twitterDataa.tweetLink = tweet["link"]
-            twitterDataa.twitterIsVideo=isVid
+            # twitterDataa.twitterIsVideo=isVid
             twitterDataa.twitterMediaURL=mediaURL
             twitterDataa.save()
     
