@@ -41,6 +41,7 @@ class storeData(models.Model):
     tweetLink = models.TextField()
     twitterIsVideo = models.CharField(max_length=255)
     twitterMediaURL = models.TextField()
+    twitterPostID = models.CharField(max_length=255)
     def __str__(self):
         return f"{self.sno} - {self.platform}"
 

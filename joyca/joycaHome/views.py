@@ -24,6 +24,18 @@ def format_count(count):
         subsFormat = count
     return subsFormat
 
+def extract_twitter_id(url):
+    # Split the URL by "/"
+    parts = url.split("/")
+    
+    # Get the last part of the URL
+    last_part = parts[-1]
+    
+    # Remove any anchor or query string if present
+    twitter_id = last_part.split("#")[0].split("?")[0]
+    
+    return twitter_id
+
 def download_video(url, filename, folder):
         BASE_DIR = Path(__file__).resolve().parent.parent
         directory = os.path.join(BASE_DIR, folder)
@@ -46,25 +58,33 @@ def index(request):
     # headers = {'User-Agent': request.headers.get('HTTP_USER_AGENT')}
     # response = requests.get("https://twitter.com/JoycaOff/header_photo", headers=headers)
     # print(response.content)
+    bannerYTData = bannerYT.objects.first()
+    instaData = dpInsta.objects.first()
+    twitterData = twitterDP.objects.first()
     allData = storeData.objects.order_by("-publishDateYT")[:6]
-    bannerYTData = bannerYT.objects.get()
-    instaData = dpInsta.objects.get()
-    twitterData = twitterDP.objects.get()
-    context = {"allData":allData, "YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
+    context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
     return render(request,"index.html", context=context)
 
 def youtube(request):
+    bannerYTData = bannerYT.objects.first()
+    instaData = dpInsta.objects.first()
+    twitterData = twitterDP.objects.first()
     allData = storeData.objects.filter(platform="YouTube").order_by("-publishDateYT")[:6]
-    context = {"allData":allData}
+    context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
     return render(request,"index.html", context=context)
 def twitter(request):
+    bannerYTData = bannerYT.objects.first()
+    instaData = dpInsta.objects.first()
     twitterData = twitterDP.objects.get()
     allData = storeData.objects.filter(platform="Twitter").order_by("-publishDateYT").distinct()
-    context = {"allData":allData,"twitterData":twitterData}
+    context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
     return render(request,"index.html", context=context)
 def instagram(request):
+    bannerYTData = bannerYT.objects.first()
+    instaData = dpInsta.objects.first()
+    twitterData = twitterDP.objects.first()
     allData = storeData.objects.filter(platform="Instagram").order_by("-publishDateYT")[:6]
-    context = {"allData":allData}
+    context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
     return render(request,"index.html", context=context)
 
 def youtubeFetchAPI(request):
@@ -200,14 +220,13 @@ def fetchBanner(request):
             postedTime = datetime.fromtimestamp(data["node"]["taken_at_timestamp"])
             likes = format_count(data["node"]["edge_media_preview_like"]["count"])
 
-            if not storeData.objects.filter(instaPostID = instaPostID).exists():
+            if not storeData.objects.filter(instaPostID = instaPostID, platform="Instagram").exists():
                 if IsVideo == True:
                     download_video(instaVideoURL,f"{instaPostID}.mp4","static/instagram/videos")
                     videoURLInsta = f"{instaPostID}.mp4"
                 if instaThumbnailURL != "":
                     download_video(instaThumbnailURL,f"{data["node"]["shortcode"]}.jpg",f"static/instagram/thumbnail/{data["node"]["shortcode"]}")
                 if mediaLinks != [] or mediaLinks != "":
-                    print(mediaLinks)
                     for index,value in enumerate(mediaLinks):
                         download_video(value,f"{data["node"]["shortcode"]}-{index}.jpg",f"static/instagram/media/{data["node"]["shortcode"]}")
                         localMedLinks.append(f"{data["node"]["shortcode"]}-{index}.jpg")
@@ -225,7 +244,7 @@ def fetchBanner(request):
                     instaPostLink = data["node"]["shortcode"]
                 )
             else:
-                instaDataa= storeData.objects.filter(instaPostID = instaPostID).first()
+                instaDataa= storeData.objects.filter(instaPostID = instaPostID, platform="Instagram").first()
                 # instaDataa.instaThumbnailURL=instaThumbnailURL
                 instaDataa.instaIsVideo=IsVideo
                 # instaVideoURL = videoURLInsta,
@@ -261,13 +280,14 @@ def twitterScape(request):
     twitterDetsModel = twitterDP.objects.get_or_create()
     joyca_tweets = scraper.get_tweets("joycaoff", mode='user' ,number=30)
     for tweet in joyca_tweets['tweets']:
-        dataExist =  storeData.objects.filter(tweetLink = tweet["link"]).exists()
+        dataExist =  storeData.objects.filter(tweetLink = tweet["link"], platform="Twitter").exists()
+        print(dataExist)
         if tweet["is-retweet"] == False and not tweet["quoted-post"] and not dataExist:
-            print(tweet["text"])
             isVid = False
             mediaURL = ""
             if tweet["videos"]:
                 isVid = True
+                # download_video(tweet["videos"][0], f"{extract_twitter_id(tweet["link"])}.mp4", f"static/twitter/videos")
                 mediaURL = tweet["videos"][0]
             elif tweet["pictures"]:
                 isVid = False
@@ -283,15 +303,18 @@ def twitterScape(request):
                 twitterMediaURL= mediaURL,
                 platform = "Twitter",
                 publishDateYT = formatted_datetime,
+                twitterPostID = extract_twitter_id(tweet["link"])
             )
         else:
-            twitterDataa = storeData.objects.filter(tweetText = tweet["text"]).first()
-            twitterDataa.tweetText = tweet["text"]
-            twitterDataa.twitterLikes = format_count(tweet["stats"]["likes"])
-            twitterDataa.tweetLink = tweet["link"]
-            # twitterDataa.twitterIsVideo=isVid
-            twitterDataa.twitterMediaURL=mediaURL
-            twitterDataa.save()
+            twitterDataa = storeData.objects.filter(tweetLink = tweet["link"], platform="Twitter").first()
+            print(twitterDataa)
+            if twitterDataa:
+                twitterDataa.tweetText = tweet["text"]
+                twitterDataa.twitterLikes = format_count(tweet["stats"]["likes"])
+                twitterDataa.tweetLink = tweet["link"]
+                # twitterDataa.twitterIsVideo=isVid
+                # twitterDataa.twitterMediaURL=mediaURL
+                twitterDataa.save()
     
     
     joyca_information = scraper.get_profile_info("joycaoff")

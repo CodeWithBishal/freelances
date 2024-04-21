@@ -153,6 +153,7 @@
                 <video id="my-video-twitter{{data.sno}}" class="video-js" controls preload="auto" width="550"
                   height="264" poster="{{data.twitterThumbnailURL}}" data-setup="{}">
                   <source src="{{data.twitterMediaURL}}" type="video/mp4" />
+                  <source type="application/x-mpegURL" src="{{data.twitterMediaURL}}">
                   <p class="vjs-no-js">
                     {{data.twitterMediaURL}}
                     To view this video please enable JavaScript, and consider upgrading to a
@@ -266,7 +267,7 @@
           </div>
         </div>
       </div>
-      <div class="h-[50px] w-full sticky top-0 z-[999] ml-[18px] bg-red-500">eqwe</div>
+      {% comment %} <div class="h-[50px] w-full sticky top-0 z-[999] ml-[18px] bg-red-500">eqwe</div> {% endcomment %}
     </div>
 </body>
 <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
