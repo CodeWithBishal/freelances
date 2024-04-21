@@ -29,6 +29,8 @@ class storeData(models.Model):
     instaIsVideo = models.CharField(max_length=255)
     instaVideoURL = models.TextField()
     instaDesc = models.TextField()
+    instaPostLink = models.TextField()
+    instaLikes = models.TextField()
     instaPostID = models.CharField(max_length=255)
     instaIsSingle = models.CharField(max_length=255)
     instaMediaLinks = models.JSONField(blank=True, null=True)
@@ -41,6 +43,8 @@ class storeData(models.Model):
     twitterIsVideo = models.CharField(max_length=255)
     twitterMediaURL = models.TextField()
     twitterPostID = models.CharField(max_length=255)
+    def __str__(self):
+        return f"{self.sno} - {self.platform}"
 
 class bannerYT(models.Model):
     sno = models.AutoField(primary_key=True)
@@ -61,6 +65,7 @@ class twitterDP(models.Model):
     storeTime = models.DateTimeField(default=now)
     # common for all
     dataURL = models.TextField()
+    dpURL = models.TextField()
     followerCount = models.CharField(max_length=255)
 
 

@@ -8,4 +8,6 @@ urlpatterns = [
     path('bannerYT-23-22aa-API-URL', views.fetchBanner, name="bannerYTFetchAPI"),
     path('twitterScape-23-22aa-API-URL', views.twitterScape, name="twitterScape"),
     path('youtube', views.youtube, name="youtube"),
+    path('twitter', views.twitter, name="twitter"),
+    path('instagram', views.instagram, name="instagram"),
 ]

@@ -24,6 +24,21 @@ def format_count(count):
         subsFormat = count
     return subsFormat
 
+def download_video(url, filename, folder):
+        BASE_DIR = Path(__file__).resolve().parent.parent
+        directory = os.path.join(BASE_DIR, folder)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        filenameDir = os.path.join(directory, filename)
+        response = requests.get(url)
+        print(response.status_code)
+        if response.status_code == 200:
+            with open(filenameDir, 'wb') as f:
+                print("done")
+                f.write(response.content)
+        else:
+            return HttpResponse("Status: FAILED!")
+
 def index(request):
     # response = requests.get(youtubePfp)
     # if response.status_code == 200:
@@ -41,6 +56,15 @@ def index(request):
 
 def youtube(request):
     allData = storeData.objects.filter(platform="YouTube").order_by("-publishDateYT")[:6]
+    context = {"allData":allData}
+    return render(request,"index.html", context=context)
+def twitter(request):
+    twitterData = twitterDP.objects.get()
+    allData = storeData.objects.filter(platform="Twitter").order_by("-publishDateYT")[:6]
+    context = {"allData":allData,"twitterData":twitterData}
+    return render(request,"index.html", context=context)
+def instagram(request):
+    allData = storeData.objects.filter(platform="Instagram").order_by("-publishDateYT")[:6]
     context = {"allData":allData}
     return render(request,"index.html", context=context)
 
@@ -137,6 +161,7 @@ def fetchBanner(request):
 
     if response.status_code == 200 and responseytSubsCount.status_code == 200 and instaBannerAndfollow.status_code == 200:
         #youtubeBanner
+        print(instaBannerAndfollow.content)
         jsonRes  =response.json()
         image = jsonRes["items"][0]["brandingSettings"]["image"]["bannerExternalUrl"]
         bannerModel = bannerYT.objects.get_or_create()
@@ -155,6 +180,7 @@ def fetchBanner(request):
         instaModel[0].storeTime = now()
         
         mediaLinks = []
+        instaIsSingle = False
         for data in jsonRes["data"]["user"]["edge_owner_to_timeline_media"]["edges"]:
             IsVideo = data["node"]["is_video"]
             instaPostID = data["node"]["id"]
@@ -170,16 +196,37 @@ def fetchBanner(request):
                     instaIsSingle = True
                     mediaLinks.append(data["node"]["edge_sidecar_to_children"]["edges"][0]["node"]["display_url"])
             postMessage = data["node"]["edge_media_to_caption"]["edges"][0]["node"]["text"]
+            postedTime = datetime.fromtimestamp(data["node"]["taken_at_timestamp"])
+            likes = format_count(data["node"]["edge_media_preview_like"]["count"])
+
             if not storeData.objects.filter(instaPostID = instaPostID).exists():
+                if IsVideo == True:
+                    download_video(instaVideoURL,f"{instaPostID}.mp4","static/instagram/videos")
                 storeData.objects.create(
                     instaThumbnailURL = instaThumbnailURL,
                     instaIsVideo = IsVideo,
-                    instaVideoURL = instaVideoURL,
+                    instaVideoURL = f"{instaPostID}.mp4",
                     instaDesc = postMessage,
                     instaPostID = instaPostID,
                     instaIsSingle = instaIsSingle,
                     instaMediaLinks = mediaLinks,
+                    platform = "Instagram",
+                    publishDateYT = postedTime,
+                    instaLikes = likes,
+                    instaPostLink = data["node"]["shortcode"]
                 )
+            else:
+               instaDataa= storeData.objects.filter(instaPostID = instaPostID).first()
+               instaDataa.instaThumbnailURL=instaThumbnailURL
+               instaDataa.instaIsVideo=IsVideo
+               instaDataa.instaVideoURL=instaVideoURL
+               instaDataa.instaDesc=postMessage
+               instaDataa.instaPostID=instaPostID
+               instaDataa.instaIsSingle=instaIsSingle
+               instaDataa.instaMediaLinks=mediaLinks
+               instaDataa.instaLikes=likes
+               instaDataa.instaPostLink = data["node"]["shortcode"]
+               instaDataa.save()
         
         BASE_DIR = Path(__file__).resolve().parent.parent
         directory = os.path.join(BASE_DIR, "static")
@@ -205,8 +252,9 @@ def twitterScape(request):
     twitterDetsModel = twitterDP.objects.get_or_create()
     joyca_tweets = scraper.get_tweets("joycaoff", mode='user' ,number=30)
     for tweet in joyca_tweets['tweets']:
-        dataExist =  storeData.objects.filter(tweetText = tweet["text"])
-        if tweet["is-retweet"] == False and not tweet["quoted-post"] and not dataExist.exists():
+        dataExist =  storeData.objects.filter(tweetText = tweet["text"]).exists()
+        if tweet["is-retweet"] == False and not tweet["quoted-post"] and not dataExist:
+            print(tweet["text"])
             isVid = False
             mediaURL = ""
             if tweet["videos"]:
@@ -220,16 +268,25 @@ def twitterScape(request):
             formatted_datetime = input_datetime.strftime("%Y-%m-%d %H:%M:%S.%U")
             storeData.objects.create(
                 tweetText = tweet["text"],
-                twitterLikes = tweet["stats"]["likes"],
+                twitterLikes = format_count(tweet["stats"]["likes"]),
                 tweetLink = tweet["link"],
                 twitterIsVideo = isVid,
                 twitterMediaURL= mediaURL,
                 platform = "Twitter",
                 publishDateYT = formatted_datetime,
             )
+        else:
+            twitterDataa = storeData.objects.filter(tweetText = tweet["text"]).first()
+            twitterDataa.tweetText = tweet["text"]
+            twitterDataa.twitterLikes = format_count(tweet["stats"]["likes"])
+            twitterDataa.tweetLink = tweet["link"]
+            twitterDataa.twitterIsVideo=isVid
+            twitterDataa.twitterMediaURL=mediaURL
+            twitterDataa.save()
     
     
     joyca_information = scraper.get_profile_info("joycaoff")
+    twitterDetsModel[0].dpURL = joyca_information["image"]
     twitterDetsModel[0].followerCount = format_count(joyca_information["stats"]["followers"])
     twitterDetsModel[0].storeTime=now()
     twitterDetsModel[0].save()
