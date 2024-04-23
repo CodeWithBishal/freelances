@@ -12,6 +12,7 @@
     href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
     rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/infinite-scroll@4/dist/infinite-scroll.pkgd.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" integrity="sha256-5uKiXEwbaQh9cgd2/5Vp6WmMnsUr3VZZw0a8rKnOKNU=" crossorigin="anonymous">
   <style>
     .profile-pic {
@@ -288,7 +289,7 @@
   }); {% endcomment %}
 
   // Function to check if scrolled near the bottom of the page
-  var isLoading = false;
+  {% comment %} var isLoading = false;
   var pageNumber = 1;
   function isScrolledNearBottom(threshold = 100) {
     const documentHeight = document.documentElement.scrollHeight;
@@ -315,13 +316,40 @@
       isLoading = true;
       loadMoreContent();
     }
-  });
+  }); {% endcomment %}
   document.addEventListener( 'DOMContentLoaded', function() {
     var elms = document.getElementsByClassName( 'splide' );
     for ( var i = 0; i < elms.length; i++ ) {
       new Splide( elms[ i ] ).mount();
     }
   } );
+  var currentPageUrl = new URLSearchParams(window.location.search);
+  var urlParams = new URLSearchParams(currentPageUrl);
+  var pageNumber = urlParams.get("page");
+
+  if(pageNumber==null){
+    pageNumber=2;
+  }else{
+    pageNumber++;
+  }
+
+
+// function loadData() {
+//   fetch(`/?page=${pageNumber}`)
+//   .then((response) =>  response.text().then((res)=> document.documentElement.innerHTML=res));
+// }
+function getFullUrlWithoutQueryParams() {
+  const url = new URL(window.location.href);
+  url.search = ""; // Remove the query string
+  return url.toString();
+}
+
+const fullUrlWithoutParams = getFullUrlWithoutQueryParams();
+window.addEventListener("scroll",()=>{
+  if(window.scrollY+window.innerHeight>=document.documentElement.scrollHeight){
+    window.location.href=`${fullUrlWithoutParams}?page=${pageNumber}`;
+  }
+})
 </script>
 <style>
   .vjs-poster {

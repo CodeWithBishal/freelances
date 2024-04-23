@@ -10,6 +10,7 @@ from django.utils.timezone import now
 from datetime import datetime
 from pathlib import Path
 from ntscraper import Nitter
+from django.core.paginator import Paginator
 
 # Create your views here.
 # youtubePfp = "https://www.googleapis.com/youtube/v3/channels?part=snippet&id=UCow2IGnug1l3Xazkrc5jM_Q&fields=items(id%2Csnippet%2Fthumbnails)&key=AIzaSyDkJ3at6Kz5clyVJeykvZYfstdpGC2dmHs" #TODO
@@ -61,30 +62,67 @@ def index(request):
     bannerYTData = bannerYT.objects.first()
     instaData = dpInsta.objects.first()
     twitterData = twitterDP.objects.first()
-    allData = storeData.objects.order_by("-publishDateYT")[:6]
-    context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
+    everyData = storeData.objects.order_by("-publishDateYT")
+    if request.GET.get('page'):
+        allData = storeData.objects.order_by("-publishDateYT")
+        paginator = Paginator(everyData, 6)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context = {"allData":page_obj,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
+    else:
+        allData = storeData.objects.order_by("-publishDateYT")[:6]
+        paginator = Paginator(everyData, 6)
+        total_pages = paginator.num_pages
+        context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData, "totalPage":total_pages}
     return render(request,"index.html", context=context)
 
 def youtube(request):
     bannerYTData = bannerYT.objects.first()
     instaData = dpInsta.objects.first()
     twitterData = twitterDP.objects.first()
-    allData = storeData.objects.filter(platform="YouTube").order_by("-publishDateYT")[:6]
-    context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
+    everyData = storeData.objects.filter(platform="YouTube").order_by("-publishDateYT")
+    if request.GET.get('page'):
+        paginator = Paginator(everyData, 6)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context = {"allData":page_obj,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
+    else:
+        paginator = Paginator(everyData, 6)
+        total_pages = paginator.num_pages
+        allData = storeData.objects.filter(platform="YouTube").order_by("-publishDateYT")[:6]
+        context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData, "totalPage":total_pages}
     return render(request,"index.html", context=context)
 def twitter(request):
     bannerYTData = bannerYT.objects.first()
     instaData = dpInsta.objects.first()
     twitterData = twitterDP.objects.get()
-    allData = storeData.objects.filter(platform="Twitter").order_by("-publishDateYT").distinct()
-    context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
+    everyData = storeData.objects.filter(platform="Twitter").order_by("-publishDateYT")
+    if request.GET.get('page'):
+        paginator = Paginator(everyData, 6)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context = {"allData":page_obj,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
+    else:
+        paginator = Paginator(everyData, 6)
+        total_pages = paginator.num_pages
+        allData = storeData.objects.filter(platform="Twitter").order_by("-publishDateYT")[:6]
+        context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData, "totalPage":total_pages}
     return render(request,"index.html", context=context)
 def instagram(request):
     bannerYTData = bannerYT.objects.first()
     instaData = dpInsta.objects.first()
     twitterData = twitterDP.objects.first()
-    allData = storeData.objects.filter(platform="Instagram").order_by("-publishDateYT")[:6]
-    context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
+    everyData = storeData.objects.filter(platform="Instagram").order_by("-publishDateYT")
+    if request.GET.get('page'):
+        paginator = Paginator(everyData, 6)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context = {"allData":page_obj,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
+    else:
+        paginator = Paginator(everyData, 6)
+        total_pages = paginator.num_pages
+        allData = storeData.objects.filter(platform="Instagram").order_by("-publishDateYT")[:6]
+        context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData, "totalPage":total_pages}
     return render(request,"index.html", context=context)
 
 def youtubeFetchAPI(request):
