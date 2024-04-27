@@ -201,10 +201,10 @@ def youtubeFetchAPI(request):
                 dataContent.channelNameYT="Joyca"
                 dataContent.storeTime=now()
                 dataContent.save()
-        return HttpResponse(f"Status code: {response.status_code}")
+        return HttpResponse(f'Status code: {response.status_code}')
 
     else:
-        return HttpResponse(f"Failed to fetch XML data. Status code: {response.status_code}")
+        return HttpResponse(f'Failed to fetch XML data. Status code: {response.status_code}')
 
 def fetchBanner(request):
     youtubeBannerURL = "https://www.googleapis.com/youtube/v3/channels?part=brandingSettings&id=UCow2IGnug1l3Xazkrc5jM_Q&key=AIzaSyDkJ3at6Kz5clyVJeykvZYfstdpGC2dmHs"
@@ -263,13 +263,13 @@ def fetchBanner(request):
                     download_video(instaVideoURL,f"{instaPostID}.mp4","static/instagram/videos")
                     videoURLInsta = f"{instaPostID}.mp4"
                 if instaThumbnailURL != "":
-                    download_video(instaThumbnailURL,f"{data["node"]["shortcode"]}.jpg",f"static/instagram/thumbnail/{data["node"]["shortcode"]}")
+                    download_video(instaThumbnailURL,f'{data["node"]["shortcode"]}.jpg',f'static/instagram/thumbnail/{data["node"]["shortcode"]}')
                 if mediaLinks != [] or mediaLinks != "":
                     for index,value in enumerate(mediaLinks):
-                        download_video(value,f"{data["node"]["shortcode"]}-{index}.jpg",f"static/instagram/media/{data["node"]["shortcode"]}")
-                        localMedLinks.append(f"{data["node"]["shortcode"]}-{index}.jpg")
+                        download_video(value,f'{data["node"]["shortcode"]}-{index}.jpg',f'static/instagram/media/{data["node"]["shortcode"]}')
+                        localMedLinks.append(f'{data["node"]["shortcode"]}-{index}.jpg')
                 storeData.objects.create(
-                    instaThumbnailURL = f"{data["node"]["shortcode"]}.jpg",
+                    instaThumbnailURL = f'{data["node"]["shortcode"]}.jpg',
                     instaIsVideo = IsVideo,
                     instaVideoURL = videoURLInsta,
                     instaDesc = postMessage,
@@ -307,9 +307,9 @@ def fetchBanner(request):
         instaModel[0].followerCount = format_count(jsonRes["data"]["user"]["edge_followed_by"]["count"])
         instaModel[0].save()
         
-        return HttpResponse(f"Status code: {response.status_code}")
+        return HttpResponse(f'Status code: {response.status_code}')
     else:
-        return HttpResponse(f"Failed to fetch data. Status code: {response.status_code}")
+        return HttpResponse(f'Failed to fetch data. Status code: {response.status_code} {responseytSubsCount.status_code} {instaBannerAndfollow.status_code}')
     
 
 def twitterScape(request):
