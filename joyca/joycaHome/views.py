@@ -63,16 +63,18 @@ def index(request):
     instaData = dpInsta.objects.first()
     twitterData = twitterDP.objects.first()
     everyData = storeData.objects.order_by("-publishDateYT")
+    paginator = Paginator(everyData, 6)
+    total_pages = paginator.num_pages
     if request.GET.get('page'):
         allData = storeData.objects.order_by("-publishDateYT")
         paginator = Paginator(everyData, 6)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        context = {"allData":page_obj,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
+        print(total_pages)
+        context = {"allData":page_obj,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData, "totalPage":total_pages}
     else:
+        print(total_pages)
         allData = storeData.objects.order_by("-publishDateYT")[:6]
-        paginator = Paginator(everyData, 6)
-        total_pages = paginator.num_pages
         context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData, "totalPage":total_pages}
     return render(request,"index.html", context=context)
 
@@ -81,14 +83,14 @@ def youtube(request):
     instaData = dpInsta.objects.first()
     twitterData = twitterDP.objects.first()
     everyData = storeData.objects.filter(platform="YouTube").order_by("-publishDateYT")
+    paginator = Paginator(everyData, 6)
+    total_pages = paginator.num_pages
     if request.GET.get('page'):
         paginator = Paginator(everyData, 6)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        context = {"allData":page_obj,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
+        context = {"allData":page_obj,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData, "totalPage":total_pages}
     else:
-        paginator = Paginator(everyData, 6)
-        total_pages = paginator.num_pages
         allData = storeData.objects.filter(platform="YouTube").order_by("-publishDateYT")[:6]
         context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData, "totalPage":total_pages}
     return render(request,"index.html", context=context)
@@ -97,14 +99,14 @@ def twitter(request):
     instaData = dpInsta.objects.first()
     twitterData = twitterDP.objects.get()
     everyData = storeData.objects.filter(platform="Twitter").order_by("-publishDateYT")
+    paginator = Paginator(everyData, 6)
+    total_pages = paginator.num_pages
     if request.GET.get('page'):
         paginator = Paginator(everyData, 6)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        context = {"allData":page_obj,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
+        context = {"allData":page_obj,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData, "totalPage":total_pages}
     else:
-        paginator = Paginator(everyData, 6)
-        total_pages = paginator.num_pages
         allData = storeData.objects.filter(platform="Twitter").order_by("-publishDateYT")[:6]
         context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData, "totalPage":total_pages}
     return render(request,"index.html", context=context)
@@ -113,14 +115,14 @@ def instagram(request):
     instaData = dpInsta.objects.first()
     twitterData = twitterDP.objects.first()
     everyData = storeData.objects.filter(platform="Instagram").order_by("-publishDateYT")
+    paginator = Paginator(everyData, 6)
+    total_pages = paginator.num_pages
     if request.GET.get('page'):
         paginator = Paginator(everyData, 6)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        context = {"allData":page_obj,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData}
+        context = {"allData":page_obj,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData, "totalPage":total_pages}
     else:
-        paginator = Paginator(everyData, 6)
-        total_pages = paginator.num_pages
         allData = storeData.objects.filter(platform="Instagram").order_by("-publishDateYT")[:6]
         context = {"allData":allData,"YTBanner":bannerYTData, "instaData":instaData, "twitterData":twitterData, "totalPage":total_pages}
     return render(request,"index.html", context=context)
@@ -315,11 +317,9 @@ def fetchBanner(request):
 def twitterScape(request):
     #Twitter
     scraper = Nitter(log_level=1, skip_instance_check=False)
-    twitterDetsModel = twitterDP.objects.get_or_create()
     joyca_tweets = scraper.get_tweets("joycaoff", mode='user' ,number=30)
     for tweet in joyca_tweets['tweets']:
         dataExist =  storeData.objects.filter(tweetLink = tweet["link"], platform="Twitter").exists()
-        print(dataExist)
         if tweet["is-retweet"] == False and not tweet["quoted-post"] and not dataExist:
             isVid = False
             mediaURL = ""
@@ -344,8 +344,7 @@ def twitterScape(request):
                 twitterPostID = extract_twitter_id(tweet["link"])
             )
         else:
-            twitterDataa = storeData.objects.filter(tweetLink = tweet["link"], platform="Twitter").first()
-            print(twitterDataa)
+            twitterDataa = storeData.objects.filter(twitterPostID = extract_twitter_id(tweet["link"]), platform="Twitter").first()
             if twitterDataa:
                 twitterDataa.tweetText = tweet["text"]
                 twitterDataa.twitterLikes = format_count(tweet["stats"]["likes"])
@@ -355,9 +354,10 @@ def twitterScape(request):
                 twitterDataa.save()
     
     
+    twitterDetsModel = twitterDP.objects.all().first()
     joyca_information = scraper.get_profile_info("joycaoff")
-    twitterDetsModel[0].dpURL = joyca_information["image"]
-    twitterDetsModel[0].followerCount = format_count(joyca_information["stats"]["followers"])
-    twitterDetsModel[0].storeTime=now()
-    twitterDetsModel[0].save()
+    twitterDetsModel.dpURL = joyca_information["image"]
+    twitterDetsModel.followerCount = format_count(joyca_information["stats"]["followers"])
+    twitterDetsModel.storeTime=now()
+    twitterDetsModel.save()
     return HttpResponse("Status: OK")

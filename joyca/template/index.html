@@ -30,7 +30,7 @@
       background-size: cover;
     }
 
-    .twitter-bg {
+    .twitter-bg-1 {
       background: linear-gradient(rgba(29, 161, 242, 0.4), rgba(29, 161, 242, 0.4));
     }
 
@@ -229,7 +229,7 @@
         <div class="whats w-full m-3 bg-[#16181c] w-1/2 rounded-xl space-y-3">
           <div class="item hover:bg-gray-800 hover:rounded-xl cursor-pointer relative">
             <div class="twitter"></div>
-            <div class="h-[80px] w-full twitter-bg flex row rounded-b-xl items-center justify-start">
+            <div class="h-[80px] w-full twitter-bg-1 !flex row rounded-b-xl items-center justify-start">
               <div>
                 <img src="{{twitterData.dpURL}}" alt="Profile Picture" class="profile-pic ml-[20px]">
               </div>
@@ -353,11 +353,10 @@ function getFullUrlWithoutQueryParams() {
 }
 
 const fullUrlWithoutParams = getFullUrlWithoutQueryParams();
+console.log({{totalPage}})
 window.addEventListener("scroll",()=>{
-  if(window.innerHeight != screen.height){
-    if(window.scrollY+window.innerHeight>=document.documentElement.scrollHeight){
-      window.location.href=`${fullUrlWithoutParams}?page=${pageNumber}`;
-    }
+  if(window.innerHeight != screen.height && window.scrollY+window.innerHeight>=document.documentElement.scrollHeight && pageNumber <= {{ totalPage }}){
+    window.location.href=`${fullUrlWithoutParams}?page=${pageNumber}`;
   }
 })
 </script>
