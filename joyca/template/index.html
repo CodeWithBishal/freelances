@@ -353,7 +353,6 @@ function getFullUrlWithoutQueryParams() {
 }
 
 const fullUrlWithoutParams = getFullUrlWithoutQueryParams();
-console.log({{totalPage}})
 window.addEventListener("scroll",()=>{
   if(window.innerHeight != screen.height && window.scrollY+window.innerHeight>=document.documentElement.scrollHeight && pageNumber <= {{ totalPage }}){
     window.location.href=`${fullUrlWithoutParams}?page=${pageNumber}`;
