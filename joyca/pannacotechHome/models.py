@@ -82,11 +82,3 @@ class instagramAccessToken(models.Model):
 class domain(models.Model):
     sno = models.AutoField(primary_key=True)
     domain = models.TextField() 
-
-
-# TODO:
-# Pagination
-# instagram content
-# twitter content
-# twitter count
-# Setup cron job

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from joycaHome.resources import storeDataAdmin
+from .resources import storeDataAdmin
 from .models import *
 # Register your models here.
 admin.site.register(StoreLastIDs)

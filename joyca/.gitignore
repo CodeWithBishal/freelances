@@ -1,3 +1,5 @@
 .env
 /static/twitter/*
 /static/instagram/*
+cronjob
+a.json

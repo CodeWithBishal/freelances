@@ -5,3 +5,4 @@ requests==2.31.0
 ntscraper==0.3.13
 tqdm
 django-import-export==3.3.8
+django-multi-domains

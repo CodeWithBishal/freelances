@@ -4,8 +4,11 @@
 <head class="max-sm:overflow-x-hidden">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Joyca.fr</title>
-  <link rel="shortcut icon" href="{{ytPfp}}">
+  <title>{{domain.domain}}</title>
+  <link rel="shortcut icon" href="{{YTBanner.dpURL}}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{YTBanner.dpURL}}">
+  <link rel="icon" type="image/svg" sizes="32x32" href="{{YTBanner.dpURL}}">
+  <link rel="icon" type="image/svg" sizes="16x16" href="{{YTBanner.dpURL}}">
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
   <link
@@ -35,7 +38,7 @@
     }
 
     .instagram {
-      background: url("/static/instagram.jpg");
+      background: url("{{instaData.dataURL}}");
       height: 17vh;
       background-repeat: no-repeat;
       background-size: cover;
@@ -96,7 +99,7 @@
               <path
                 d="M825.4 1238c0-227.9 184.7-412.7 412.6-412.7 227.9 0 412.7 184.8 412.7 412.7 0 227.9-184.8 412.7-412.7 412.7-227.9 0-412.6-184.8-412.6-412.7m-223.1 0c0 351.1 284.6 635.7 635.7 635.7s635.7-284.6 635.7-635.7-284.6-635.7-635.7-635.7S602.3 886.9 602.3 1238m1148-660.9c0 82 66.5 148.6 148.6 148.6 82 0 148.6-66.6 148.6-148.6s-66.5-148.5-148.6-148.5-148.6 66.5-148.6 148.5M737.8 2245.7c-120.7-5.5-186.3-25.6-229.9-42.6-57.8-22.5-99-49.3-142.4-92.6-43.3-43.3-70.2-84.5-92.6-142.3-17-43.6-37.1-109.2-42.6-229.9-6-130.5-7.2-169.7-7.2-500.3s1.3-369.7 7.2-500.3c5.5-120.7 25.7-186.2 42.6-229.9 22.5-57.8 49.3-99 92.6-142.4 43.3-43.3 84.5-70.2 142.4-92.6 43.6-17 109.2-37.1 229.9-42.6 130.5-6 169.7-7.2 500.2-7.2 330.6 0 369.7 1.3 500.3 7.2 120.7 5.5 186.2 25.7 229.9 42.6 57.8 22.4 99 49.3 142.4 92.6 43.3 43.3 70.1 84.6 92.6 142.4 17 43.6 37.1 109.2 42.6 229.9 6 130.6 7.2 169.7 7.2 500.3 0 330.5-1.2 369.7-7.2 500.3-5.5 120.7-25.7 186.3-42.6 229.9-22.5 57.8-49.3 99-92.6 142.3-43.3 43.3-84.6 70.1-142.4 92.6-43.6 17-109.2 37.1-229.9 42.6-130.5 6-169.7 7.2-500.3 7.2-330.5 0-369.7-1.2-500.2-7.2M727.6 7.5c-131.8 6-221.8 26.9-300.5 57.5-81.4 31.6-150.4 74-219.3 142.8C139 276.6 96.6 345.6 65 427.1 34.4 505.8 13.5 595.8 7.5 727.6 1.4 859.6 0 901.8 0 1238s1.4 378.4 7.5 510.4c6 131.8 26.9 221.8 57.5 300.5 31.6 81.4 73.9 150.5 142.8 219.3 68.8 68.8 137.8 111.1 219.3 142.8 78.8 30.6 168.7 51.5 300.5 57.5 132.1 6 174.2 7.5 510.4 7.5 336.3 0 378.4-1.4 510.4-7.5 131.8-6 221.8-26.9 300.5-57.5 81.4-31.7 150.4-74 219.3-142.8 68.8-68.8 111.1-137.9 142.8-219.3 30.6-78.7 51.6-168.7 57.5-300.5 6-132.1 7.4-174.2 7.4-510.4s-1.4-378.4-7.4-510.4c-6-131.8-26.9-221.8-57.5-300.5-31.7-81.4-74-150.4-142.8-219.3C2199.4 139 2130.3 96.6 2049 65c-78.8-30.6-168.8-51.6-300.5-57.5-132-6-174.2-7.5-510.4-7.5-336.3 0-378.4 1.4-510.5 7.5">
               </path>
-            </svg><span class="hidden md:block">Instagram</span></a>
+            </svg><span class="hidden md:block">&nbsp;Instagram</span></a>
           </li>
         </ul>
 
@@ -107,21 +110,24 @@
     <div class="main-feed w-90 max-sm:w-[83%] border-[1px] border-x-gray-600 border-y-black ">
       <div class="top flex p-3 sticky z-[999] top-0 bg-black backdrop-blur-3xl opacity-80">
         <div class="absolute w-16 h-1 rounded-full bg-blue-500 bottom-0 left-[44%] "></div>
-        <div class="left bg-red-3001 w-full flex justify-center font-bold text-lg">Joyca.fr</div>
+        <div class="left bg-red-3001 w-full flex justify-center font-bold text-lg">{{domain.domain}}</div>
       </div>
       <div class="h-[1px] w-full bg-gray-700"></div>
 
 
       <div class="posts">
         {% for data in allData %}
+        {% if forloop.counter|divisibleby:5 %}
+        <img src="https://www.adspeed.com/placeholder-300x250.gif" />
+        {% endif %}
         {% if data.platform == "YouTube" %}
         <div class="post">
           <div class="flex">
             <div class="image max-sm:hidden m-4">
-              <img class="w-16 rounded-full max-sm:hidden" src="https://unavatar.io/youtube/Joyca" alt="">
+              <img class="w-16 rounded-full max-sm:hidden" src="{{YTBanner.dpURL}}" width="50px" height="100px" alt="">
             </div>
             <div class="content my-3 ml-3">
-              <a href="https://www.youtube.com/channel/UCow2IGnug1l3Xazkrc5jM_Q" target="_blank"><span
+              <a href="{{YTBanner.ytLink}}" target="_blank"><span
                   class="font-bold hover:underline cursor-pointer text-white">{{data.channelNameYT}}</span></a> <span
                 class="text-gray-500">@{{data.platform}} · {{data.publishDateYT}} · 👁️ {{data.viewsYT}}</span>
               <div>{{data.videoTitleYT}}</div>
@@ -140,11 +146,11 @@
         <div class="post">
           <div class="flex">
             <div class="image max-sm:hidden m-4">
-              <img class="rounded-full max-sm:hidden w-[20px] h-[20px]" src="{{twitterData.dpURL}}" alt="">
+              <img class="rounded-full max-sm:hidden" src="{{twitterData.dpURL}}" width="50px" height="100px" alt="">
             </div>
             <div class="content my-3 ml-3">
-              <a href="https://twitter.com/joycaoff" target="_blank"><span
-                  class="font-bold hover:underline cursor-pointer text-white">JoycaOff</span></a> <span
+              <a href="{{twitterData.twitterLink}}" target="_blank"><span
+                  class="font-bold hover:underline cursor-pointer text-white">{{twitterData.twitterHandle}}</span></a> <span
                 class="text-gray-500">@{{data.platform}} · {{data.publishDateYT}} · ❤️ {{data.twitterLikes}}</span>
               <div><a href="{{data.tweetLink}}" target="_blank"
                   rel="noopener noreferrer">{{data.tweetText|truncatechars:120}}</a></div>
@@ -178,20 +184,19 @@
         <div class="post">
           <div class="flex">
             <div class="image max-sm:hidden m-4">
-              <img class="rounded-full max-sm:hidden" src="/static/instagram.jpg" width="100px" height="100px" alt="">
+              <img class="rounded-full max-sm:hidden" src="{{instaData.dataURL}}" width="50px" height="100px" alt="">
             </div>
             <div class="content my-3 ml-3">
-              <a href="https://www.instagram.com/joyca/" target="_blank"><span
-                  class="font-bold hover:underline cursor-pointer text-white">Joyca</span></a> <span
+              <a href="{{instaData.instaLink}}" target="_blank"><span
+                  class="font-bold hover:underline cursor-pointer text-white">{{instaData.instaHandle}}</span></a> <span
                 class="text-gray-500">@{{data.platform}} · {{data.publishDateYT}} · ❤️
                 {{data.instaLikes}}</span>
-              <div><a href="https://www.instagram.com/p/{{data.instaPostLink}}/" target="_blank"
+              <div><a href="{{data.instaPostLink}}" target="_blank"
                   rel="noopener noreferrer">{{data.instaDesc|truncatechars:120}}</a></div>
               <div class="postimg flex justify-center m-4 ml-0">
                 {% if data.instaIsVideo == "True" %}
-                <video id="my-video-insta-{{data.sno}}" class="video-js" controls preload="auto" width="550" height="264"
-                  poster="/static/instagram/thumbnail/{{data.instaPostLink}}/{{data.instaThumbnailURL}}" data-setup="{}">
-                  <source src="/static/instagram/videos/{{data.instaVideoURL}}" type="video/mp4" />
+                <video id="my-video-insta-{{data.sno}}" class="video-js" controls preload="auto" width="550" height="264"data-setup="{}">
+                  <source src="{{data.instaVideoURL}}" type="video/mp4" />
                   <p class="vjs-no-js">
                     To view this video please enable JavaScript, and consider upgrading to a
                     web browser that
@@ -202,11 +207,22 @@
                 {% comment %} {% if data.instaIsSingle %}
                 <img src="{{data.instaMediaLinks}}" alt="">
                 {% endif %}  {% endcomment %}
-                <section class="splide w-[28vw] max-sm:w-[80vw]" id={{data.instaPostLink}}>
+                <section class="splide w-[28vw] max-sm:w-[80vw]" id={{data.instaPostID}}>
                   <div class="splide__track">
                     <ul class="splide__list">
                       {% for links in data.instaMediaLinks %}
-                        <img src="/static/instagram/media/{{data.instaPostLink}}/{{links}}" alt="" class="splide__slide">
+                      {% if ".jpg" in links %}
+                      <img src="/static/instagram/media/{{data.instaPostID}}/{{links}}" alt="" class="splide__slide">
+                      {% else %}
+                      <video id="my-video-insta-{{data.sno}}" class="video-js splide__slide" controls preload="auto" width="550" height="264" data-setup="{}">
+                        <source src="/static/instagram/media/{{data.instaPostID}}/{{links}}" type="video/mp4" />
+                        <p class="vjs-no-js">
+                          To view this video please enable JavaScript, and consider upgrading to a
+                          web browser that
+                          <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                        </p>
+                      </video>
+                      {% endif %}
                       {% endfor %}
                     </ul>
                   </div>
@@ -234,8 +250,8 @@
                 <img src="{{twitterData.dpURL}}" alt="Profile Picture" class="profile-pic ml-[20px]">
               </div>
               <div>
-                <a href="https://twitter.com/JoycaOff" class="text-2xl pl-3 " target="_blank"
-                  rel="noopener noreferrer">@JoycaOff</a> {{twitterData.followerCount}} Followers
+                <a href="{{twitterData.twitterLink}}" class="text-2xl pl-3 " target="_blank"
+                  rel="noopener noreferrer">@{{twitterData.twitterHandle}}</a> {{twitterData.followerCount}} Followers
               </div>
             </div>
           </div>
@@ -248,11 +264,11 @@
             <div class="youtube"></div>
             <div class="h-[80px] youtube-bg flex rounded-b-xl row items-center justify-start">
               <div>
-                <img src="https://unavatar.io/youtube/joyca" alt="Profile Picture" class="ml-[20px] profile-pic">
+                <img src="{{YTBanner.dpURL}}" alt="Profile Picture" class="ml-[20px] profile-pic">
               </div>
               <div>
-                <a href="https://www.youtube.com/@joyca" class="text-2xl pl-3 " target="_blank"
-                  rel="noopener noreferrer">@Joyca</a> {{YTBanner.subsCount}} Subscribers
+                <a href="{{YTBanner.ytLink}}" class="text-2xl pl-3 " target="_blank"
+                  rel="noopener noreferrer">@{{YTBanner.ytHandle}}</a> {{YTBanner.subsCount}} Subscribers
               </div>
             </div>
           </div>
@@ -265,11 +281,11 @@
             <div class="instagram"></div>
             <div class="h-[80px] instagram-bg rounded-b-xl flex row items-center justify-start">
               <div>
-                <img src="/static/instagram.jpg" alt="Profile Picture" class="profile-pic ml-[20px]">
+                <img src="{{instaData.dataURL}}" alt="Profile Picture" class="profile-pic ml-[20px]">
               </div>
               <div>
-                <a href="https://www.instagram.com/joyca/" class="text-2xl pl-3 " target="_blank"
-                  rel="noopener noreferrer">@Joyca</a> {{instaData.followerCount}} Followers
+                <a href="{{instaData.instaLink}}" class="text-2xl pl-3 " target="_blank"
+                  rel="noopener noreferrer">@{{instaData.instaHandle}}</a> {{instaData.followerCount}} Followers
               </div>
             </div>
           </div>

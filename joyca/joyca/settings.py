@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'joycaHome.apps.JoycahomeConfig',
-    'import_export'
+    'djilsiHome.apps.DjilsihomeConfig',
+    'pannacotechHome.apps.PannacotechhomeConfig',
+    'import_export',
+    'multi_domains'
 ]
 
 MIDDLEWARE = [
@@ -51,7 +54,22 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'multi_domains.middleware.MultiDomainsMiddleware',
 ]
+
+if DEBUG:
+    MULTI_DOMAINS = {
+        "127.0.0.1:8000": "joyca.urls",
+        "127.0.0.1:8001": "djilsiHome.urls",
+        "127.0.0.1:8002": "pannacotechHome.urls",
+    }
+else:
+    MULTI_DOMAINS = {
+        "joyca.fr": "joyca.urls",
+        "djilsi.fr": "djilsiHome.urls",
+        "pannacotech.fr": "pannacotechHome.urls",
+    }
+
 
 ROOT_URLCONF = 'joyca.urls'
 IMPORT_EXPORT_USE_TRANSACTIONS = True

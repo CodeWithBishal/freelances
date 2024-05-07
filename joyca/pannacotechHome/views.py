@@ -15,7 +15,7 @@ from decouple import config
 import re
 
 # Create your views here.
-# youtubePfp = "https://www.googleapis.com/youtube/v3/channels?part=snippet&id=UCow2IGnug1l3Xazkrc5jM_Q&fields=items(id%2Csnippet%2Fthumbnails)&key=" #TODO
+# youtubePfp = "https://www.googleapis.com/youtube/v3/channels?part=snippet&id=UCZO7iTy_uLmPbZiofPJpeXA&fields=items(id%2Csnippet%2Fthumbnails)&key=" #TODO
 
 
 def is_image(url):
@@ -72,7 +72,7 @@ def index(request):
         # data = json.loads(response.content)
         # high_thumbnail_url = data['items'][0]['snippet']['thumbnails']['high']['url']
     # headers = {'User-Agent': request.headers.get('HTTP_USER_AGENT')}
-    # response = requests.get("https://twitter.com/JoycaOff/header_photo", headers=headers)
+    # response = requests.get("https://twitter.com/pannacotech/header_photo", headers=headers)
     # print(response.content)
     bannerYTData = bannerYT.objects.first()
     instaData = dpInsta.objects.first()
@@ -145,7 +145,7 @@ def instagram(request):
     return render(request,"index.html", context=context)
 
 def youtubeFetchAPI(request):
-    url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCow2IGnug1l3Xazkrc5jM_Q"
+    url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCZO7iTy_uLmPbZiofPJpeXA"
     response = requests.get(url)
     if response.status_code == 200:
         xml_data = response.content
@@ -198,7 +198,7 @@ def youtubeFetchAPI(request):
                         viewsYT=viewsFormat,
                         thumbnailYT=videoData['thumbnail_url'],
                         platform="YouTube",
-                        channelNameYT="Joyca"
+                        channelNameYT="Pannacotech"
                     )
             last_id_obj[0].save()
         else:
@@ -217,7 +217,7 @@ def youtubeFetchAPI(request):
                 dataContent.viewsYT=viewsFormat
                 dataContent.thumbnailYT=videoData['thumbnail_url']
                 dataContent.platform="YouTube"
-                dataContent.channelNameYT="Joyca"
+                dataContent.channelNameYT="Pannacotech"
                 dataContent.storeTime=now()
                 dataContent.save()
         return HttpResponse(f'Status code: {response.status_code}')
@@ -226,9 +226,9 @@ def youtubeFetchAPI(request):
         return HttpResponse(f'Failed to fetch XML data. Status code: {response.status_code}')
 
 def fetchBanner(request):
-    youtubeBannerURL = f'https://www.googleapis.com/youtube/v3/channels?part=brandingSettings&id=UCow2IGnug1l3Xazkrc5jM_Q&key={config("YT_API")}'
+    youtubeBannerURL = f'https://www.googleapis.com/youtube/v3/channels?part=brandingSettings&id=UCZO7iTy_uLmPbZiofPJpeXA&key={config("YT_API")}'
     response = requests.get(youtubeBannerURL)
-    ytSubsCount = f'https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCow2IGnug1l3Xazkrc5jM_Q&fields=items/statistics/subscriberCount&key={config("YT_API")}'
+    ytSubsCount = f'https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCZO7iTy_uLmPbZiofPJpeXA&fields=items/statistics/subscriberCount&key={config("YT_API")}'
     responseytSubsCount = requests.get(ytSubsCount)
     # instaHeadersUA = {
     #     'User-Agent': 'Instagram 76.0.0.15.395 Android (24/7.0; 640dpi; 1440x2560; samsung; SM-G930F; herolte; samsungexynos8890; en_US; 138226743)'
@@ -242,9 +242,9 @@ def fetchBanner(request):
         bannerModel = bannerYT.objects.get_or_create()
         bannerModel[0].dataURL = image
         bannerModel[0].storeTime = now()
-        bannerModel[0].dpURL = "https://unavatar.io/youtube/joyca"
-        bannerModel[0].ytHandle = "Joyca"
-        bannerModel[0].ytLink = "https://www.youtube.com/@Joyca"
+        bannerModel[0].dpURL = "https://unavatar.io/youtube/pannacotech"
+        bannerModel[0].ytHandle = "Pannacotech"
+        bannerModel[0].ytLink = "https://www.youtube.com/@pannacotech"
         #youtubeSubsCount
         jsonRes =responseytSubsCount.json()
         bannerModel[0].subsCount = format_count(jsonRes["items"][0]["statistics"]["subscriberCount"])
@@ -259,7 +259,7 @@ def fetchBanner(request):
 def fetchInsta(request):
         # gettokenfrom db
         accessToken = instagramAccessToken.objects.all()
-        instaGraphAPI = 'https://graph.facebook.com/17841451041881672?fields=business_discovery.username(joyca){username,website,name,ig_id,id,profile_picture_url,biography,follows_count,followers_count,media_count,media{id,caption,like_count,comments_count,timestamp,username,media_product_type,media_type,owner,permalink,media_url,children{media_url}}}&access_token='+accessToken[0].accessToken
+        instaGraphAPI = 'https://graph.facebook.com/17841451041881672?fields=business_discovery.username(pannacotech){username,website,name,ig_id,id,profile_picture_url,biography,follows_count,followers_count,media_count,media{id,caption,like_count,comments_count,timestamp,username,media_product_type,media_type,owner,permalink,media_url,children{media_url}}}&access_token='+accessToken[0].accessToken
         response = requests.get(instaGraphAPI)
         if response.status_code==200:
             dataa = response.json()
@@ -267,11 +267,11 @@ def fetchInsta(request):
             instaModel = dpInsta.objects.get_or_create()
             instaModel[0].followerCount = format_count(data["followers_count"])
             instaModel[0].storeTime = now()
-            instaModel[0].dataURL = "/static/instagram.jpg"
-            instaModel[0].dpURL = "/static/instagram.jpg"
-            instaModel[0].instaHandle = "Joyca"
-            instaModel[0].instaLink = "https://www.instagram.com/joyca/"
-            download_video(data["profile_picture_url"],"instagram.jpg","static")
+            instaModel[0].dataURL = "/static/instagram-pannacotech.jpg"
+            instaModel[0].dpURL = "/static/instagram-pannacotech.jpg"
+            instaModel[0].instaHandle = "Pannacotech"
+            instaModel[0].instaLink = "https://www.instagram.com/pannacotech/"
+            download_video(data["profile_picture_url"],"instagram-pannacotech.jpg","static")
             instaModel[0].save()
 
             for media in data["media"]["data"]:
@@ -350,7 +350,7 @@ def fetchInsta(request):
 def twitterScape(request):
     #Twitter
     scraper = Nitter(log_level=1, skip_instance_check=False)
-    joyca_tweets = scraper.get_tweets("joycaoff", mode='user' ,number=30)
+    joyca_tweets = scraper.get_tweets("pannacotech", mode='user' ,number=30)
     for tweet in joyca_tweets['tweets']:
         dataExist =  storeData.objects.filter(tweetLink = tweet["link"], platform="Twitter").exists()
         if tweet["is-retweet"] == False and not tweet["quoted-post"] and not dataExist:
@@ -388,10 +388,10 @@ def twitterScape(request):
     
     
     twitterDetsModel = twitterDP.objects.get_or_create()
-    joyca_information = scraper.get_profile_info("joycaoff")
+    joyca_information = scraper.get_profile_info("pannacotech")
     twitterDetsModel[0].dpURL = joyca_information["image"]
-    twitterDetsModel[0].twitterHandle = "Joycaoff"
-    twitterDetsModel[0].twitterLink = "https://twitter.com/joycaoff"
+    twitterDetsModel[0].twitterHandle = "Pannacotech"
+    twitterDetsModel[0].twitterLink = "https://twitter.com/pannacotech"
     twitterDetsModel[0].followerCount = format_count(joyca_information["stats"]["followers"])
     twitterDetsModel[0].storeTime=now()
     twitterDetsModel[0].save()
