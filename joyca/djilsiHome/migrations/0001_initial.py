@@ -25,13 +25,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='domain',
-            fields=[
-                ('sno', models.AutoField(primary_key=True, serialize=False)),
-                ('domain', models.TextField()),
-            ],
-        ),
-        migrations.CreateModel(
             name='dpInsta',
             fields=[
                 ('sno', models.AutoField(primary_key=True, serialize=False)),
