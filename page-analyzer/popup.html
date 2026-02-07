@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { 
+      width: 400px; 
+      padding: 15px; 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+    }
+    h3 { margin-top: 0; color: #333; }
+    .section { 
+      margin-bottom: 20px; 
+      padding: 15px; 
+      background: #f8f9fa; 
+      border-radius: 8px; 
+    }
+    .section-title { 
+      font-weight: 600; 
+      margin-bottom: 10px; 
+      color: #444; 
+      font-size: 14px;
+    }
+    .toggle-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      background: #e8f5e9;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .toggle-label {
+      font-weight: 600;
+      color: #2e7d32;
+    }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #4caf50;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    label { 
+      display: block; 
+      margin-bottom: 5px; 
+      font-size: 12px; 
+      font-weight: 500; 
+      color: #555;
+    }
+    input[type="password"], input[type="text"] { 
+      width: 100%; 
+      padding: 8px; 
+      margin-bottom: 12px; 
+      box-sizing: border-box; 
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+    input:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+    button { 
+      width: 100%; 
+      padding: 10px; 
+      background: #007bff; 
+      color: white; 
+      border: none; 
+      cursor: pointer; 
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    button:hover { background: #0056b3; }
+    .status { 
+      margin-top: 10px; 
+      padding: 10px;
+      font-size: 12px; 
+      color: #155724;
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      border-radius: 4px;
+      display: none; 
+    }
+    .info-text {
+      font-size: 11px;
+      color: #666;
+      margin-top: 5px;
+      line-height: 1.4;
+    }
+    .api-link {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .api-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h3>Extension Settings</h3>
+  
+  <!-- Enable/Disable Toggle -->
+  <div class="toggle-section">
+    <span class="toggle-label">Extension Status</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="extensionEnabled" checked>
+      <span class="slider"></span>
+    </label>
+  </div>
+  
+  <!-- Gemini API -->
+  <div class="section">
+    <div class="section-title">🔷 Gemini API</div>
+    <label>API Key:</label>
+    <input type="password" id="geminiKey" placeholder="AIzaSy..." />
+    <div class="info-text">
+      Get free key: <a href="https://aistudio.google.com/app/apikey" target="_blank" class="api-link">Google AI Studio</a>
+    </div>
+  </div>
+  
+  <!-- Groq API -->
+  <div class="section">
+    <div class="section-title">⚡ Groq API (Fast & Free)</div>
+    <label>API Key:</label>
+    <input type="password" id="groqKey" placeholder="gsk_..." />
+    <div class="info-text">
+      Get free key: <a href="https://console.groq.com/keys" target="_blank" class="api-link">Groq Console</a>
+    </div>
+  </div>
+  
+  <!-- Hugging Face API -->
+  <div class="section">
+    <div class="section-title">🤗 Hugging Face API</div>
+    <label>API Key:</label>
+    <input type="password" id="hfKey" placeholder="hf_..." />
+    <div class="info-text">
+      Get free key: <a href="https://huggingface.co/settings/tokens" target="_blank" class="api-link">Hugging Face Tokens</a>
+    </div>
+  </div>
+  
+  <!-- Together AI API -->
+  <div class="section">
+    <div class="section-title">🌐 Together AI</div>
+    <label>API Key:</label>
+    <input type="password" id="togetherKey" placeholder="..." />
+    <div class="info-text">
+      Get free key: <a href="https://api.together.xyz/settings/api-keys" target="_blank" class="api-link">Together AI</a>
+    </div>
+  </div>
+  
+  <button id="saveBtn">Save Configuration</button>
+  <div id="status" class="status">Configuration saved! Reload your tabs.</div>
+  <script src="popup.js"></script>
+</body>
+</html>
