@@ -153,7 +153,7 @@ const menuData: MenuCategory[] = [
 const CONTACT_INFO = {
   phone: '8878883540',
   whatsapp: '918878883540',
-  address: 'Indore, MP',
+  address: 'Rainbow commercial, Snehlataganj, DRP Line, Indore, Madhya Pradesh 452003',
   timings: '11:00 AM - 11:00 PM (Daily)',
   instagram: '#'
 };
@@ -482,7 +482,7 @@ const About = () => {
           <div className="relative">
              <div className="absolute -inset-4 border-2 border-brand-yellow/30 rounded-lg transform translate-x-4 translate-y-4"></div>
              <img 
-              src="https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1000" 
+              src="/assets/shop.jpeg" 
               alt="Restaurant Interior" 
               className="rounded-lg shadow-2xl relative z-10 w-full"
             />
@@ -580,7 +580,7 @@ const Contact = () => {
                 <MapPin size={48} className="text-brand-red mb-4 animate-bounce" />
                 <h3 className="text-2xl font-heading font-bold text-white mb-2">Locate Us</h3>
                 <p className="text-gray-300 font-body mb-6 max-w-xs">Find us in the heart of Indore. Click below for directions.</p>
-                <button className="bg-brand-yellow text-brand-black px-6 py-2 rounded font-heading font-bold uppercase hover:bg-white transition-colors">
+                <button className="bg-brand-yellow text-brand-black px-6 py-2 rounded font-heading font-bold uppercase hover:bg-white transition-colors" onClick={() => window.open(`https://maps.app.goo.gl/DDvDTPWSjJeSv8b77`, '_blank')}>
                   Get Directions
                 </button>
              </div>
