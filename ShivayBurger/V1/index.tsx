@@ -438,7 +438,7 @@ const Gallery = () => {
     { src: "/assets/pizza.jpeg", alt: "Pizza" },
     { src: "/assets/momo.jpeg", alt: "Momos" },
     { src: "/assets/sandwich.jpeg", alt: "Sandwich" },
-    { src: "/assets/shakes.jpeg", alt: "Shakes" },
+    { src: "/assets/shake.jpeg", alt: "Shakes" },
     { src: "/assets/fries.jpeg", alt: "Fries" },
   ];
 
