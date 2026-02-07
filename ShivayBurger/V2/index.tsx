@@ -300,7 +300,7 @@ const Hero = () => {
     <div id="home" className="relative h-screen min-h-[600px] flex items-center justify-center bg-brand-black overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img 
-          src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=2000&auto=format&fit=crop"
+          src="/assets/burger.jpeg"
           alt="Delicious Burger" 
           className="w-full h-full object-cover opacity-40"
         />
@@ -734,12 +734,12 @@ const Features = () => {
 
 const Gallery = () => {
   const images = [
-    "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=800",
-    "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800",
-    "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?q=80&w=800",
-    "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800",
-    "https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=800",
-    "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=800"
+    { src: "/assets/burger.jpeg", alt: "Burger" },
+    { src: "/assets/pizza.jpeg", alt: "Pizza" },
+    { src: "/assets/momo.jpeg", alt: "Momos" },
+    { src: "/assets/sandwich.jpeg", alt: "Sandwich" },
+    { src: "/assets/shakes.jpeg", alt: "Shakes" },
+    { src: "/assets/fries.jpeg", alt: "Fries" },
   ];
   return (
     <section id="gallery" className="py-20 bg-brand-dark scroll-mt-24">
