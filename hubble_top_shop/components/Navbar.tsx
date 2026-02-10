@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
             <button className="hidden md:flex items-center gap-2 text-sm font-semibold hover:text-gray-600 transition-colors">
               Sign in
             </button>
-            <button className="bg-black text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wide hover:bg-gray-800 transition-all transform hover:scale-105 active:scale-95">
+            <button className="hidden md:block bg-black text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wide hover:bg-gray-800 transition-all transform hover:scale-105 active:scale-95">
               Contact Us
             </button>
           </div>
