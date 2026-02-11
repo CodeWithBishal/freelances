@@ -1,8 +1,9 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Users, ShoppingCart, Settings, LogOut, Hexagon, FileText, X, CheckSquare } from 'lucide-react';
 import { clsx } from 'clsx';
 import { motion } from 'framer-motion';
+import { useAuth } from '../services/AuthContext';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -10,6 +11,9 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
   const navItems = [
     { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/clients', icon: Users, label: 'Clients' },
@@ -18,11 +22,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { to: '/todos', icon: CheckSquare, label: 'Tasks' },
   ];
 
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/login');
+  };
+
+  // Get user initials from email
+  const getInitials = (email?: string) => {
+    if (!email) return '??';
+    const parts = email.split('@')[0].split(/[._-]/);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return email.substring(0, 2).toUpperCase();
+  };
+
   return (
     <>
       {/* Overlay for mobile */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 md:hidden"
           onClick={onClose}
         />
@@ -34,23 +53,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       )}>
         <div className="flex items-center justify-between px-6 h-24 border-b border-white/5">
           <div className="flex items-center gap-3 group cursor-pointer">
-              <div className="relative">
-                  <div className="absolute inset-0 bg-violet-600 blur-lg opacity-40 group-hover:opacity-60 transition-opacity rounded-full"></div>
-                  <div className="relative bg-zinc-900 p-2 rounded-xl border border-white/10 group-hover:border-violet-500/50 transition-colors">
-                      <Hexagon className="w-5 h-5 text-white" />
-                  </div>
+            <div className="relative">
+              <div className="absolute inset-0 bg-violet-600 blur-lg opacity-40 group-hover:opacity-60 transition-opacity rounded-full"></div>
+              <div className="relative bg-zinc-900 p-2 rounded-xl border border-white/10 group-hover:border-violet-500/50 transition-colors">
+                <Hexagon className="w-5 h-5 text-white" />
               </div>
-              <div>
-                  <h1 className="text-sm font-bold tracking-widest text-white uppercase">TheTechArch</h1>
-                  <p className="text-[10px] text-zinc-500 tracking-wide">V 2.0.26</p>
-              </div>
+            </div>
+            <div>
+              <h1 className="text-sm font-bold tracking-widest text-white uppercase">TheTechArch</h1>
+              <p className="text-[10px] text-zinc-500 tracking-wide">V 2.0.26</p>
+            </div>
           </div>
           {/* Close button for mobile */}
           <button onClick={onClose} className="md:hidden text-zinc-500 hover:text-white">
             <X className="w-6 h-6" />
           </button>
         </div>
-        
+
         <nav className="flex-1 px-4 py-8 space-y-2">
           {navItems.map((item) => (
             <NavLink
@@ -67,17 +86,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               }
             >
               {({ isActive }) => (
-                  <>
-                      {isActive && (
-                          <motion.div 
-                              layoutId="activeNav"
-                              className="absolute inset-0 bg-violet-500/10 border border-violet-500/20 rounded-xl"
-                              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                          />
-                      )}
-                      <item.icon className={clsx("w-5 h-5 mr-3 relative z-10 transition-colors duration-300", isActive ? "text-violet-400" : "text-zinc-600 group-hover:text-zinc-300")} />
-                      <span className="relative z-10">{item.label}</span>
-                  </>
+                <>
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeNav"
+                      className="absolute inset-0 bg-violet-500/10 border border-violet-500/20 rounded-xl"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                  <item.icon className={clsx("w-5 h-5 mr-3 relative z-10 transition-colors duration-300", isActive ? "text-violet-400" : "text-zinc-600 group-hover:text-zinc-300")} />
+                  <span className="relative z-10">{item.label}</span>
+                </>
               )}
             </NavLink>
           ))}
@@ -88,17 +107,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             <Settings className="w-5 h-5 mr-3 text-zinc-600 group-hover:text-zinc-300 transition-colors" />
             <span>Settings</span>
           </button>
-          <div className="mt-6 flex items-center gap-3 px-3 py-3 rounded-2xl bg-zinc-900/50 border border-white/5 hover:border-white/10 transition-colors cursor-pointer group">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-violet-500 to-fuchsia-500 p-[1px]">
-                  <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
-                      <span className="text-xs font-bold text-white">AD</span>
-                  </div>
+          <div className="mt-6 flex items-center gap-3 px-3 py-3 rounded-2xl bg-zinc-900/50 border border-white/5 hover:border-white/10 transition-colors group">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-violet-500 to-fuchsia-500 p-[1px]">
+              <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
+                <span className="text-xs font-bold text-white">{getInitials(user?.email)}</span>
               </div>
-              <div className="flex-1">
-                  <p className="text-xs font-semibold text-white group-hover:text-violet-200 transition-colors">Alex Designer</p>
-                  <p className="text-[10px] text-zinc-600">Admin</p>
-              </div>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold text-white group-hover:text-violet-200 transition-colors truncate">{user?.email || 'Unknown'}</p>
+              <p className="text-[10px] text-zinc-600">Admin</p>
+            </div>
+            <button onClick={handleSignOut} title="Sign out" className="p-1 rounded-lg hover:bg-white/5 transition-colors">
               <LogOut className="w-4 h-4 text-zinc-600 hover:text-rose-400 transition-colors" />
+            </button>
           </div>
         </div>
       </div>

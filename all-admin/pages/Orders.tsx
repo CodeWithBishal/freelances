@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, Download, ArrowDownUp, Plus, X, Calendar, DollarSign, Briefcase } from 'lucide-react';
-import { mockOrders, mockClients } from '../services/mockData';
+import { fetchOrders, fetchClients, createOrder } from '../services/database';
 import { format } from 'date-fns';
 import { clsx } from 'clsx';
-import { Status, Order } from '../types';
+import { Status, Order, Client } from '../types';
 import { Card } from '../components/Card';
 import { PageTransition } from '../components/PageTransition';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -19,7 +19,9 @@ const formatCurrency = (amount: number) => {
 export const Orders = () => {
   const [filterStatus, setFilterStatus] = useState<Status | 'all'>('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [orders, setOrders] = useState<Order[]>(mockOrders);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // New Order Form State
@@ -37,10 +39,20 @@ export const Orders = () => {
     billingFreq: 'one-time'
   });
 
+  useEffect(() => {
+    Promise.all([fetchOrders(), fetchClients()])
+      .then(([ordersData, clientsData]) => {
+        setOrders(ordersData);
+        setClients(clientsData);
+      })
+      .catch(err => console.error('Failed to fetch data:', err))
+      .finally(() => setLoading(false));
+  }, []);
+
   const filteredOrders = orders.filter(order => {
     const matchesStatus = filterStatus === 'all' || order.status === filterStatus;
-    const matchesSearch = order.id.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          order.serviceName.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.serviceName.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesStatus && matchesSearch;
   });
 
@@ -57,16 +69,16 @@ export const Orders = () => {
   const handleExportCSV = () => {
     const headers = ['Order ID', 'Client Name', 'Service', 'Billing', 'Amount', 'Status', 'Due Date'];
     const rows = filteredOrders.map(order => {
-        const clientName = mockClients.find(c => c.id === order.clientId)?.name || 'Unknown';
-        return [
-            order.id,
-            `"${clientName}"`, // Quote to handle commas in names
-            `"${order.serviceName}"`,
-            order.billingFreq,
-            order.amount,
-            order.status,
-            order.dueDate
-        ].join(',');
+      const clientName = clients.find(c => c.id === order.clientId)?.name || 'Unknown';
+      return [
+        order.id,
+        `"${clientName}"`,
+        `"${order.serviceName}"`,
+        order.billingFreq,
+        order.amount,
+        order.status,
+        order.dueDate
+      ].join(',');
     });
 
     const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows].join('\n');
@@ -79,24 +91,27 @@ export const Orders = () => {
     document.body.removeChild(link);
   };
 
-  const handleCreateOrder = (e: React.FormEvent) => {
+  const handleCreateOrder = async (e: React.FormEvent) => {
     e.preventDefault();
-    if(!newOrder.clientId || !newOrder.serviceName || !newOrder.amount) return;
+    if (!newOrder.clientId || !newOrder.serviceName || !newOrder.amount) return;
 
-    const order: Order = {
+    try {
+      const created = await createOrder({
         id: `ORD-${Math.floor(1000 + Math.random() * 9000)}`,
         clientId: newOrder.clientId,
         serviceName: newOrder.serviceName,
         amount: parseFloat(newOrder.amount),
         dueDate: newOrder.dueDate || new Date().toISOString(),
         status: 'active',
-        createdAt: new Date().toISOString(),
-        billingFreq: newOrder.billingFreq
-    };
-
-    setOrders([order, ...orders]);
-    setIsModalOpen(false);
-    setNewOrder({ clientId: '', serviceName: '', amount: '', dueDate: '', billingFreq: 'one-time' });
+        billingFreq: newOrder.billingFreq,
+      });
+      setOrders([created, ...orders]);
+      setIsModalOpen(false);
+      setNewOrder({ clientId: '', serviceName: '', amount: '', dueDate: '', billingFreq: 'one-time' });
+    } catch (err) {
+      console.error('Failed to create order:', err);
+      alert('Failed to create order. Please try again.');
+    }
   };
 
   return (
@@ -107,20 +122,20 @@ export const Orders = () => {
           <p className="text-zinc-400 mt-2 font-light">Transactions & Service History</p>
         </div>
         <div className="flex gap-3">
-            <button 
-                onClick={handleExportCSV}
-                className="flex items-center gap-2 border border-white/10 bg-zinc-900 text-zinc-300 px-4 py-2.5 rounded-xl hover:bg-zinc-800 transition-colors text-sm font-medium hover:text-white"
-            >
+          <button
+            onClick={handleExportCSV}
+            className="flex items-center gap-2 border border-white/10 bg-zinc-900 text-zinc-300 px-4 py-2.5 rounded-xl hover:bg-zinc-800 transition-colors text-sm font-medium hover:text-white"
+          >
             <Download className="w-4 h-4" />
             <span>Export CSV</span>
-            </button>
-            <button 
-                onClick={() => setIsModalOpen(true)}
-                className="flex items-center gap-2 bg-white text-black px-4 py-2.5 rounded-xl hover:bg-zinc-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] text-sm font-bold"
-            >
+          </button>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 bg-white text-black px-4 py-2.5 rounded-xl hover:bg-zinc-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] text-sm font-bold"
+          >
             <Plus className="w-4 h-4" />
             <span>Create Order</span>
-            </button>
+          </button>
         </div>
       </div>
 
@@ -128,9 +143,9 @@ export const Orders = () => {
         <div className="p-4 border-b border-white/5 flex flex-col md:flex-row gap-4 justify-between items-center bg-white/[0.02]">
           <div className="relative w-full md:w-96">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-500 w-4 h-4" />
-            <input 
-              type="text" 
-              placeholder="Search orders..." 
+            <input
+              type="text"
+              placeholder="Search orders..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 pr-4 py-2.5 w-full bg-black/50 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:ring-1 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all placeholder-zinc-600"
@@ -144,8 +159,8 @@ export const Orders = () => {
                 onClick={() => setFilterStatus(status as any)}
                 className={clsx(
                   'px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap border',
-                  filterStatus === status 
-                    ? 'bg-white text-black border-white' 
+                  filterStatus === status
+                    ? 'bg-white text-black border-white'
                     : 'bg-transparent text-zinc-500 border-transparent hover:bg-white/5 hover:text-zinc-300'
                 )}
               >
@@ -164,7 +179,7 @@ export const Orders = () => {
                 <th className="px-6 py-4 font-semibold">Service</th>
                 <th className="px-6 py-4 font-semibold">Billing</th>
                 <th className="px-6 py-4 font-semibold flex items-center gap-1 cursor-pointer hover:text-zinc-300">
-                    Due Date <ArrowDownUp className="w-3 h-3" />
+                  Due Date <ArrowDownUp className="w-3 h-3" />
                 </th>
                 <th className="px-6 py-4 font-semibold">Status</th>
                 <th className="px-6 py-4 font-semibold text-right">Amount</th>
@@ -172,14 +187,14 @@ export const Orders = () => {
             </thead>
             <tbody className="divide-y divide-white/5">
               {filteredOrders.map(order => {
-                const client = mockClients.find(c => c.id === order.clientId);
+                const client = clients.find(c => c.id === order.clientId);
                 return (
                   <tr key={order.id} className="hover:bg-white/[0.02] transition-colors">
                     <td className="px-6 py-4 text-sm font-medium text-white font-mono text-xs opacity-70">{order.id}</td>
                     <td className="px-6 py-4 text-sm text-zinc-400">
                       <div className="flex items-center gap-3">
-                         {client && <img src={client.avatar} className="w-6 h-6 rounded-full ring-1 ring-white/10" alt="" />}
-                         <span className="font-medium text-zinc-300">{client?.name || 'Unknown'}</span>
+                        {client && <img src={client.avatar} className="w-6 h-6 rounded-full ring-1 ring-white/10" alt="" />}
+                        <span className="font-medium text-zinc-300">{client?.name || 'Unknown'}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-sm text-zinc-300">{order.serviceName}</td>
@@ -203,9 +218,9 @@ export const Orders = () => {
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 1 }} 
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsModalOpen(false)}
               className="absolute inset-0 bg-black/80 backdrop-blur-sm"
@@ -222,84 +237,84 @@ export const Orders = () => {
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              
+
               <form onSubmit={handleCreateOrder} className="p-6 space-y-4">
-                
+
                 <div className="space-y-2">
-                    <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Client</label>
-                    <div className="relative">
-                        <select 
-                            required
-                            value={newOrder.clientId}
-                            onChange={(e) => setNewOrder({...newOrder, clientId: e.target.value})}
-                            className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-white focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 outline-none transition-all appearance-none"
-                        >
-                            <option value="" disabled>Select a client</option>
-                            {mockClients.map(client => (
-                                <option key={client.id} value={client.id}>{client.name} - {client.company}</option>
-                            ))}
-                        </select>
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                            <ArrowDownUp className="w-3 h-3 text-zinc-500" />
-                        </div>
+                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Client</label>
+                  <div className="relative">
+                    <select
+                      required
+                      value={newOrder.clientId}
+                      onChange={(e) => setNewOrder({ ...newOrder, clientId: e.target.value })}
+                      className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-white focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 outline-none transition-all appearance-none"
+                    >
+                      <option value="" disabled>Select a client</option>
+                      {clients.map(client => (
+                        <option key={client.id} value={client.id}>{client.name} - {client.company}</option>
+                      ))}
+                    </select>
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                      <ArrowDownUp className="w-3 h-3 text-zinc-500" />
                     </div>
+                  </div>
                 </div>
 
                 <div className="space-y-2">
-                    <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Service Name</label>
-                    <div className="relative">
-                        <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                        <input 
-                            required
-                            placeholder="e.g. Website Maintenance"
-                            value={newOrder.serviceName}
-                            onChange={e => setNewOrder({...newOrder, serviceName: e.target.value})}
-                            className="w-full bg-black/40 border border-white/10 rounded-lg pl-10 pr-3 py-2 text-white focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 outline-none transition-all"
-                        />
-                    </div>
+                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Service Name</label>
+                  <div className="relative">
+                    <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                    <input
+                      required
+                      placeholder="e.g. Website Maintenance"
+                      value={newOrder.serviceName}
+                      onChange={e => setNewOrder({ ...newOrder, serviceName: e.target.value })}
+                      className="w-full bg-black/40 border border-white/10 rounded-lg pl-10 pr-3 py-2 text-white focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 outline-none transition-all"
+                    />
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Amount (INR)</label>
-                        <div className="relative">
-                            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                            <input 
-                                type="number"
-                                required
-                                placeholder="0.00"
-                                value={newOrder.amount}
-                                onChange={e => setNewOrder({...newOrder, amount: e.target.value})}
-                                className="w-full bg-black/40 border border-white/10 rounded-lg pl-10 pr-3 py-2 text-white focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 outline-none transition-all"
-                            />
-                        </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Amount (INR)</label>
+                    <div className="relative">
+                      <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                      <input
+                        type="number"
+                        required
+                        placeholder="0.00"
+                        value={newOrder.amount}
+                        onChange={e => setNewOrder({ ...newOrder, amount: e.target.value })}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg pl-10 pr-3 py-2 text-white focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 outline-none transition-all"
+                      />
                     </div>
-                     <div className="space-y-2">
-                        <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Billing</label>
-                        <select 
-                            value={newOrder.billingFreq}
-                            onChange={(e: any) => setNewOrder({...newOrder, billingFreq: e.target.value})}
-                            className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all"
-                        >
-                            <option value="one-time">One-time</option>
-                            <option value="monthly">Monthly</option>
-                            <option value="yearly">Yearly</option>
-                        </select>
-                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Billing</label>
+                    <select
+                      value={newOrder.billingFreq}
+                      onChange={(e: any) => setNewOrder({ ...newOrder, billingFreq: e.target.value })}
+                      className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all"
+                    >
+                      <option value="one-time">One-time</option>
+                      <option value="monthly">Monthly</option>
+                      <option value="yearly">Yearly</option>
+                    </select>
+                  </div>
                 </div>
 
                 <div className="space-y-2">
-                    <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Due Date</label>
-                    <div className="relative">
-                        <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                        <input 
-                            type="date"
-                            required
-                            value={newOrder.dueDate}
-                            onChange={e => setNewOrder({...newOrder, dueDate: e.target.value})}
-                            className="w-full bg-black/40 border border-white/10 rounded-lg pl-10 pr-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all [color-scheme:dark]"
-                        />
-                    </div>
+                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Due Date</label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                    <input
+                      type="date"
+                      required
+                      value={newOrder.dueDate}
+                      onChange={e => setNewOrder({ ...newOrder, dueDate: e.target.value })}
+                      className="w-full bg-black/40 border border-white/10 rounded-lg pl-10 pr-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all [color-scheme:dark]"
+                    />
+                  </div>
                 </div>
 
                 <div className="pt-4 flex gap-3">

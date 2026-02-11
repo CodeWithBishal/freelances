@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Plus, Search, Calendar, Filter, Edit2, Save, Trash2, ArrowRight, ArrowLeft, X, Circle } from 'lucide-react';
-import { mockTodos, mockClients } from '../services/mockData';
-import { Todo, TaskStatus, TaskPriority } from '../types';
+import { fetchTodos, fetchClients, createTodo, updateTodo, deleteTodo } from '../services/database';
+import { Todo, TaskStatus, TaskPriority, Client } from '../types';
 import { PageTransition } from '../components/PageTransition';
 import { format, isPast, isToday, isTomorrow } from 'date-fns';
 import { clsx } from 'clsx';
@@ -14,12 +14,14 @@ const columns: { id: TaskStatus; label: string; color: string; dot: string }[] =
 ];
 
 export const Todos = () => {
-    const [todos, setTodos] = useState<Todo[]>(mockTodos);
+    const [todos, setTodos] = useState<Todo[]>([]);
+    const [clients, setClients] = useState<Client[]>([]);
+    const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [priorityFilter, setPriorityFilter] = useState<TaskPriority | 'all'>('all');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
-    
+
     // Task Form State
     const [taskForm, setTaskForm] = useState<{
         title: string;
@@ -36,6 +38,16 @@ export const Todos = () => {
         clientId: '',
         dueDate: ''
     });
+
+    useEffect(() => {
+        Promise.all([fetchTodos(), fetchClients()])
+            .then(([todosData, clientsData]) => {
+                setTodos(todosData);
+                setClients(clientsData);
+            })
+            .catch(err => console.error('Failed to fetch data:', err))
+            .finally(() => setLoading(false));
+    }, []);
 
     const openCreateModal = () => {
         setEditingId(null);
@@ -56,62 +68,84 @@ export const Todos = () => {
         setIsModalOpen(true);
     };
 
-    const handleSaveTask = (e: React.FormEvent) => {
+    const handleSaveTask = async (e: React.FormEvent) => {
         e.preventDefault();
-        
-        if (editingId) {
-            // Update existing
-            setTodos(todos.map(t => t.id === editingId ? {
-                ...t,
-                title: taskForm.title,
-                description: taskForm.description,
-                priority: taskForm.priority,
-                status: taskForm.status,
-                clientId: taskForm.clientId || undefined,
-                dueDate: taskForm.dueDate || undefined,
-            } : t));
-        } else {
-            // Create new
-            const task: Todo = {
-                id: `t-${Date.now()}`,
-                title: taskForm.title,
-                description: taskForm.description,
-                priority: taskForm.priority,
-                status: taskForm.status,
-                clientId: taskForm.clientId || undefined,
-                dueDate: taskForm.dueDate || undefined,
-                createdAt: new Date().toISOString()
-            };
-            setTodos([...todos, task]);
+
+        try {
+            if (editingId) {
+                // Update existing
+                await updateTodo(editingId, {
+                    title: taskForm.title,
+                    description: taskForm.description,
+                    priority: taskForm.priority,
+                    status: taskForm.status,
+                    clientId: taskForm.clientId || undefined,
+                    dueDate: taskForm.dueDate || undefined,
+                });
+                setTodos(todos.map(t => t.id === editingId ? {
+                    ...t,
+                    title: taskForm.title,
+                    description: taskForm.description,
+                    priority: taskForm.priority,
+                    status: taskForm.status,
+                    clientId: taskForm.clientId || undefined,
+                    dueDate: taskForm.dueDate || undefined,
+                } : t));
+            } else {
+                // Create new
+                const created = await createTodo({
+                    title: taskForm.title,
+                    description: taskForm.description,
+                    priority: taskForm.priority,
+                    status: taskForm.status,
+                    clientId: taskForm.clientId || undefined,
+                    dueDate: taskForm.dueDate || undefined,
+                });
+                setTodos([created, ...todos]);
+            }
+            setIsModalOpen(false);
+        } catch (err) {
+            console.error('Failed to save task:', err);
+            alert('Failed to save task. Please try again.');
         }
-        setIsModalOpen(false);
     };
 
-    const handleDeleteTask = (id: string, e: React.MouseEvent) => {
+    const handleDeleteTask = async (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
-        if(window.confirm('Are you sure you want to delete this task?')) {
-            setTodos(todos.filter(t => t.id !== id));
+        if (window.confirm('Are you sure you want to delete this task?')) {
+            try {
+                await deleteTodo(id);
+                setTodos(todos.filter(t => t.id !== id));
+            } catch (err) {
+                console.error('Failed to delete task:', err);
+                alert('Failed to delete task.');
+            }
         }
     };
 
-    const handleMoveTask = (id: string, direction: 'next' | 'prev', currentStatus: TaskStatus, e: React.MouseEvent) => {
+    const handleMoveTask = async (id: string, direction: 'next' | 'prev', currentStatus: TaskStatus, e: React.MouseEvent) => {
         e.stopPropagation();
         const flow: TaskStatus[] = ['todo', 'in-progress', 'done'];
         const currentIndex = flow.indexOf(currentStatus);
         let nextIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
-        
+
         // Bounds check
         if (nextIndex < 0) nextIndex = 0;
         if (nextIndex >= flow.length) nextIndex = flow.length - 1;
 
         const nextStatus = flow[nextIndex];
         if (nextStatus !== currentStatus) {
-            setTodos(todos.map(t => t.id === id ? { ...t, status: nextStatus } : t));
+            try {
+                await updateTodo(id, { status: nextStatus });
+                setTodos(todos.map(t => t.id === id ? { ...t, status: nextStatus } : t));
+            } catch (err) {
+                console.error('Failed to move task:', err);
+            }
         }
     };
 
     const getPriorityColor = (p: TaskPriority) => {
-        switch(p) {
+        switch (p) {
             case 'high': return 'text-red-400 bg-red-400/10 border-red-400/20';
             case 'medium': return 'text-orange-400 bg-orange-400/10 border-orange-400/20';
             case 'low': return 'text-blue-400 bg-blue-400/10 border-blue-400/20';
@@ -129,8 +163,8 @@ export const Todos = () => {
 
     const filteredTodos = useMemo(() => {
         return todos.filter(t => {
-            const matchesSearch = t.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                                  (t.description?.toLowerCase().includes(searchTerm.toLowerCase()));
+            const matchesSearch = t.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (t.description?.toLowerCase().includes(searchTerm.toLowerCase()));
             const matchesPriority = priorityFilter === 'all' || t.priority === priorityFilter;
             return matchesSearch && matchesPriority;
         });
@@ -138,17 +172,17 @@ export const Todos = () => {
 
     return (
         <PageTransition className="space-y-8 h-[calc(100vh-100px)] flex flex-col">
-             <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end gap-6 flex-shrink-0">
+            <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end gap-6 flex-shrink-0">
                 <div>
                     <h1 className="text-4xl font-bold text-white tracking-tight">Tasks</h1>
                     <p className="text-zinc-400 mt-2 font-light">Manage your daily priorities and workflow</p>
                 </div>
-                
+
                 <div className="flex flex-col sm:flex-row gap-3 w-full xl:w-auto">
-                     {/* Filter Group */}
-                     <div className="flex items-center gap-2 bg-zinc-900 border border-white/10 rounded-xl px-3 py-2.5">
+                    {/* Filter Group */}
+                    <div className="flex items-center gap-2 bg-zinc-900 border border-white/10 rounded-xl px-3 py-2.5">
                         <Filter className="w-4 h-4 text-zinc-500" />
-                        <select 
+                        <select
                             value={priorityFilter}
                             onChange={(e) => setPriorityFilter(e.target.value as any)}
                             className="bg-transparent text-sm text-white focus:outline-none border-none p-0 cursor-pointer"
@@ -158,13 +192,13 @@ export const Todos = () => {
                             <option value="medium">Medium Priority</option>
                             <option value="low">Low Priority</option>
                         </select>
-                     </div>
+                    </div>
 
                     {/* Search */}
                     <div className="relative flex-1 sm:w-64">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                        <input 
-                            placeholder="Search tasks..." 
+                        <input
+                            placeholder="Search tasks..."
                             value={searchTerm}
                             onChange={e => setSearchTerm(e.target.value)}
                             className="w-full bg-zinc-900 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:ring-1 focus:ring-violet-500/50 outline-none"
@@ -172,7 +206,7 @@ export const Todos = () => {
                     </div>
 
                     {/* Add Button */}
-                    <button 
+                    <button
                         onClick={openCreateModal}
                         className="flex items-center justify-center gap-2 bg-white text-black px-5 py-2.5 rounded-xl hover:bg-zinc-200 transition-all font-bold text-sm whitespace-nowrap shadow-[0_0_20px_rgba(255,255,255,0.1)]"
                     >
@@ -196,12 +230,12 @@ export const Todos = () => {
                                     {filteredTodos.filter(t => t.status === col.id).length}
                                 </span>
                             </div>
-                            
+
                             {/* Column Body */}
                             <div className="flex-1 bg-zinc-900/20 border border-white/5 rounded-2xl p-3 overflow-y-auto space-y-3 custom-scrollbar">
                                 <AnimatePresence mode="popLayout">
                                     {filteredTodos.filter(t => t.status === col.id).map(task => {
-                                        const client = mockClients.find(c => c.id === task.clientId);
+                                        const client = clients.find(c => c.id === task.clientId);
                                         return (
                                             <motion.div
                                                 key={task.id}
@@ -213,9 +247,9 @@ export const Todos = () => {
                                                 className="group relative bg-zinc-900 border border-white/5 hover:border-violet-500/30 p-4 rounded-xl shadow-sm hover:shadow-xl transition-all cursor-pointer overflow-hidden"
                                             >
                                                 {/* Left Accent Bar */}
-                                                <div className={clsx("absolute left-0 top-0 bottom-0 w-1", 
-                                                    task.priority === 'high' ? 'bg-red-500' : 
-                                                    task.priority === 'medium' ? 'bg-orange-500' : 'bg-blue-500'
+                                                <div className={clsx("absolute left-0 top-0 bottom-0 w-1",
+                                                    task.priority === 'high' ? 'bg-red-500' :
+                                                        task.priority === 'medium' ? 'bg-orange-500' : 'bg-blue-500'
                                                 )}></div>
 
                                                 <div className="pl-2">
@@ -229,9 +263,9 @@ export const Todos = () => {
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <h4 className="text-white font-semibold text-sm leading-snug mb-1.5 pr-2">{task.title}</h4>
-                                                    
+
                                                     {task.description && (
                                                         <p className="text-zinc-500 text-xs line-clamp-2 mb-4 leading-relaxed font-light">{task.description}</p>
                                                     )}
@@ -257,7 +291,7 @@ export const Todos = () => {
                                                 {/* Directional Buttons (Overlay on hover) */}
                                                 <div className="absolute bottom-3 right-3 flex gap-1">
                                                     {task.status !== 'todo' && (
-                                                        <button 
+                                                        <button
                                                             onClick={(e) => handleMoveTask(task.id, 'prev', task.status, e)}
                                                             className="p-1.5 bg-black/50 hover:bg-white text-white hover:text-black rounded-lg border border-white/10 transition-colors backdrop-blur-sm opacity-0 group-hover:opacity-100"
                                                             title="Move Back"
@@ -266,7 +300,7 @@ export const Todos = () => {
                                                         </button>
                                                     )}
                                                     {task.status !== 'done' && (
-                                                         <button 
+                                                        <button
                                                             onClick={(e) => handleMoveTask(task.id, 'next', task.status, e)}
                                                             className="p-1.5 bg-black/50 hover:bg-white text-white hover:text-black rounded-lg border border-white/10 transition-colors backdrop-blur-sm opacity-0 group-hover:opacity-100"
                                                             title="Move Forward"
@@ -294,111 +328,111 @@ export const Todos = () => {
             {/* Create/Edit Task Modal */}
             <AnimatePresence>
                 {isModalOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                    <motion.div 
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
-                    exit={{ opacity: 0 }}
-                    onClick={() => setIsModalOpen(false)}
-                    className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-                    />
-                    <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                    className="relative w-full max-w-lg bg-zinc-900 border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
-                    >
-                    <div className="px-6 py-4 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
-                        <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                            {editingId ? <Edit2 className="w-5 h-5 text-violet-500" /> : <Plus className="w-5 h-5 text-violet-500" />}
-                            {editingId ? 'Edit Task' : 'New Task'}
-                        </h2>
-                        <button onClick={() => setIsModalOpen(false)} className="text-zinc-500 hover:text-white transition-colors">
-                        <X className="w-5 h-5" />
-                        </button>
-                    </div>
-                    <form onSubmit={handleSaveTask} className="p-6 space-y-4">
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Title</label>
-                            <input 
-                                required
-                                value={taskForm.title}
-                                onChange={e => setTaskForm({...taskForm, title: e.target.value})}
-                                placeholder="What needs to be done?"
-                                className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all"
-                            />
-                        </div>
-                         <div className="space-y-2">
-                            <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Description</label>
-                            <textarea 
-                                value={taskForm.description}
-                                onChange={e => setTaskForm({...taskForm, description: e.target.value})}
-                                placeholder="Details..."
-                                className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all resize-none h-24"
-                            />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Priority</label>
-                                <select 
-                                    value={taskForm.priority}
-                                    onChange={(e: any) => setTaskForm({...taskForm, priority: e.target.value})}
-                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all"
-                                >
-                                    <option value="low">Low</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="high">High</option>
-                                </select>
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsModalOpen(false)}
+                            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative w-full max-w-lg bg-zinc-900 border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+                        >
+                            <div className="px-6 py-4 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
+                                <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                                    {editingId ? <Edit2 className="w-5 h-5 text-violet-500" /> : <Plus className="w-5 h-5 text-violet-500" />}
+                                    {editingId ? 'Edit Task' : 'New Task'}
+                                </h2>
+                                <button onClick={() => setIsModalOpen(false)} className="text-zinc-500 hover:text-white transition-colors">
+                                    <X className="w-5 h-5" />
+                                </button>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Due Date</label>
-                                <input 
-                                    type="date"
-                                    value={taskForm.dueDate}
-                                    onChange={e => setTaskForm({...taskForm, dueDate: e.target.value})}
-                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all [color-scheme:dark]"
-                                />
-                            </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-4">
-                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Status</label>
-                                <select 
-                                    value={taskForm.status}
-                                    onChange={(e: any) => setTaskForm({...taskForm, status: e.target.value})}
-                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all"
-                                >
-                                    <option value="todo">To Do</option>
-                                    <option value="in-progress">In Progress</option>
-                                    <option value="done">Done</option>
-                                </select>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Client</label>
-                                <select 
-                                    value={taskForm.clientId}
-                                    onChange={(e) => setTaskForm({...taskForm, clientId: e.target.value})}
-                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all"
-                                >
-                                    <option value="">None</option>
-                                    {mockClients.map(c => (
-                                        <option key={c.id} value={c.id}>{c.name}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
+                            <form onSubmit={handleSaveTask} className="p-6 space-y-4">
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Title</label>
+                                    <input
+                                        required
+                                        value={taskForm.title}
+                                        onChange={e => setTaskForm({ ...taskForm, title: e.target.value })}
+                                        placeholder="What needs to be done?"
+                                        className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Description</label>
+                                    <textarea
+                                        value={taskForm.description}
+                                        onChange={e => setTaskForm({ ...taskForm, description: e.target.value })}
+                                        placeholder="Details..."
+                                        className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all resize-none h-24"
+                                    />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Priority</label>
+                                        <select
+                                            value={taskForm.priority}
+                                            onChange={(e: any) => setTaskForm({ ...taskForm, priority: e.target.value })}
+                                            className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all"
+                                        >
+                                            <option value="low">Low</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="high">High</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Due Date</label>
+                                        <input
+                                            type="date"
+                                            value={taskForm.dueDate}
+                                            onChange={e => setTaskForm({ ...taskForm, dueDate: e.target.value })}
+                                            className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all [color-scheme:dark]"
+                                        />
+                                    </div>
+                                </div>
 
-                        <div className="pt-4 flex gap-3">
-                        <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-2.5 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5 font-medium transition-colors">Cancel</button>
-                        <button type="submit" className="flex-1 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold shadow-lg shadow-violet-600/20 transition-all flex items-center justify-center gap-2">
-                            {editingId ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-                            {editingId ? 'Save Changes' : 'Create Task'}
-                        </button>
-                        </div>
-                    </form>
-                    </motion.div>
-                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Status</label>
+                                        <select
+                                            value={taskForm.status}
+                                            onChange={(e: any) => setTaskForm({ ...taskForm, status: e.target.value })}
+                                            className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all"
+                                        >
+                                            <option value="todo">To Do</option>
+                                            <option value="in-progress">In Progress</option>
+                                            <option value="done">Done</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Client</label>
+                                        <select
+                                            value={taskForm.clientId}
+                                            onChange={(e) => setTaskForm({ ...taskForm, clientId: e.target.value })}
+                                            className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 outline-none transition-all"
+                                        >
+                                            <option value="">None</option>
+                                            {clients.map(c => (
+                                                <option key={c.id} value={c.id}>{c.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="pt-4 flex gap-3">
+                                    <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-2.5 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5 font-medium transition-colors">Cancel</button>
+                                    <button type="submit" className="flex-1 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold shadow-lg shadow-violet-600/20 transition-all flex items-center justify-center gap-2">
+                                        {editingId ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                                        {editingId ? 'Save Changes' : 'Create Task'}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
                 )}
             </AnimatePresence>
         </PageTransition>
