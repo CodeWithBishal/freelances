@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Plus, Mail, Phone, MapPin, ChevronRight, UserPlus, X, Upload } from 'lucide-react';
+import { Search, Plus, Mail, Phone, MapPin, ChevronRight, UserPlus, X, Upload, Loader2 } from 'lucide-react';
 import { fetchClients, createClient } from '../services/database';
 import { Client } from '../types';
 import { Card } from '../components/Card';
@@ -12,6 +12,7 @@ export const Clients = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   // New Client Form State
   const [newClient, setNewClient] = useState({
@@ -19,7 +20,8 @@ export const Clients = () => {
     company: '',
     email: '',
     phone: '',
-    address: ''
+    address: '',
+    plusCode: ''
   });
 
   useEffect(() => {
@@ -36,17 +38,22 @@ export const Clients = () => {
 
   const handleAddClient = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSaving(true);
     try {
+      const seed = newClient.name || newClient.phone || Date.now().toString();
+      const avatar = `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(seed)}&backgroundColor=8b5cf6`;
       const created = await createClient({
         ...newClient,
-        avatar: `https://picsum.photos/200/200?random=${Date.now()}`,
+        avatar,
       });
       setClients([created, ...clients]);
       setIsModalOpen(false);
-      setNewClient({ name: '', company: '', email: '', phone: '', address: '' });
-    } catch (err) {
+      setNewClient({ name: '', company: '', email: '', phone: '', address: '', plusCode: '' });
+    } catch (err: any) {
       console.error('Failed to create client:', err);
-      alert('Failed to create client. Please try again.');
+      alert(err?.message || 'Failed to create client. Please try again.');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -225,12 +232,26 @@ export const Clients = () => {
                   />
                 </div>
 
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Plus Code</label>
+                  <input
+                    value={newClient.plusCode}
+                    onChange={e => setNewClient({ ...newClient, plusCode: e.target.value })}
+                    placeholder="e.g. 7J4W+8G Bangalore"
+                    className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white placeholder-zinc-600 focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 outline-none transition-all"
+                  />
+                </div>
+
                 <div className="pt-4 flex gap-3">
-                  <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-2.5 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5 font-medium transition-colors">
+                  <button type="button" onClick={() => setIsModalOpen(false)} disabled={saving} className="flex-1 py-2.5 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     Cancel
                   </button>
-                  <button type="submit" className="flex-1 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold shadow-lg shadow-violet-600/20 transition-all">
-                    Create Profile
+                  <button type="submit" disabled={saving} className="flex-1 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold shadow-lg shadow-violet-600/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-violet-600">
+                    {saving ? (
+                      <><Loader2 className="w-4 h-4 animate-spin" /> Creating...</>
+                    ) : (
+                      'Create Profile'
+                    )}
                   </button>
                 </div>
               </form>

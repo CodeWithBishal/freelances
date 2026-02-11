@@ -4,15 +4,17 @@
 -- ============================================
 
 -- 1. Clients
+-- 1. Clients (phone is primary key)
 create table if not exists clients (
-  id uuid primary key default gen_random_uuid(),
+  id uuid default gen_random_uuid() unique,
   user_id uuid references auth.users(id) on delete cascade not null,
   name text not null,
   email text not null,
   company text not null default '',
   avatar text default '',
-  phone text default '',
+  phone text primary key,
   address text default '',
+  plus_code text default '',
   joined_at timestamptz default now(),
   created_at timestamptz default now()
 );

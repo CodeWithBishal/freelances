@@ -8,6 +8,7 @@ export interface Client {
   avatar: string;
   phone: string;
   address: string;
+  plusCode: string;
   joinedAt: string;
 }
 

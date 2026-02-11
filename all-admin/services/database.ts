@@ -19,6 +19,7 @@ function toClient(row: any): Client {
         avatar: row.avatar || '',
         phone: row.phone || '',
         address: row.address || '',
+        plusCode: row.plus_code || '',
         joinedAt: row.joined_at,
     };
 }
@@ -107,7 +108,23 @@ export async function fetchClientById(id: string): Promise<Client | null> {
     return toClient(data);
 }
 
+export async function checkClientByPhone(phone: string): Promise<boolean> {
+    const { data, error } = await supabase
+        .from('clients')
+        .select('phone')
+        .eq('phone', phone)
+        .maybeSingle();
+    if (error) throw error;
+    return data !== null;
+}
+
 export async function createClient(client: Omit<Client, 'id' | 'joinedAt'>): Promise<Client> {
+    // Check for duplicate phone
+    const exists = await checkClientByPhone(client.phone);
+    if (exists) {
+        throw new Error(`A client with phone number "${client.phone}" already exists.`);
+    }
+
     const userId = await getUserId();
     const { data, error } = await supabase
         .from('clients')
@@ -119,7 +136,28 @@ export async function createClient(client: Omit<Client, 'id' | 'joinedAt'>): Pro
             avatar: client.avatar,
             phone: client.phone,
             address: client.address,
+            plus_code: client.plusCode || '',
         })
+        .select()
+        .single();
+    if (error) throw error;
+    return toClient(data);
+}
+
+export async function updateClient(id: string, updates: Partial<Omit<Client, 'id' | 'joinedAt'>>): Promise<Client> {
+    const payload: any = {};
+    if (updates.name !== undefined) payload.name = updates.name;
+    if (updates.email !== undefined) payload.email = updates.email;
+    if (updates.company !== undefined) payload.company = updates.company;
+    if (updates.phone !== undefined) payload.phone = updates.phone;
+    if (updates.address !== undefined) payload.address = updates.address;
+    if (updates.plusCode !== undefined) payload.plus_code = updates.plusCode;
+    if (updates.avatar !== undefined) payload.avatar = updates.avatar;
+
+    const { data, error } = await supabase
+        .from('clients')
+        .update(payload)
+        .eq('id', id)
         .select()
         .single();
     if (error) throw error;

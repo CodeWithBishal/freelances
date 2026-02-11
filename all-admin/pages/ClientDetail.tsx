@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Mail, Phone, Lock, Eye, EyeOff, Plus, FileText, Paperclip, MoreHorizontal, ShieldCheck, X, Trash2, Wand2, Calculator, FileDown, Copy, RefreshCw, FileCheck, Save, Calendar, DollarSign, Briefcase, ArrowDownUp, Search, RotateCcw, Edit2, Check, ShoppingCart, Image as ImageIcon, File, Download, Clock, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Mail, Phone, Lock, Eye, EyeOff, Plus, FileText, Paperclip, MoreHorizontal, ShieldCheck, X, Trash2, Wand2, Calculator, FileDown, Copy, RefreshCw, FileCheck, Save, Calendar, DollarSign, Briefcase, ArrowDownUp, Search, RotateCcw, Edit2, Check, ShoppingCart, Image as ImageIcon, File, Download, Clock, ChevronRight, Loader2, MapPin, Settings } from 'lucide-react';
 import {
     fetchClientById, fetchOrdersByClient, fetchQuotesByClient,
     fetchNotesByClient, fetchCredentialsByClient,
     createOrder, createNote, updateNoteContent, softDeleteNote, undeleteNote,
-    createCredential, createQuote
+    createCredential, createQuote, updateClient
 } from '../services/database';
 import { format } from 'date-fns';
 import { clsx } from 'clsx';
@@ -61,6 +61,11 @@ export const ClientDetail = () => {
     const [newQuoteItems, setNewQuoteItems] = useState<QuoteItem[]>([{ description: '', price: 0, quantity: 1 }]);
     const [newQuoteTitle, setNewQuoteTitle] = useState('');
 
+    // Manage Profile Modal
+    const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+    const [savingProfile, setSavingProfile] = useState(false);
+    const [profileForm, setProfileForm] = useState({ name: '', company: '', email: '', phone: '', address: '', plusCode: '' });
+
     // Fetch all data on mount
     useEffect(() => {
         if (!id) return;
@@ -84,6 +89,33 @@ export const ClientDetail = () => {
 
     if (loading) return <div className="p-8 text-white flex items-center justify-center min-h-[400px]"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-500"></div></div>;
     if (!client) return <div className="p-8 text-white">Client not found</div>;
+
+    const openProfileModal = () => {
+        setProfileForm({
+            name: client.name,
+            company: client.company,
+            email: client.email,
+            phone: client.phone,
+            address: client.address,
+            plusCode: client.plusCode || '',
+        });
+        setIsProfileModalOpen(true);
+    };
+
+    const handleUpdateProfile = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setSavingProfile(true);
+        try {
+            const updated = await updateClient(client.id, profileForm);
+            setClient(updated);
+            setIsProfileModalOpen(false);
+        } catch (err: any) {
+            console.error('Failed to update profile:', err);
+            alert(err?.message || 'Failed to update profile.');
+        } finally {
+            setSavingProfile(false);
+        }
+    };
 
     const togglePassword = (credId: string) => {
         setShowPassword(prev => ({ ...prev, [credId]: !prev[credId] }));
@@ -316,7 +348,8 @@ export const ClientDetail = () => {
                             </div>
                         </div>
                     </div>
-                    <button className="hidden md:block px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-zinc-300 hover:text-white font-medium transition-all text-sm backdrop-blur-sm">
+                    <button onClick={openProfileModal} className="hidden md:block px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-zinc-300 hover:text-white font-medium transition-all text-sm backdrop-blur-sm flex items-center gap-2">
+                        <Settings className="w-4 h-4 inline mr-1.5" />
                         Manage Profile
                     </button>
                 </div>
@@ -1245,6 +1278,113 @@ export const ClientDetail = () => {
                                     Mark Complete
                                 </button>
                             </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Manage Profile Modal */}
+            <AnimatePresence>
+                {isProfileModalOpen && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => !savingProfile && setIsProfileModalOpen(false)}
+                            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative w-full max-w-lg bg-zinc-900 border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+                        >
+                            <div className="px-6 py-4 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
+                                <div>
+                                    <h2 className="text-lg font-bold text-white">Manage Profile</h2>
+                                    <p className="text-xs text-zinc-500 mt-0.5">Update client information</p>
+                                </div>
+                                <button onClick={() => !savingProfile && setIsProfileModalOpen(false)} className="text-zinc-500 hover:text-white transition-colors">
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleUpdateProfile} className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Full Name</label>
+                                        <input
+                                            required
+                                            value={profileForm.name}
+                                            onChange={e => setProfileForm({ ...profileForm, name: e.target.value })}
+                                            className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 outline-none transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Company</label>
+                                        <input
+                                            required
+                                            value={profileForm.company}
+                                            onChange={e => setProfileForm({ ...profileForm, company: e.target.value })}
+                                            className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 outline-none transition-all"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Email Address</label>
+                                    <input
+                                        type="email"
+                                        required
+                                        value={profileForm.email}
+                                        onChange={e => setProfileForm({ ...profileForm, email: e.target.value })}
+                                        className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 outline-none transition-all"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Phone</label>
+                                    <input
+                                        required
+                                        value={profileForm.phone}
+                                        onChange={e => setProfileForm({ ...profileForm, phone: e.target.value })}
+                                        className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 outline-none transition-all"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Address</label>
+                                    <input
+                                        value={profileForm.address}
+                                        onChange={e => setProfileForm({ ...profileForm, address: e.target.value })}
+                                        className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 outline-none transition-all"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Plus Code</label>
+                                    <input
+                                        value={profileForm.plusCode}
+                                        onChange={e => setProfileForm({ ...profileForm, plusCode: e.target.value })}
+                                        placeholder="e.g. 7J4W+8G Bangalore"
+                                        className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white placeholder-zinc-600 focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 outline-none transition-all"
+                                    />
+                                </div>
+
+                                <div className="pt-4 flex gap-3">
+                                    <button type="button" onClick={() => setIsProfileModalOpen(false)} disabled={savingProfile} className="flex-1 py-2.5 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" disabled={savingProfile} className="flex-1 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold shadow-lg shadow-violet-600/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-violet-600">
+                                        {savingProfile ? (
+                                            <><Loader2 className="w-4 h-4 animate-spin" /> Saving...</>
+                                        ) : (
+                                            <><Save className="w-4 h-4" /> Save Changes</>
+                                        )}
+                                    </button>
+                                </div>
+                            </form>
                         </motion.div>
                     </div>
                 )}

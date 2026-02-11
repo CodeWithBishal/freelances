@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Plus, Search, Calendar, Filter, Edit2, Save, Trash2, ArrowRight, ArrowLeft, X, Circle } from 'lucide-react';
+import { Plus, Search, Calendar, Filter, Edit2, Save, Trash2, ArrowRight, ArrowLeft, X, Circle, Loader2 } from 'lucide-react';
 import { fetchTodos, fetchClients, createTodo, updateTodo, deleteTodo } from '../services/database';
 import { Todo, TaskStatus, TaskPriority, Client } from '../types';
 import { PageTransition } from '../components/PageTransition';
@@ -21,6 +21,8 @@ export const Todos = () => {
     const [priorityFilter, setPriorityFilter] = useState<TaskPriority | 'all'>('all');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
+    const [saving, setSaving] = useState(false);
+    const [operatingId, setOperatingId] = useState<string | null>(null);
 
     // Task Form State
     const [taskForm, setTaskForm] = useState<{
@@ -70,10 +72,9 @@ export const Todos = () => {
 
     const handleSaveTask = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        setSaving(true);
         try {
             if (editingId) {
-                // Update existing
                 await updateTodo(editingId, {
                     title: taskForm.title,
                     description: taskForm.description,
@@ -92,7 +93,6 @@ export const Todos = () => {
                     dueDate: taskForm.dueDate || undefined,
                 } : t));
             } else {
-                // Create new
                 const created = await createTodo({
                     title: taskForm.title,
                     description: taskForm.description,
@@ -107,18 +107,23 @@ export const Todos = () => {
         } catch (err) {
             console.error('Failed to save task:', err);
             alert('Failed to save task. Please try again.');
+        } finally {
+            setSaving(false);
         }
     };
 
     const handleDeleteTask = async (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
         if (window.confirm('Are you sure you want to delete this task?')) {
+            setOperatingId(id);
             try {
                 await deleteTodo(id);
                 setTodos(todos.filter(t => t.id !== id));
             } catch (err) {
                 console.error('Failed to delete task:', err);
                 alert('Failed to delete task.');
+            } finally {
+                setOperatingId(null);
             }
         }
     };
@@ -129,17 +134,19 @@ export const Todos = () => {
         const currentIndex = flow.indexOf(currentStatus);
         let nextIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
 
-        // Bounds check
         if (nextIndex < 0) nextIndex = 0;
         if (nextIndex >= flow.length) nextIndex = flow.length - 1;
 
         const nextStatus = flow[nextIndex];
         if (nextStatus !== currentStatus) {
+            setOperatingId(id);
             try {
                 await updateTodo(id, { status: nextStatus });
                 setTodos(todos.map(t => t.id === id ? { ...t, status: nextStatus } : t));
             } catch (err) {
                 console.error('Failed to move task:', err);
+            } finally {
+                setOperatingId(null);
             }
         }
     };
@@ -424,10 +431,14 @@ export const Todos = () => {
                                 </div>
 
                                 <div className="pt-4 flex gap-3">
-                                    <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-2.5 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5 font-medium transition-colors">Cancel</button>
-                                    <button type="submit" className="flex-1 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold shadow-lg shadow-violet-600/20 transition-all flex items-center justify-center gap-2">
-                                        {editingId ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-                                        {editingId ? 'Save Changes' : 'Create Task'}
+                                    <button type="button" onClick={() => setIsModalOpen(false)} disabled={saving} className="flex-1 py-2.5 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Cancel</button>
+                                    <button type="submit" disabled={saving} className="flex-1 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold shadow-lg shadow-violet-600/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-violet-600">
+                                        {saving ? (
+                                            <><Loader2 className="w-4 h-4 animate-spin" /> {editingId ? 'Saving...' : 'Creating...'}</>
+                                        ) : (
+                                            <>{editingId ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                                                {editingId ? 'Save Changes' : 'Create Task'}</>
+                                        )}
                                     </button>
                                 </div>
                             </form>

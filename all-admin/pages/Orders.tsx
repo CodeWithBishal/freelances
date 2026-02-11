@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, Download, ArrowDownUp, Plus, X, Calendar, DollarSign, Briefcase } from 'lucide-react';
+import { Search, Filter, Download, ArrowDownUp, Plus, X, Calendar, DollarSign, Briefcase, Loader2 } from 'lucide-react';
 import { fetchOrders, fetchClients, createOrder } from '../services/database';
 import { format } from 'date-fns';
 import { clsx } from 'clsx';
@@ -23,6 +23,7 @@ export const Orders = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   // New Order Form State
   const [newOrder, setNewOrder] = useState<{
@@ -94,7 +95,7 @@ export const Orders = () => {
   const handleCreateOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newOrder.clientId || !newOrder.serviceName || !newOrder.amount) return;
-
+    setSaving(true);
     try {
       const created = await createOrder({
         id: `ORD-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -111,6 +112,8 @@ export const Orders = () => {
     } catch (err) {
       console.error('Failed to create order:', err);
       alert('Failed to create order. Please try again.');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -318,11 +321,15 @@ export const Orders = () => {
                 </div>
 
                 <div className="pt-4 flex gap-3">
-                  <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-2.5 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5 font-medium transition-colors">
+                  <button type="button" onClick={() => setIsModalOpen(false)} disabled={saving} className="flex-1 py-2.5 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     Cancel
                   </button>
-                  <button type="submit" className="flex-1 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold shadow-lg shadow-violet-600/20 transition-all">
-                    Create Order
+                  <button type="submit" disabled={saving} className="flex-1 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold shadow-lg shadow-violet-600/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-violet-600">
+                    {saving ? (
+                      <><Loader2 className="w-4 h-4 animate-spin" /> Creating...</>
+                    ) : (
+                      'Create Order'
+                    )}
                   </button>
                 </div>
               </form>
