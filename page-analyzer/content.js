@@ -5,7 +5,7 @@ const CODING_PROMPT = "I will show you a coding question/problem from a webpage.
 
 // ── Main Init ────────────────────────────────────
 chrome.storage.local.get([
-  'GEMINI_API_KEY', 'GROQ_API_KEY', 'HF_API_KEY', 'TOGETHER_API_KEY',
+  'GEMINI_API_KEY',
   'EXTENSION_ENABLED', 'ACTIVE_MODE', 'QUIZ_AUTO_CAPTURE'
 ], (result) => {
   if (result.EXTENSION_ENABLED === false) {
@@ -13,11 +13,8 @@ chrome.storage.local.get([
     return;
   }
 
-  const hasAnyKey = result.GEMINI_API_KEY || result.GROQ_API_KEY ||
-    result.HF_API_KEY || result.TOGETHER_API_KEY;
-
-  if (!hasAnyKey) {
-    console.log("Page Analyzer: No API Keys configured.");
+  if (!result.GEMINI_API_KEY) {
+    console.log("Page Analyzer: Gemini API Key not configured.");
     return;
   }
 
@@ -524,11 +521,5 @@ function createSidebarUI(mode) {
 }
 
 function getProviderDisplayName(provider) {
-  const names = {
-    'gemini': '🔷 Gemini',
-    'groq': '⚡ Groq',
-    'huggingface': '🤗 HuggingFace',
-    'together': '🌐 Together AI'
-  };
-  return names[provider] || provider;
+  return provider === 'gemini' ? 'Gemini' : provider;
 }

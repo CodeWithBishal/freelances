@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
       width: 420px;
@@ -23,11 +28,21 @@
       animation: pageIn 0.35s ease;
       min-height: 480px;
     }
-    .page.active { display: flex; }
+
+    .page.active {
+      display: flex;
+    }
 
     @keyframes pageIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* ── Header ───────────────────────────────────── */
@@ -37,6 +52,7 @@
       justify-content: space-between;
       margin-bottom: 24px;
     }
+
     .page-header h1 {
       font-size: 20px;
       font-weight: 700;
@@ -45,16 +61,18 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
+
     .header-actions {
       display: flex;
       gap: 8px;
     }
+
     .icon-btn {
       width: 36px;
       height: 36px;
       border: none;
       border-radius: 10px;
-      background: rgba(255,255,255,0.06);
+      background: rgba(255, 255, 255, 0.06);
       color: #999;
       font-size: 18px;
       cursor: pointer;
@@ -63,16 +81,17 @@
       justify-content: center;
       transition: all 0.2s;
     }
+
     .icon-btn:hover {
-      background: rgba(255,255,255,0.12);
+      background: rgba(255, 255, 255, 0.12);
       color: #fff;
       transform: scale(1.05);
     }
 
     /* ── Glass Card ────────────────────────────────── */
     .glass {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 16px;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
@@ -83,12 +102,18 @@
       text-align: center;
       margin-bottom: 24px;
     }
-    .setup-hero .emoji { font-size: 48px; margin-bottom: 12px; }
+
+    .setup-hero .emoji {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
     .setup-hero h2 {
       font-size: 22px;
       font-weight: 700;
       margin-bottom: 6px;
     }
+
     .setup-hero p {
       font-size: 13px;
       color: #888;
@@ -99,20 +124,24 @@
       padding: 14px 16px;
       margin-bottom: 12px;
     }
+
     .api-group-header {
       display: flex;
       align-items: center;
       gap: 8px;
       margin-bottom: 10px;
     }
+
     .api-group-header .badge {
       font-size: 16px;
     }
+
     .api-group-header span {
       font-size: 13px;
       font-weight: 600;
       color: #ccc;
     }
+
     .api-group-header a {
       margin-left: auto;
       font-size: 11px;
@@ -121,13 +150,16 @@
       font-weight: 500;
       transition: color 0.2s;
     }
-    .api-group-header a:hover { color: #8b83ff; }
+
+    .api-group-header a:hover {
+      color: #8b83ff;
+    }
 
     .api-input {
       width: 100%;
       padding: 10px 14px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 10px;
       color: #e0e0e8;
       font-size: 13px;
@@ -135,10 +167,14 @@
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .api-input::placeholder { color: #555; }
+
+    .api-input::placeholder {
+      color: #555;
+    }
+
     .api-input:focus {
       border-color: #6c63ff;
-      box-shadow: 0 0 0 3px rgba(108,99,255,0.15);
+      box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
     }
 
     /* ── Buttons ──────────────────────────────────── */
@@ -158,11 +194,16 @@
       position: relative;
       overflow: hidden;
     }
+
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(108,99,255,0.35);
+      box-shadow: 0 8px 24px rgba(108, 99, 255, 0.35);
     }
-    .btn-primary:active { transform: translateY(0); }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
     .btn-primary:disabled {
       opacity: 0.5;
       cursor: not-allowed;
@@ -173,7 +214,7 @@
     .btn-secondary {
       width: 100%;
       padding: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       font-family: inherit;
       font-size: 13px;
@@ -184,10 +225,11 @@
       transition: all 0.2s;
       margin-top: 8px;
     }
+
     .btn-secondary:hover {
-      border-color: rgba(255,255,255,0.2);
+      border-color: rgba(255, 255, 255, 0.2);
       color: #ccc;
-      background: rgba(255,255,255,0.04);
+      background: rgba(255, 255, 255, 0.04);
     }
 
     /* ── Mode Cards (Home) ────────────────────────── */
@@ -206,6 +248,7 @@
       position: relative;
       overflow: hidden;
     }
+
     .mode-card::before {
       content: '';
       position: absolute;
@@ -214,17 +257,22 @@
       opacity: 0;
       transition: opacity 0.3s;
     }
+
     .mode-card:hover {
       transform: translateY(-3px);
-      border-color: rgba(255,255,255,0.15);
+      border-color: rgba(255, 255, 255, 0.15);
     }
-    .mode-card:hover::before { opacity: 1; }
+
+    .mode-card:hover::before {
+      opacity: 1;
+    }
 
     .mode-card.quiz::before {
-      background: linear-gradient(135deg, rgba(108,99,255,0.12), rgba(72,198,239,0.08));
+      background: linear-gradient(135deg, rgba(108, 99, 255, 0.12), rgba(72, 198, 239, 0.08));
     }
+
     .mode-card.coding::before {
-      background: linear-gradient(135deg, rgba(74,222,128,0.12), rgba(34,197,94,0.08));
+      background: linear-gradient(135deg, rgba(74, 222, 128, 0.12), rgba(34, 197, 94, 0.08));
     }
 
     .mode-card .card-icon {
@@ -233,6 +281,7 @@
       position: relative;
       z-index: 1;
     }
+
     .mode-card h3 {
       font-size: 16px;
       font-weight: 600;
@@ -240,6 +289,7 @@
       position: relative;
       z-index: 1;
     }
+
     .mode-card p {
       font-size: 12px;
       color: #888;
@@ -247,6 +297,7 @@
       position: relative;
       z-index: 1;
     }
+
     .mode-card .card-arrow {
       position: absolute;
       right: 20px;
@@ -257,6 +308,7 @@
       transition: all 0.2s;
       z-index: 1;
     }
+
     .mode-card:hover .card-arrow {
       color: #aaa;
       transform: translateY(-50%) translateX(4px);
@@ -271,11 +323,16 @@
       justify-content: space-between;
       display: none;
     }
-    .active-mode-bar.visible { display: flex; }
+
+    .active-mode-bar.visible {
+      display: flex;
+    }
+
     .active-mode-bar .label {
       font-size: 12px;
       color: #888;
     }
+
     .active-mode-bar .mode-name {
       font-size: 13px;
       font-weight: 600;
@@ -296,27 +353,32 @@
       cursor: pointer;
       transition: all 0.25s;
     }
+
     .quiz-option:hover {
       transform: translateY(-2px);
-      border-color: rgba(108,99,255,0.3);
+      border-color: rgba(108, 99, 255, 0.3);
     }
+
     .quiz-option .opt-icon {
       font-size: 28px;
       margin-bottom: 8px;
     }
+
     .quiz-option h3 {
       font-size: 14px;
       font-weight: 600;
       margin-bottom: 4px;
     }
+
     .quiz-option p {
       font-size: 12px;
       color: #777;
       line-height: 1.4;
     }
+
     .quiz-option.selected {
       border-color: #6c63ff;
-      background: rgba(108,99,255,0.08);
+      background: rgba(108, 99, 255, 0.08);
     }
 
     .back-link {
@@ -332,7 +394,10 @@
       padding: 0;
       transition: color 0.2s;
     }
-    .back-link:hover { color: #ccc; }
+
+    .back-link:hover {
+      color: #ccc;
+    }
 
     /* ── Settings Page ─────────────────────────────── */
     .settings-scroll {
@@ -340,9 +405,13 @@
       overflow-y: auto;
       padding-right: 4px;
     }
-    .settings-scroll::-webkit-scrollbar { width: 4px; }
+
+    .settings-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+
     .settings-scroll::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 4px;
     }
 
@@ -353,24 +422,33 @@
       padding: 14px 16px;
       margin-bottom: 14px;
     }
+
     .toggle-row .label {
       font-size: 14px;
       font-weight: 500;
     }
+
     .toggle-switch {
       position: relative;
       width: 44px;
       height: 24px;
     }
-    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
     .toggle-slider {
       position: absolute;
       inset: 0;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 24px;
       cursor: pointer;
       transition: background 0.3s;
     }
+
     .toggle-slider::before {
       content: '';
       position: absolute;
@@ -382,10 +460,12 @@
       border-radius: 50%;
       transition: transform 0.3s;
     }
-    .toggle-switch input:checked + .toggle-slider {
+
+    .toggle-switch input:checked+.toggle-slider {
       background: #6c63ff;
     }
-    .toggle-switch input:checked + .toggle-slider::before {
+
+    .toggle-switch input:checked+.toggle-slider::before {
       transform: translateX(20px);
     }
 
@@ -396,7 +476,7 @@
       left: 50%;
       transform: translateX(-50%) translateY(60px);
       padding: 10px 20px;
-      background: rgba(108,99,255,0.9);
+      background: rgba(108, 99, 255, 0.9);
       color: #fff;
       border-radius: 10px;
       font-size: 13px;
@@ -407,6 +487,7 @@
       z-index: 100;
       backdrop-filter: blur(8px);
     }
+
     .toast.show {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
@@ -427,6 +508,7 @@
       padding-top: 12px;
       margin-top: auto;
     }
+
     .footer span {
       font-size: 10px;
       color: #444;
@@ -435,6 +517,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- ═══════ PAGE: SETUP ═══════ -->
@@ -442,7 +525,7 @@
     <div class="setup-hero">
       <div class="emoji">🚀</div>
       <h2>Welcome!</h2>
-      <p>Add at least one API key to get started.<br>You can always change these later.</p>
+      <p>Add your Gemini API key to get started.<br>You can always change it later.</p>
     </div>
 
     <div class="api-group glass">
@@ -452,156 +535,100 @@
         <a href="https://aistudio.google.com/app/apikey" target="_blank">Get key →</a>
       </div>
       <input type="password" class="api-input" id="setup-gemini" placeholder="AIzaSy..." />
+      <button class="btn-primary" id="setup-save-btn" disabled>Get Started</button>
+      <div class="hint">Enter your Gemini API key to continue</div>
     </div>
 
-    <div class="api-group glass">
-      <div class="api-group-header">
-        <span class="badge">⚡</span>
-        <span>Groq</span>
-        <a href="https://console.groq.com/keys" target="_blank">Get key →</a>
-      </div>
-      <input type="password" class="api-input" id="setup-groq" placeholder="gsk_..." />
-    </div>
-
-    <div class="api-group glass">
-      <div class="api-group-header">
-        <span class="badge">🤗</span>
-        <span>Hugging Face</span>
-        <a href="https://huggingface.co/settings/tokens" target="_blank">Get key →</a>
-      </div>
-      <input type="password" class="api-input" id="setup-hf" placeholder="hf_..." />
-    </div>
-
-    <div class="api-group glass">
-      <div class="api-group-header">
-        <span class="badge">🌐</span>
-        <span>Together AI</span>
-        <a href="https://api.together.xyz/settings/api-keys" target="_blank">Get key →</a>
-      </div>
-      <input type="password" class="api-input" id="setup-together" placeholder="..." />
-    </div>
-
-    <button class="btn-primary" id="setup-save-btn" disabled>Get Started</button>
-    <div class="hint">Enter at least one key to continue</div>
-  </div>
-
-  <!-- ═══════ PAGE: HOME ═══════ -->
-  <div class="page" id="page-home">
-    <div class="page-header">
-      <h1>Page Insight</h1>
-      <div class="header-actions">
-        <button class="icon-btn" id="btn-settings" title="Settings">⚙</button>
-      </div>
-    </div>
-
-    <div class="active-mode-bar glass" id="active-mode-bar">
-      <span class="label">Active mode</span>
-      <span class="mode-name" id="active-mode-name">—</span>
-    </div>
-
-    <div class="mode-cards">
-      <div class="mode-card quiz glass" id="card-quiz">
-        <div class="card-icon">📝</div>
-        <h3>Quiz Mode</h3>
-        <p>Capture screen to find answers. Auto-capture or trigger manually.</p>
-        <span class="card-arrow">›</span>
-      </div>
-      <div class="mode-card coding glass" id="card-coding">
-        <div class="card-icon">💻</div>
-        <h3>Coding Mode</h3>
-        <p>Full-page capture + text extraction. Analyze code, find bugs, get explanations.</p>
-        <span class="card-arrow">›</span>
-      </div>
-    </div>
-
-    <div class="footer"><span>Page Insight Analyzer • Multi AI</span></div>
-  </div>
-
-  <!-- ═══════ PAGE: QUIZ OPTIONS ═══════ -->
-  <div class="page" id="page-quiz">
-    <div class="page-header">
-      <button class="back-link" id="quiz-back">← Back</button>
-      <h1>Quiz Mode</h1>
-      <div style="width:36px"></div>
-    </div>
-
-    <div class="quiz-options">
-      <div class="quiz-option glass" id="opt-auto">
-        <div class="opt-icon">🔄</div>
-        <h3>Auto Capture</h3>
-        <p>Automatically captures the screen on every page load and searches for answers.</p>
-      </div>
-      <div class="quiz-option glass" id="opt-manual">
-        <div class="opt-icon">👆</div>
-        <h3>Manual Button</h3>
-        <p>Adds a small "Answer" button below the sidebar arrow. Click it when you're ready.</p>
-      </div>
-    </div>
-
-    <button class="btn-primary" id="quiz-activate-btn" disabled>Activate Quiz Mode</button>
-    <div class="hint">Select a capture method above</div>
-  </div>
-
-  <!-- ═══════ PAGE: SETTINGS ═══════ -->
-  <div class="page" id="page-settings">
-    <div class="page-header">
-      <button class="back-link" id="settings-back">← Back</button>
-      <h1>Settings</h1>
-      <div style="width:36px"></div>
-    </div>
-
-    <div class="settings-scroll">
-      <div class="toggle-row glass">
-        <span class="label">Extension Enabled</span>
-        <label class="toggle-switch">
-          <input type="checkbox" id="settings-enabled" checked>
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-
-      <div class="api-group glass">
-        <div class="api-group-header">
-          <span class="badge">🔷</span>
-          <span>Gemini</span>
-          <a href="https://aistudio.google.com/app/apikey" target="_blank">Get key →</a>
+    <!-- ═══════ PAGE: HOME ═══════ -->
+    <div class="page" id="page-home">
+      <div class="page-header">
+        <h1>Page Insight</h1>
+        <div class="header-actions">
+          <button class="icon-btn" id="btn-settings" title="Settings">⚙</button>
         </div>
-        <input type="password" class="api-input" id="settings-gemini" placeholder="AIzaSy..." />
       </div>
 
-      <div class="api-group glass">
-        <div class="api-group-header">
-          <span class="badge">⚡</span>
-          <span>Groq</span>
-          <a href="https://console.groq.com/keys" target="_blank">Get key →</a>
-        </div>
-        <input type="password" class="api-input" id="settings-groq" placeholder="gsk_..." />
+      <div class="active-mode-bar glass" id="active-mode-bar">
+        <span class="label">Active mode</span>
+        <span class="mode-name" id="active-mode-name">—</span>
       </div>
 
-      <div class="api-group glass">
-        <div class="api-group-header">
-          <span class="badge">🤗</span>
-          <span>Hugging Face</span>
-          <a href="https://huggingface.co/settings/tokens" target="_blank">Get key →</a>
+      <div class="mode-cards">
+        <div class="mode-card quiz glass" id="card-quiz">
+          <div class="card-icon">📝</div>
+          <h3>Quiz Mode</h3>
+          <p>Capture screen to find answers. Auto-capture or trigger manually.</p>
+          <span class="card-arrow">›</span>
         </div>
-        <input type="password" class="api-input" id="settings-hf" placeholder="hf_..." />
+        <div class="mode-card coding glass" id="card-coding">
+          <div class="card-icon">💻</div>
+          <h3>Coding Mode</h3>
+          <p>Full-page capture + text extraction. Analyze code, find bugs, get explanations.</p>
+          <span class="card-arrow">›</span>
+        </div>
       </div>
 
-      <div class="api-group glass">
-        <div class="api-group-header">
-          <span class="badge">🌐</span>
-          <span>Together AI</span>
-          <a href="https://api.together.xyz/settings/api-keys" target="_blank">Get key →</a>
-        </div>
-        <input type="password" class="api-input" id="settings-together" placeholder="..." />
-      </div>
+      <div class="footer"><span>Page Insight Analyzer • Gemini AI</span></div>
     </div>
 
-    <button class="btn-primary" id="settings-save-btn">Save Changes</button>
-  </div>
+    <!-- ═══════ PAGE: QUIZ OPTIONS ═══════ -->
+    <div class="page" id="page-quiz">
+      <div class="page-header">
+        <button class="back-link" id="quiz-back">← Back</button>
+        <h1>Quiz Mode</h1>
+        <div style="width:36px"></div>
+      </div>
 
-  <!-- Toast notification -->
-  <div class="toast" id="toast"></div>
+      <div class="quiz-options">
+        <div class="quiz-option glass" id="opt-auto">
+          <div class="opt-icon">🔄</div>
+          <h3>Auto Capture</h3>
+          <p>Automatically captures the screen on every page load and searches for answers.</p>
+        </div>
+        <div class="quiz-option glass" id="opt-manual">
+          <div class="opt-icon">👆</div>
+          <h3>Manual Button</h3>
+          <p>Adds a small "Answer" button below the sidebar arrow. Click it when you're ready.</p>
+        </div>
+      </div>
 
-  <script src="popup.js"></script>
+      <button class="btn-primary" id="quiz-activate-btn" disabled>Activate Quiz Mode</button>
+      <div class="hint">Select a capture method above</div>
+    </div>
+
+    <!-- ═══════ PAGE: SETTINGS ═══════ -->
+    <div class="page" id="page-settings">
+      <div class="page-header">
+        <button class="back-link" id="settings-back">← Back</button>
+        <h1>Settings</h1>
+        <div style="width:36px"></div>
+      </div>
+
+      <div class="settings-scroll">
+        <div class="toggle-row glass">
+          <span class="label">Extension Enabled</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="settings-enabled" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="api-group glass">
+          <div class="api-group-header">
+            <span class="badge">🔷</span>
+            <span>Gemini</span>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank">Get key →</a>
+          </div>
+          <input type="password" class="api-input" id="settings-gemini" placeholder="AIzaSy..." />
+        </div>
+
+        <button class="btn-primary" id="settings-save-btn">Save Changes</button>
+      </div>
+
+      <!-- Toast notification -->
+      <div class="toast" id="toast"></div>
+
+      <script src="popup.js"></script>
 </body>
+
 </html>
