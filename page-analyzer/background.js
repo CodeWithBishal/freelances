@@ -1,17 +1,28 @@
+// ── Message Router ───────────────────────────────
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "ANALYZE_PAGE") {
     handleAnalysis(sender.tab.id, request.prompt).then(sendResponse);
-    return true; 
+    return true;
+  }
+
+  if (request.action === "ANALYZE_PAGE_MULTI") {
+    handleMultiAnalysis(request.screenshots, request.pageText, request.prompt).then(sendResponse);
+    return true;
+  }
+
+  if (request.action === "CAPTURE_VIEWPORT") {
+    chrome.tabs.captureVisibleTab(null, { format: "jpeg", quality: 60 })
+      .then(dataUrl => sendResponse({ dataUrl }))
+      .catch(err => sendResponse({ error: err.message }));
+    return true;
   }
 });
 
+// ── Single Screenshot Analysis (Quiz Mode) ──────
 async function handleAnalysis(tabId, customPrompt) {
   try {
     const data = await chrome.storage.local.get([
-      'GEMINI_API_KEY', 
-      'GROQ_API_KEY', 
-      'HF_API_KEY', 
-      'TOGETHER_API_KEY',
+      'GEMINI_API_KEY', 'GROQ_API_KEY', 'HF_API_KEY', 'TOGETHER_API_KEY',
       'EXTENSION_ENABLED'
     ]);
 
@@ -19,30 +30,25 @@ async function handleAnalysis(tabId, customPrompt) {
       return { error: "Extension is disabled. Please enable it in the extension popup." };
     }
 
-    // Check if at least one API key is configured
-    const hasAnyKey = data.GEMINI_API_KEY || data.GROQ_API_KEY || 
-                      data.HF_API_KEY || data.TOGETHER_API_KEY;
-    
+    const hasAnyKey = data.GEMINI_API_KEY || data.GROQ_API_KEY ||
+      data.HF_API_KEY || data.TOGETHER_API_KEY;
+
     if (!hasAnyKey) {
       return { error: "No API Keys configured. Please open the extension popup and save at least one API key." };
     }
 
-    // 1. Capture Screenshot
     let dataUrl;
     try {
       dataUrl = await chrome.tabs.captureVisibleTab(null, { format: "jpeg", quality: 60 });
-      console.log("Screenshot captured");
     } catch (e) {
-      return { error: "Cannot capture this page. It might be a restricted browser page (like settings)." };
+      return { error: "Cannot capture this page. It might be a restricted browser page." };
     }
 
     if (!dataUrl) {
       return { error: "Screenshot failed (undefined result)." };
     }
 
-    // 2. Call all configured AI APIs in parallel
-    const results = await callAllAIs(data, dataUrl, customPrompt);
-    
+    const results = await callAllAIs(data, [dataUrl], customPrompt, null);
     return { success: true, data: results };
 
   } catch (error) {
@@ -51,41 +57,78 @@ async function handleAnalysis(tabId, customPrompt) {
   }
 }
 
-async function callAllAIs(apiKeys, dataUrl, promptText) {
-  const promises = [];
-  const base64Data = dataUrl.split(',')[1];
+// ── Multi-Screenshot Analysis (Coding Mode) ─────
+async function handleMultiAnalysis(screenshots, pageText, customPrompt) {
+  try {
+    const data = await chrome.storage.local.get([
+      'GEMINI_API_KEY', 'GROQ_API_KEY', 'HF_API_KEY', 'TOGETHER_API_KEY',
+      'EXTENSION_ENABLED'
+    ]);
 
-  // Gemini
+    if (data.EXTENSION_ENABLED === false) {
+      return { error: "Extension is disabled." };
+    }
+
+    const hasAnyKey = data.GEMINI_API_KEY || data.GROQ_API_KEY ||
+      data.HF_API_KEY || data.TOGETHER_API_KEY;
+
+    if (!hasAnyKey) {
+      return { error: "No API Keys configured." };
+    }
+
+    if (!screenshots || screenshots.length === 0) {
+      return { error: "No screenshots captured." };
+    }
+
+    const results = await callAllAIs(data, screenshots, customPrompt, pageText);
+    return { success: true, data: results };
+
+  } catch (error) {
+    console.error("Multi-analysis failed:", error);
+    return { error: error.message };
+  }
+}
+
+// ── Call All Configured AIs ─────────────────────
+async function callAllAIs(apiKeys, screenshotUrls, promptText, pageText) {
+  const promises = [];
+
+  // Build combined prompt with page text if available
+  const fullPrompt = pageText
+    ? `${promptText}\n\n--- PAGE TEXT ---\n${pageText.substring(0, 8000)}`
+    : promptText;
+
+  // Gemini (supports multiple images natively)
   if (apiKeys.GEMINI_API_KEY) {
     promises.push(
-      callGeminiAPI(apiKeys.GEMINI_API_KEY, dataUrl, promptText)
+      callGeminiAPI(apiKeys.GEMINI_API_KEY, screenshotUrls, fullPrompt)
         .then(result => ({ provider: 'gemini', result, error: null }))
         .catch(error => ({ provider: 'gemini', result: null, error: error.message }))
     );
   }
 
-  // Groq
+  // Groq (supports multiple images via OpenAI format)
   if (apiKeys.GROQ_API_KEY) {
     promises.push(
-      callGroqAPI(apiKeys.GROQ_API_KEY, base64Data, promptText)
+      callGroqAPI(apiKeys.GROQ_API_KEY, screenshotUrls, fullPrompt)
         .then(result => ({ provider: 'groq', result, error: null }))
         .catch(error => ({ provider: 'groq', result: null, error: error.message }))
     );
   }
 
-  // Hugging Face
+  // Hugging Face (text-only for multi-image, single image for single)
   if (apiKeys.HF_API_KEY) {
     promises.push(
-      callHuggingFaceAPI(apiKeys.HF_API_KEY, base64Data, promptText)
+      callHuggingFaceAPI(apiKeys.HF_API_KEY, screenshotUrls, fullPrompt)
         .then(result => ({ provider: 'huggingface', result, error: null }))
         .catch(error => ({ provider: 'huggingface', result: null, error: error.message }))
     );
   }
 
-  // Together AI
+  // Together AI (supports multiple images via OpenAI format)
   if (apiKeys.TOGETHER_API_KEY) {
     promises.push(
-      callTogetherAPI(apiKeys.TOGETHER_API_KEY, base64Data, promptText)
+      callTogetherAPI(apiKeys.TOGETHER_API_KEY, screenshotUrls, fullPrompt)
         .then(result => ({ provider: 'together', result, error: null }))
         .catch(error => ({ provider: 'together', result: null, error: error.message }))
     );
@@ -94,19 +137,22 @@ async function callAllAIs(apiKeys, dataUrl, promptText) {
   return await Promise.all(promises);
 }
 
-async function callGeminiAPI(apiKey, base64ImageURI, promptText) {
+// ── Gemini API (multi-image support) ────────────
+async function callGeminiAPI(apiKey, screenshotUrls, promptText) {
   const modelVersion = 'gemini-2.0-flash-exp';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelVersion}:generateContent?key=${apiKey}`;
-  
-  const base64Data = base64ImageURI.split(',')[1];
+
+  // Build parts: text prompt + all images
+  const parts = [{ text: promptText }];
+  for (const dataUrl of screenshotUrls) {
+    const base64Data = dataUrl.split(',')[1];
+    parts.push({
+      inline_data: { mime_type: "image/jpeg", data: base64Data }
+    });
+  }
 
   const payload = {
-    contents: [{
-      parts: [
-        { text: promptText },
-        { inline_data: { mime_type: "image/jpeg", data: base64Data } }
-      ]
-    }]
+    contents: [{ parts }]
   };
 
   const response = await fetch(url, {
@@ -129,7 +175,7 @@ async function callGeminiAPI(apiKey, base64ImageURI, promptText) {
   }
 
   const json = await response.json();
-  
+
   if (!json.candidates || !json.candidates[0] || !json.candidates[0].content) {
     const finishReason = json.promptFeedback?.blockReason || "Unknown";
     throw new Error(`AI generated no content. Reason: ${finishReason}`);
@@ -138,28 +184,24 @@ async function callGeminiAPI(apiKey, base64ImageURI, promptText) {
   return json.candidates[0].content.parts[0].text;
 }
 
-async function callGroqAPI(apiKey, base64Data, promptText) {
-  // Groq uses llama-3.2-90b-vision-preview for vision tasks
+// ── Groq API (multi-image via OpenAI format) ────
+async function callGroqAPI(apiKey, screenshotUrls, promptText) {
   const url = 'https://api.groq.com/openai/v1/chat/completions';
-  
+
+  const content = [{ type: "text", text: promptText }];
+  for (const dataUrl of screenshotUrls) {
+    const base64Data = dataUrl.split(',')[1];
+    content.push({
+      type: "image_url",
+      image_url: { url: `data:image/jpeg;base64,${base64Data}` }
+    });
+  }
+
   const payload = {
-    model: "llama-3.2-90b-vision-preview",
-    messages: [
-      {
-        role: "user",
-        content: [
-          { type: "text", text: promptText },
-          {
-            type: "image_url",
-            image_url: {
-              url: `data:image/jpeg;base64,${base64Data}`
-            }
-          }
-        ]
-      }
-    ],
-    temperature: 0.7,
-    max_tokens: 1024
+    model: "meta-llama/llama-4-maverick-17b-128e-instruct",
+    messages: [{ role: "user", content }],
+    temperature: 0.1,
+    max_tokens: 4096
   };
 
   const response = await fetch(url, {
@@ -180,22 +222,21 @@ async function callGroqAPI(apiKey, base64Data, promptText) {
   return json.choices[0].message.content;
 }
 
-async function callHuggingFaceAPI(apiKey, base64Data, promptText) {
-  // Using a vision-capable model from Hugging Face
+// ── Hugging Face API ─────────────────────────────
+async function callHuggingFaceAPI(apiKey, screenshotUrls, promptText) {
+  // HF only supports single image well, use first screenshot
   const url = 'https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large';
-  
-  // Convert base64 to blob
+
+  const base64Data = screenshotUrls[0].split(',')[1];
   const binaryString = atob(base64Data);
   const bytes = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {
     bytes[i] = binaryString.charCodeAt(i);
   }
-  
+
   const response = await fetch(url, {
     method: "POST",
-    headers: {
-      "Authorization": `Bearer ${apiKey}`
-    },
+    headers: { "Authorization": `Bearer ${apiKey}` },
     body: bytes
   });
 
@@ -205,34 +246,29 @@ async function callHuggingFaceAPI(apiKey, base64Data, promptText) {
   }
 
   const json = await response.json();
-  // HF returns array of captions
   if (json && json[0] && json[0].generated_text) {
     return `${promptText}\n\nImage Analysis: ${json[0].generated_text}`;
   }
   throw new Error("No caption generated");
 }
 
-async function callTogetherAPI(apiKey, base64Data, promptText) {
-  // Together AI supports various vision models
+// ── Together AI API (multi-image support) ────────
+async function callTogetherAPI(apiKey, screenshotUrls, promptText) {
   const url = 'https://api.together.xyz/v1/chat/completions';
-  
+
+  const content = [{ type: "text", text: promptText }];
+  for (const dataUrl of screenshotUrls) {
+    const base64Data = dataUrl.split(',')[1];
+    content.push({
+      type: "image_url",
+      image_url: { url: `data:image/jpeg;base64,${base64Data}` }
+    });
+  }
+
   const payload = {
     model: "meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo",
-    messages: [
-      {
-        role: "user",
-        content: [
-          { type: "text", text: promptText },
-          {
-            type: "image_url",
-            image_url: {
-              url: `data:image/jpeg;base64,${base64Data}`
-            }
-          }
-        ]
-      }
-    ],
-    max_tokens: 1024,
+    messages: [{ role: "user", content }],
+    max_tokens: 2048,
     temperature: 0.7
   };
 

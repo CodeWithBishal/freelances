@@ -1,48 +1,72 @@
-// Configuration
-const PREDEFINED_PROMPT = "I will upload you the questions of my quiz. Please answer them accurately and concisely without any explanation with option number and question number. If the question is multiple choice, give all the correct option which you are surely confident about.";
+// ── Prompts ──────────────────────────────────────
+const QUIZ_PROMPT = "I will upload you the questions of my quiz. Please answer them accurately and concisely without any explanation with option number and question number. If the question is multiple choice, give all the correct option which you are surely confident about. Don't explain just answer with the correct option";
 
-// 1. Check for API Key immediately
-chrome.storage.local.get(['GEMINI_API_KEY', 'GROQ_API_KEY', 'HF_API_KEY', 'TOGETHER_API_KEY', 'EXTENSION_ENABLED'], (result) => {
+const CODING_PROMPT = "I will show you a coding question/problem from a webpage. The page text and screenshots are provided. Please:\n1. Read and understand the full problem statement\n2. Provide a clear, optimal solution with code\n3. Explain the approach and time/space complexity\n4. If there are edge cases, mention them\nAnswer accurately and provide working code.";
+
+// ── Main Init ────────────────────────────────────
+chrome.storage.local.get([
+  'GEMINI_API_KEY', 'GROQ_API_KEY', 'HF_API_KEY', 'TOGETHER_API_KEY',
+  'EXTENSION_ENABLED', 'ACTIVE_MODE', 'QUIZ_AUTO_CAPTURE'
+], (result) => {
   if (result.EXTENSION_ENABLED === false) {
     console.log("Page Analyzer: Extension is disabled.");
     return;
   }
-  
-  const hasAnyKey = result.GEMINI_API_KEY || result.GROQ_API_KEY || 
-                    result.HF_API_KEY || result.TOGETHER_API_KEY;
-  
-  if (hasAnyKey) {
-    const updateUI = createSidebarUI(); 
-    // Wait a brief moment for dynamic content to settle, then analyze
-    setTimeout(() => initAnalysis(updateUI), 2000);
-  } else {
+
+  const hasAnyKey = result.GEMINI_API_KEY || result.GROQ_API_KEY ||
+    result.HF_API_KEY || result.TOGETHER_API_KEY;
+
+  if (!hasAnyKey) {
     console.log("Page Analyzer: No API Keys configured.");
+    return;
+  }
+
+  const mode = result.ACTIVE_MODE || 'quiz';
+  const autoCapture = result.QUIZ_AUTO_CAPTURE !== false;
+
+  const updateUI = createSidebarUI(mode);
+
+  if (mode === 'quiz') {
+    if (autoCapture) {
+      // Auto-analyze on load (original behavior)
+      setTimeout(() => initQuizAnalysis(updateUI), 2000);
+    } else {
+      // Show manual answer button
+      createAnswerButton(updateUI);
+    }
+  } else if (mode === 'coding') {
+    // Coding mode: multi-capture + text extraction
+    setTimeout(() => initCodingAnalysis(updateUI), 2000);
   }
 });
 
-function initAnalysis(updateUI) {
-  console.log("Page Analyzer: Requesting capture...");
+// Listen for mode changes from popup
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.action === 'MODE_CHANGED') {
+    // Reload the page to apply the new mode
+    location.reload();
+  }
+});
+
+// ── Quiz Analysis (single screenshot) ────────────
+function initQuizAnalysis(updateUI) {
+  console.log("Page Analyzer: Quiz mode - requesting capture...");
 
   let responseHandled = false;
-
-  // Safety timeout: If background doesn't respond in 30s, show error
   const timeoutId = setTimeout(() => {
     if (!responseHandled) {
       responseHandled = true;
-      updateUI('error', { error: "Request timed out. The background service might be busy or failed." });
+      updateUI('error', { error: "Request timed out." });
     }
   }, 30000);
 
-  // Send message to background script
   chrome.runtime.sendMessage(
-    { action: "ANALYZE_PAGE", prompt: PREDEFINED_PROMPT },
+    { action: "ANALYZE_PAGE", prompt: QUIZ_PROMPT },
     (response) => {
-      // Prevent race condition with timeout
       if (responseHandled) return;
       responseHandled = true;
       clearTimeout(timeoutId);
 
-      // Check for connection errors (e.g., extension reloaded or background crashed)
       if (chrome.runtime.lastError) {
         updateUI('error', { error: "Connection Error: " + chrome.runtime.lastError.message });
         return;
@@ -51,33 +75,210 @@ function initAnalysis(updateUI) {
       if (response && response.success) {
         updateUI('success', response.data);
       } else {
-        const errorMsg = response ? response.error : "Unknown error";
-        updateUI('error', { error: errorMsg });
+        updateUI('error', { error: response ? response.error : "Unknown error" });
       }
     }
   );
 }
 
-// Creates the Sidebar UI and returns a function to update the content
-function createSidebarUI() {
+// ── Coding Analysis (multi-capture + text) ───────
+async function initCodingAnalysis(updateUI) {
+  console.log("Page Analyzer: Coding mode - starting multi-capture...");
+
+  try {
+    // 1. Extract page text
+    const pageText = document.body.innerText || '';
+
+    // 2. Scrolling multi-capture
+    const screenshots = await captureScrollingScreenshots();
+
+    // 3. Send to background for AI analysis
+    let responseHandled = false;
+    const timeoutId = setTimeout(() => {
+      if (!responseHandled) {
+        responseHandled = true;
+        updateUI('error', { error: "Request timed out." });
+      }
+    }, 60000); // Longer timeout for multi-capture
+
+    chrome.runtime.sendMessage(
+      {
+        action: "ANALYZE_PAGE_MULTI",
+        prompt: CODING_PROMPT,
+        screenshots: screenshots,
+        pageText: pageText
+      },
+      (response) => {
+        if (responseHandled) return;
+        responseHandled = true;
+        clearTimeout(timeoutId);
+
+        if (chrome.runtime.lastError) {
+          updateUI('error', { error: "Connection Error: " + chrome.runtime.lastError.message });
+          return;
+        }
+
+        if (response && response.success) {
+          updateUI('success', response.data);
+        } else {
+          updateUI('error', { error: response ? response.error : "Unknown error" });
+        }
+      }
+    );
+  } catch (err) {
+    updateUI('error', { error: "Capture failed: " + err.message });
+  }
+}
+
+// ── Scrolling Screenshot Capture ─────────────────
+function captureScrollingScreenshots() {
+  return new Promise(async (resolve) => {
+    const viewportHeight = window.innerHeight;
+    const totalHeight = document.documentElement.scrollHeight;
+    const originalScroll = window.scrollY;
+    const screenshots = [];
+    const maxCaptures = 8; // Safety limit
+
+    let currentY = 0;
+    let captureCount = 0;
+
+    while (currentY < totalHeight && captureCount < maxCaptures) {
+      window.scrollTo(0, currentY);
+
+      // Wait for scroll to settle and paint
+      await new Promise(r => setTimeout(r, 300));
+
+      // Ask background to capture this viewport
+      try {
+        const dataUrl = await new Promise((res, rej) => {
+          chrome.runtime.sendMessage(
+            { action: "CAPTURE_VIEWPORT" },
+            (response) => {
+              if (chrome.runtime.lastError) {
+                rej(new Error(chrome.runtime.lastError.message));
+              } else if (response && response.dataUrl) {
+                res(response.dataUrl);
+              } else {
+                rej(new Error("Capture failed"));
+              }
+            }
+          );
+        });
+        screenshots.push(dataUrl);
+      } catch (e) {
+        console.warn("Viewport capture failed at position", currentY, e);
+      }
+
+      currentY += viewportHeight;
+      captureCount++;
+    }
+
+    // Restore original scroll position
+    window.scrollTo(0, originalScroll);
+
+    // If no screenshots captured, fall back to at least one
+    if (screenshots.length === 0) {
+      try {
+        const fallback = await new Promise((res, rej) => {
+          chrome.runtime.sendMessage({ action: "CAPTURE_VIEWPORT" }, (r) => {
+            if (r && r.dataUrl) res(r.dataUrl);
+            else rej(new Error("fallback capture failed"));
+          });
+        });
+        screenshots.push(fallback);
+      } catch (e) {
+        console.warn("Fallback capture also failed");
+      }
+    }
+
+    resolve(screenshots);
+  });
+}
+
+// ── Manual Answer Button (Quiz manual mode) ──────
+function createAnswerButton(updateUI) {
+  const container = document.createElement('div');
+  container.id = 'page-analyzer-answer-host';
+  const shadow = container.attachShadow({ mode: 'open' });
+
+  const style = document.createElement('style');
+  style.textContent = `
+    .answer-btn {
+      position: fixed;
+      top: calc(50% + 28px);
+      right: 0;
+      width: 16px;
+      height: 28px;
+      background: #ffffff;
+      border: none;
+      border-radius: 4px 0 0 4px;
+      cursor: pointer;
+      z-index: 2147483645;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: -2px 1px 6px rgba(0,0,0,0.2);
+      transition: all 0.2s;
+    }
+    .answer-btn:hover {
+      width: 22px;
+      background: #e0e0e0;
+      box-shadow: -3px 2px 10px rgba(0,0,0,0.3);
+    }
+    .answer-btn::after {
+      content: '?';
+      color: #000;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: -apple-system, sans-serif;
+    }
+    .answer-btn.loading {
+      pointer-events: none;
+      animation: pulse 0.8s infinite alternate;
+    }
+    @keyframes pulse {
+      from { opacity: 0.5; }
+      to { opacity: 1; }
+    }
+  `;
+
+  const btn = document.createElement('button');
+  btn.className = 'answer-btn';
+  btn.title = 'Get Answer';
+
+  btn.addEventListener('click', () => {
+    btn.classList.add('loading');
+    initQuizAnalysis((status, data) => {
+      btn.classList.remove('loading');
+      updateUI(status, data);
+    });
+  });
+
+  shadow.appendChild(style);
+  shadow.appendChild(btn);
+  document.body.appendChild(container);
+}
+
+// ── Sidebar UI ───────────────────────────────────
+function createSidebarUI(mode) {
   const container = document.createElement('div');
   container.id = 'gemini-analyzer-host';
-  
-  // Use Shadow DOM to isolate styles
+
   const shadow = container.attachShadow({ mode: 'open' });
+
+  const modeBadge = mode === 'coding' ? '💻 Coding' : '📝 Quiz';
 
   const style = document.createElement('style');
   style.textContent = `
     :host {
       --sidebar-width: 350px;
       --bg-color: #ffffff;
-      --header-bg: #2c3e50;
-      --border-color: #dcdcdc;
-      --text-color: #333333;
+      --header-bg: #f0f0f0;
+      --border-color: #ddd;
+      --text-color: #111111;
       --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    /* 1. The Toggle Handle (Native-looking tab) */
     .toggle-handle {
       position: fixed;
       top: 50%;
@@ -85,7 +286,7 @@ function createSidebarUI() {
       transform: translateY(-50%);
       width: 16px;
       height: 40px;
-      background: #eeeeee;
+      background: #f0f0f0;
       border: 1px solid var(--border-color);
       border-right: none;
       border-radius: 4px 0 0 4px;
@@ -94,33 +295,25 @@ function createSidebarUI() {
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: -2px 1px 4px rgba(0,0,0,0.05);
+      box-shadow: -2px 1px 4px rgba(0,0,0,0.1);
       transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.2s;
     }
-    
-    .toggle-handle:hover {
-      background: #e0e0e0;
-    }
+    .toggle-handle:hover { background: #e0e0e0; }
 
-    /* Chevron Icon (CSS Triangle) */
     .handle-icon {
-      width: 0; 
-      height: 0; 
+      width: 0; height: 0;
       border-top: 4px solid transparent;
-      border-bottom: 4px solid transparent; 
-      border-right: 5px solid #666;
+      border-bottom: 4px solid transparent;
+      border-right: 5px solid #333333;
       transition: transform 0.3s;
     }
-    
-    /* Loading pulse for handle */
+
     .toggle-handle.loading .handle-icon {
       opacity: 0.5;
       animation: pulse 1s infinite alternate;
     }
-
     @keyframes pulse { from { opacity: 0.3; } to { opacity: 0.8; } }
 
-    /* 2. The Sidebar */
     .sidebar {
       position: fixed;
       top: 50%;
@@ -132,7 +325,7 @@ function createSidebarUI() {
       background: var(--bg-color);
       border: 1px solid var(--border-color);
       border-right: none;
-      border-radius: 8px 0 0 8px;
+      border-radius: 12px 0 0 12px;
       box-shadow: -5px 0 15px rgba(0,0,0,0.1);
       z-index: 2147483647;
       transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -142,30 +335,25 @@ function createSidebarUI() {
       box-sizing: border-box;
     }
 
-    .sidebar.open {
-      right: 0;
-    }
-    
-    /* Push handle when sidebar opens */
+    .sidebar.open { right: 0; }
+
     .sidebar.open + .toggle-handle,
     .toggle-handle.sidebar-open {
       right: var(--sidebar-width);
       border-right: 1px solid var(--border-color);
     }
 
-    /* Sidebar Header */
     .sidebar-header {
       padding: 12px 14px;
       background: var(--header-bg);
       border-bottom: 1px solid var(--border-color);
-      border-radius: 8px 0 0 0;
+      border-radius: 12px 0 0 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 13px;
       font-weight: 600;
-      color: white;
-      text-transform: uppercase;
+      color: #000000;
       letter-spacing: 0.5px;
       cursor: pointer;
     }
@@ -175,53 +363,36 @@ function createSidebarUI() {
       border: none;
       font-size: 20px;
       line-height: 1;
-      color: white;
+      color: #000000;
       cursor: pointer;
       padding: 0 4px;
       opacity: 0.8;
     }
     .close-btn:hover { opacity: 1; }
 
-    /* Tabs */
     .tabs {
       display: flex;
-      background: #f5f5f5;
+      background: #f8f8f8;
       border-bottom: 1px solid var(--border-color);
       overflow-x: auto;
     }
-    
+
     .tab {
       padding: 10px 15px;
       cursor: pointer;
       font-size: 12px;
       font-weight: 500;
-      color: #666;
+      color: #888;
       border-bottom: 2px solid transparent;
       transition: all 0.2s;
       white-space: nowrap;
       flex-shrink: 0;
     }
-    
-    .tab:hover {
-      background: #e8e8e8;
-      color: #333;
-    }
-    
-    .tab.active {
-      color: #007bff;
-      border-bottom-color: #007bff;
-      background: white;
-    }
-    
-    .tab.error {
-      color: #dc3545;
-    }
-    
-    .tab.loading {
-      color: #999;
-    }
+    .tab:hover { background: #eeeeee; color: #333; }
+    .tab.active { color: #111111; border-bottom-color: #111111; background: #ffffff; }
+    .tab.error { color: #666; }
+    .tab.loading { color: #aaa; }
 
-    /* Tab Content */
     .tab-content {
       display: none;
       padding: 15px;
@@ -232,24 +403,11 @@ function createSidebarUI() {
       white-space: pre-wrap;
       flex: 1;
     }
-    
-    .tab-content.active {
-      display: block;
-    }
-    
-    .loading-text { 
-      color: #888; 
-      font-style: italic; 
-      font-size: 12px; 
-    }
-    
-    .error-text { 
-      color: #d32f2f; 
-      font-size: 12px; 
-      line-height: 1.5;
-    }
+    .tab-content.active { display: block; }
 
-    /* Scrollbar */
+    .loading-text { color: #999; font-style: italic; font-size: 12px; }
+    .error-text { color: #555; font-size: 12px; line-height: 1.5; }
+
     .tab-content::-webkit-scrollbar { width: 5px; }
     .tab-content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
     .tab-content::-webkit-scrollbar-track { background: transparent; }
@@ -257,14 +415,13 @@ function createSidebarUI() {
     .tabs::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
   `;
 
-  // --- DOM Structure ---
   const sidebar = document.createElement('div');
   sidebar.className = 'sidebar';
-  
+
   const header = document.createElement('div');
   header.className = 'sidebar-header';
   header.innerHTML = `
-    <span>AI Analyzer</span>
+    <span>${modeBadge} AI Analyzer</span>
     <button class="close-btn" title="Close">&times;</button>
   `;
 
@@ -289,12 +446,10 @@ function createSidebarUI() {
   shadow.appendChild(handle);
   document.body.appendChild(container);
 
-  // --- Interactions ---
+  // Interactions
   const toggleSidebar = () => {
     const isOpen = sidebar.classList.toggle('open');
     handle.classList.toggle('sidebar-open');
-    
-    // Rotate Icon
     const icon = handle.querySelector('.handle-icon');
     icon.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
   };
@@ -302,52 +457,43 @@ function createSidebarUI() {
   handle.addEventListener('click', toggleSidebar);
   header.addEventListener('click', toggleSidebar);
 
-  // Store tabs data
   const tabsData = {};
   let activeTab = null;
 
-  // Return update function
   return (status, data) => {
     handle.classList.remove('loading');
-    
+
     if (status === 'success') {
-      // data is an array of results from different AIs
       data.forEach(aiResult => {
         const { provider, result, error } = aiResult;
-        
-        // Create or update tab
+
         if (!tabsData[provider]) {
           const tab = document.createElement('div');
           tab.className = 'tab';
           tab.dataset.provider = provider;
           tab.textContent = getProviderDisplayName(provider);
-          
+
           const content = document.createElement('div');
           content.className = 'tab-content';
           content.dataset.provider = provider;
-          
+
           tabsContainer.appendChild(tab);
           contentContainer.appendChild(content);
-          
           tabsData[provider] = { tab, content };
-          
-          // Tab click handler
+
           tab.addEventListener('click', () => {
-            // Deactivate all tabs
             Object.values(tabsData).forEach(({ tab: t, content: c }) => {
               t.classList.remove('active');
               c.classList.remove('active');
             });
-            
-            // Activate clicked tab
             tab.classList.add('active');
             content.classList.add('active');
             activeTab = provider;
           });
         }
-        
+
         const { tab, content } = tabsData[provider];
-        
+
         if (error) {
           tab.classList.add('error');
           tab.classList.remove('loading');
@@ -357,23 +503,20 @@ function createSidebarUI() {
           content.textContent = result;
         }
       });
-      
-      // Activate first tab if none is active
+
       if (!activeTab && Object.keys(tabsData).length > 0) {
         const firstProvider = Object.keys(tabsData)[0];
         tabsData[firstProvider].tab.click();
       }
-      
     } else {
-      // Global error
       const errorTab = document.createElement('div');
       errorTab.className = 'tab active error';
       errorTab.textContent = 'Error';
-      
+
       const errorContent = document.createElement('div');
       errorContent.className = 'tab-content active';
       errorContent.innerHTML = `<span class="error-text">${data.error || 'Unknown error'}</span>`;
-      
+
       tabsContainer.appendChild(errorTab);
       contentContainer.appendChild(errorContent);
     }
