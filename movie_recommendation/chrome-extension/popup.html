@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Watchlist</title>
+  <!-- Load Google Font: Outfit for a modern, fun look -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+
+  <!-- Load local Supabase -->
+  <script src="supabase-js.js"></script>
+</head>
+
+<body>
+
+  <div id="app">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <span class="logo-icon">🎬</span>
+        <h1>Watchlist Tracker</h1>
+      </div>
+      <div id="userMenu" class="user-menu hidden">
+        <button id="logoutBtn" class="icon-btn" title="Sign Out">🚪</button>
+      </div>
+    </header>
+
+    <!-- Global Loader -->
+    <div id="globalLoader" class="loader-container hidden">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Error Toast -->
+    <div id="errorToast" class="toast hidden"></div>
+
+    <!-- VIEW: Authentication -->
+    <section id="authView" class="view active">
+      <div class="auth-card glass-card">
+        <h2>Welcome Back! 🍿</h2>
+        <p>Sign in to sync your watchlists.</p>
+
+        <form id="authForm">
+          <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" required placeholder="moviebuff@example.com">
+          </div>
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="btn primary-btn w-full">Sign In</button>
+        </form>
+
+        <div class="auth-toggle">
+          <span id="authToggleText">Don't have an account?</span>
+          <button id="toggleAuthModeBtn" class="text-btn">Sign Up</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: Dashboard (List of Watchlists) -->
+    <section id="dashboardView" class="view hidden">
+      <div class="section-header">
+        <h2>My Lists</h2>
+        <button id="showCreateListBtn" class="btn icon-btn primary-btn" title="Create New List">➕</button>
+      </div>
+
+      <div id="watchlistsContainer" class="lists-grid">
+        <!-- Watchlist items will be injected here -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyDashboardState" class="empty-state hidden">
+        <span class="empty-icon">📭</span>
+        <p>You don't have any lists yet.</p>
+        <button id="emptyCreateListBtn" class="btn secondary-btn mt-2">Create a List</button>
+      </div>
+    </section>
+
+    <!-- VIEW: Specific Watchlist -->
+    <section id="listView" class="view hidden">
+      <div class="section-header">
+        <button id="backToDashboardBtn" class="icon-btn" title="Back">⬅️</button>
+        <h2 id="currentListName">Loading...</h2>
+        <button id="showSearchBtn" class="btn icon-btn primary-btn" title="Add Movie">🔍</button>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">All</button>
+        <button class="filter-tab" data-filter="to_watch">To Watch</button>
+        <button class="filter-tab" data-filter="watching">Watching</button>
+        <button class="filter-tab" data-filter="watched">Watched</button>
+      </div>
+
+      <div id="moviesGrid" class="movies-grid">
+        <!-- Movie cards will be injected here -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyListState" class="empty-state hidden">
+        <span class="empty-icon">🍿</span>
+        <p>This list is empty.</p>
+        <button id="emptySearchBtn" class="btn secondary-btn mt-2">Find Movies to Add</button>
+      </div>
+    </section>
+
+    <!-- VIEW: Search Hub -->
+    <section id="searchhubView" class="view hidden">
+      <div class="section-header">
+        <button id="backFromSearchBtn" class="icon-btn" title="Back">⬅️</button>
+        <div class="search-bar w-full">
+          <input type="text" id="searchInput" placeholder="Search movies, TV shows...">
+          <button id="clearSearchBtn" class="icon-btn hidden">❌</button>
+        </div>
+      </div>
+
+      <div id="searchResults" class="search-results">
+        <!-- Search results injected here -->
+      </div>
+
+      <div id="searchTrending" class="search-trending">
+        <h3>Trending Today 📈</h3>
+        <div id="trendingGrid" class="movies-grid mini">
+          <!-- Trending injected here -->
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- MODAL: Movie Detals -->
+  <div id="movieDetailModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content glass-card large">
+      <button class="close-modal-btn">❌</button>
+
+      <div id="movieDetailContent" class="movie-detail-content">
+        <!-- Details injected here -->
+        <!-- Layout: 
+          [Poster image] 
+          [Title] [Year] 
+          [Rating Stars] 
+          [Pill: Add to List dropdown if in search, OR Status dropdown if in list]
+          [Overview text]
+          [Trailer Button/Iframe container]
+        -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Create/Edit List -->
+  <div id="listModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content glass-card">
+      <button class="close-modal-btn">❌</button>
+      <h2 id="listModalTitle">Create List</h2>
+
+      <form id="listForm">
+        <div class="input-group">
+          <label>List Name</label>
+          <input type="text" id="listNameInput" required placeholder="e.g., Sci-Fi Binge">
+        </div>
+
+        <div class="input-group">
+          <label>Emoji Icon</label>
+          <div class="emoji-picker" id="emojiPicker">
+            <span class="emoji-option selected">🍿</span>
+            <span class="emoji-option">👽</span>
+            <span class="emoji-option">👻</span>
+            <span class="emoji-option">🦸‍♂️</span>
+            <span class="emoji-option">💔</span>
+            <span class="emoji-option">🤣</span>
+            <span class="emoji-option">🤯</span>
+            <span class="emoji-option">🔪</span>
+            <span class="emoji-option">🚀</span>
+            <span class="emoji-option">🦄</span>
+            <span class="emoji-option">🎥</span>
+            <span class="emoji-option">📺</span>
+          </div>
+          <input type="hidden" id="listEmojiInput" value="🍿">
+        </div>
+
+        <div class="input-group">
+          <label>Theme Color</label>
+          <div class="color-picker" id="colorPicker">
+            <span class="color-option selected" style="background: #8b5cf6;" data-color="#8b5cf6"></span>
+            <span class="color-option" style="background: #ec4899;" data-color="#ec4899"></span>
+            <span class="color-option" style="background: #ef4444;" data-color="#ef4444"></span>
+            <span class="color-option" style="background: #f59e0b;" data-color="#f59e0b"></span>
+            <span class="color-option" style="background: #10b981;" data-color="#10b981"></span>
+            <span class="color-option" style="background: #3b82f6;" data-color="#3b82f6"></span>
+            <span class="color-option" style="background: #6366f1;" data-color="#6366f1"></span>
+          </div>
+          <input type="hidden" id="listColorInput" value="#8b5cf6">
+        </div>
+
+        <button type="submit" class="btn primary-btn w-full mt-2">Save List</button>
+        <button type="button" id="deleteListBtn" class="btn danger-btn w-full mt-2 hidden">Delete List</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Note: We load config implicitly, but scripts must be modules to use imports in MV3 if we split them -->
+  <!-- We'll bundle or use module type for popup.js -->
+  <script type="module" src="popup.js"></script>
+</body>
+
+</html>
