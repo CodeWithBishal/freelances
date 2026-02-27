@@ -271,6 +271,10 @@
       background: linear-gradient(135deg, rgba(108, 99, 255, 0.12), rgba(72, 198, 239, 0.08));
     }
 
+    .mode-card.selection::before {
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.12), rgba(255, 142, 83, 0.08));
+    }
+
     .mode-card.coding::before {
       background: linear-gradient(135deg, rgba(74, 222, 128, 0.12), rgba(34, 197, 94, 0.08));
     }
@@ -538,97 +542,105 @@
       <button class="btn-primary" id="setup-save-btn" disabled>Get Started</button>
       <div class="hint">Enter your Gemini API key to continue</div>
     </div>
+  </div>
 
-    <!-- ═══════ PAGE: HOME ═══════ -->
-    <div class="page" id="page-home">
-      <div class="page-header">
-        <h1>Page Insight</h1>
-        <div class="header-actions">
-          <button class="icon-btn" id="btn-settings" title="Settings">⚙</button>
-        </div>
+  <!-- ═══════ PAGE: HOME ═══════ -->
+  <div class="page" id="page-home">
+    <div class="page-header">
+      <h1>Page Insight</h1>
+      <div class="header-actions">
+        <button class="icon-btn" id="btn-settings" title="Settings">⚙</button>
       </div>
-
-      <div class="active-mode-bar glass" id="active-mode-bar">
-        <span class="label">Active mode</span>
-        <span class="mode-name" id="active-mode-name">—</span>
-      </div>
-
-      <div class="mode-cards">
-        <div class="mode-card quiz glass" id="card-quiz">
-          <div class="card-icon">📝</div>
-          <h3>Quiz Mode</h3>
-          <p>Capture screen to find answers. Auto-capture or trigger manually.</p>
-          <span class="card-arrow">›</span>
-        </div>
-        <div class="mode-card coding glass" id="card-coding">
-          <div class="card-icon">💻</div>
-          <h3>Coding Mode</h3>
-          <p>Full-page capture + text extraction. Analyze code, find bugs, get explanations.</p>
-          <span class="card-arrow">›</span>
-        </div>
-      </div>
-
-      <div class="footer"><span>Page Insight Analyzer • Gemini AI</span></div>
     </div>
 
-    <!-- ═══════ PAGE: QUIZ OPTIONS ═══════ -->
-    <div class="page" id="page-quiz">
-      <div class="page-header">
-        <button class="back-link" id="quiz-back">← Back</button>
-        <h1>Quiz Mode</h1>
-        <div style="width:36px"></div>
-      </div>
-
-      <div class="quiz-options">
-        <div class="quiz-option glass" id="opt-auto">
-          <div class="opt-icon">🔄</div>
-          <h3>Auto Capture</h3>
-          <p>Automatically captures the screen on every page load and searches for answers.</p>
-        </div>
-        <div class="quiz-option glass" id="opt-manual">
-          <div class="opt-icon">👆</div>
-          <h3>Manual Button</h3>
-          <p>Adds a small "Answer" button below the sidebar arrow. Click it when you're ready.</p>
-        </div>
-      </div>
-
-      <button class="btn-primary" id="quiz-activate-btn" disabled>Activate Quiz Mode</button>
-      <div class="hint">Select a capture method above</div>
+    <div class="active-mode-bar glass" id="active-mode-bar">
+      <span class="label">Active mode</span>
+      <span class="mode-name" id="active-mode-name">—</span>
     </div>
 
-    <!-- ═══════ PAGE: SETTINGS ═══════ -->
-    <div class="page" id="page-settings">
-      <div class="page-header">
-        <button class="back-link" id="settings-back">← Back</button>
-        <h1>Settings</h1>
-        <div style="width:36px"></div>
+    <div class="mode-cards">
+      <div class="mode-card quiz glass" id="card-quiz">
+        <div class="card-icon">📝</div>
+        <h3>Quiz Mode</h3>
+        <p>Capture screen to find answers. Auto-capture or trigger manually.</p>
+        <span class="card-arrow">›</span>
+      </div>
+      <div class="mode-card selection glass" id="card-selection">
+        <div class="card-icon">🖱️</div>
+        <h3>Selection Mode</h3>
+        <p>Highlight text on any page to get instant AI analysis.</p>
+        <span class="card-arrow">›</span>
+      </div>
+      <div class="mode-card coding glass" id="card-coding">
+        <div class="card-icon">💻</div>
+        <h3>Coding Mode</h3>
+        <p>Full-page capture + text extraction. Analyze code, find bugs, get explanations.</p>
+        <span class="card-arrow">›</span>
+      </div>
+    </div>
+
+    <div class="footer"><span>Page Insight Analyzer • Gemini AI</span></div>
+  </div>
+
+  <!-- ═══════ PAGE: QUIZ OPTIONS ═══════ -->
+  <div class="page" id="page-quiz">
+    <div class="page-header">
+      <button class="back-link" id="quiz-back">← Back</button>
+      <h1>Quiz Mode</h1>
+      <div style="width:36px"></div>
+    </div>
+
+    <div class="quiz-options">
+      <div class="quiz-option glass" id="opt-auto">
+        <div class="opt-icon">🔄</div>
+        <h3>Auto Capture</h3>
+        <p>Automatically captures the screen on every page load and searches for answers.</p>
+      </div>
+      <div class="quiz-option glass" id="opt-manual">
+        <div class="opt-icon">👆</div>
+        <h3>Manual Button</h3>
+        <p>Adds a small "Answer" button below the sidebar arrow. Click it when you're ready.</p>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="quiz-activate-btn" disabled>Activate Quiz Mode</button>
+    <div class="hint">Select a capture method above</div>
+  </div>
+
+  <!-- ═══════ PAGE: SETTINGS ═══════ -->
+  <div class="page" id="page-settings">
+    <div class="page-header">
+      <button class="back-link" id="settings-back">← Back</button>
+      <h1>Settings</h1>
+      <div style="width:36px"></div>
+    </div>
+
+    <div class="settings-scroll">
+      <div class="toggle-row glass">
+        <span class="label">Extension Enabled</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="settings-enabled" checked>
+          <span class="toggle-slider"></span>
+        </label>
       </div>
 
-      <div class="settings-scroll">
-        <div class="toggle-row glass">
-          <span class="label">Extension Enabled</span>
-          <label class="toggle-switch">
-            <input type="checkbox" id="settings-enabled" checked>
-            <span class="toggle-slider"></span>
-          </label>
+      <div class="api-group glass">
+        <div class="api-group-header">
+          <span class="badge">🔷</span>
+          <span>Gemini</span>
+          <a href="https://aistudio.google.com/app/apikey" target="_blank">Get key →</a>
         </div>
-
-        <div class="api-group glass">
-          <div class="api-group-header">
-            <span class="badge">🔷</span>
-            <span>Gemini</span>
-            <a href="https://aistudio.google.com/app/apikey" target="_blank">Get key →</a>
-          </div>
-          <input type="password" class="api-input" id="settings-gemini" placeholder="AIzaSy..." />
-        </div>
-
-        <button class="btn-primary" id="settings-save-btn">Save Changes</button>
+        <input type="password" class="api-input" id="settings-gemini" placeholder="AIzaSy..." />
       </div>
 
-      <!-- Toast notification -->
-      <div class="toast" id="toast"></div>
+      <button class="btn-primary" id="settings-save-btn">Save Changes</button>
+    </div>
+  </div>
 
-      <script src="popup.js"></script>
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="popup.js"></script>
 </body>
 
 </html>

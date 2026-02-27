@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Home page
   const cardQuiz = document.getElementById('card-quiz');
+  const cardSelection = document.getElementById('card-selection');
   const cardCoding = document.getElementById('card-coding');
   const btnSettings = document.getElementById('btn-settings');
   const activeModeBar = document.getElementById('active-mode-bar');
@@ -76,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function showHomePage(data) {
     if (data && data.ACTIVE_MODE) {
       activeModeBar.classList.add('visible');
-      const modeLabels = { quiz: '📝 Quiz Mode', coding: '💻 Coding Mode' };
+      const modeLabels = { quiz: '📝 Quiz Mode', coding: '💻 Coding Mode', selection: '🖱️ Selection Mode' };
       activeModeName.textContent = modeLabels[data.ACTIVE_MODE] || data.ACTIVE_MODE;
     } else {
       activeModeBar.classList.remove('visible');
@@ -115,6 +116,12 @@ document.addEventListener('DOMContentLoaded', () => {
     await saveStorage({ ACTIVE_MODE: 'coding' });
     showToast('Coding mode activated! 💻');
     notifyTabsOfModeChange('coding');
+  });
+
+  cardSelection.addEventListener('click', async () => {
+    await saveStorage({ ACTIVE_MODE: 'selection' });
+    showToast('Selection mode activated! 🖱️');
+    notifyTabsOfModeChange('selection');
   });
 
   btnSettings.addEventListener('click', async () => {

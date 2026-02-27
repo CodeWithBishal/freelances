@@ -3,6 +3,8 @@ const QUIZ_PROMPT = "I will upload you the questions of my quiz. Please answer t
 
 const CODING_PROMPT = "I will show you a coding question/problem from a webpage. The page text and screenshots are provided. Please:\n1. Read and understand the full problem statement\n2. Provide a clear, optimal solution with code\n3. Explain the approach and time/space complexity\n4. If there are edge cases, mention them\nAnswer accurately and provide working code.";
 
+const SELECTION_PROMPT = "I will upload you the questions of my quiz. Please answer them accurately and concisely without any explanation with option number and question number. If the question is multiple choice, give all the correct option which you are surely confident about. Don't explain just answer with the correct option";
+
 // ── Main Init ────────────────────────────────────
 chrome.storage.local.get([
   'GEMINI_API_KEY',
@@ -31,6 +33,8 @@ chrome.storage.local.get([
       // Show manual answer button
       createAnswerButton(updateUI);
     }
+  } else if (mode === 'selection') {
+    initSelectionMode(updateUI);
   } else if (mode === 'coding') {
     // Coding mode: multi-capture + text extraction
     setTimeout(() => initCodingAnalysis(updateUI), 2000);
@@ -125,6 +129,109 @@ async function initCodingAnalysis(updateUI) {
   } catch (err) {
     updateUI('error', { error: "Capture failed: " + err.message });
   }
+}
+
+// ── Selection Analysis ───────────────────────────
+function initSelectionMode(updateUI) {
+  console.log("Page Analyzer: Selection mode active");
+
+  const btnId = 'page-analyzer-selection-btn';
+  let analyzeBtn = document.getElementById(btnId);
+
+  if (!analyzeBtn) {
+    analyzeBtn = document.createElement('button');
+    analyzeBtn.id = btnId;
+    analyzeBtn.className = 'page-analyzer-hover-btn';
+    analyzeBtn.innerHTML = '✨ Analyze';
+    analyzeBtn.title = 'Analyze selected text with Gemini';
+
+    const style = document.createElement('style');
+    style.textContent = `
+      .page-analyzer-hover-btn {
+        position: absolute;
+        background: linear-gradient(135deg, #6c63ff 0%, #48c6ef 100%);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-family: -apple-system, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        z-index: 2147483647;
+        box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+        display: none;
+        transition: transform 0.2s;
+      }
+      .page-analyzer-hover-btn:hover {
+        transform: scale(1.05);
+      }
+    `;
+    document.head.appendChild(style);
+    document.body.appendChild(analyzeBtn);
+  }
+
+  document.addEventListener('mouseup', (e) => {
+    if (e.target.id === btnId) return;
+
+    setTimeout(() => {
+      const selection = window.getSelection();
+      const text = selection.toString().trim();
+
+      if (text.length > 0) {
+        const range = selection.getRangeAt(0);
+        const rect = range.getBoundingClientRect();
+
+        analyzeBtn.style.display = 'block';
+        analyzeBtn.style.top = (window.scrollY + rect.bottom + 5) + 'px';
+        analyzeBtn.style.left = (window.scrollX + rect.left + (rect.width / 2) - (analyzeBtn.offsetWidth / 2)) + 'px';
+
+        analyzeBtn.dataset.text = text;
+      } else {
+        analyzeBtn.style.display = 'none';
+      }
+    }, 10);
+  });
+
+  analyzeBtn.addEventListener('click', () => {
+    const text = analyzeBtn.dataset.text;
+    if (!text) return;
+
+    analyzeBtn.style.display = 'none';
+    window.getSelection().removeAllRanges();
+
+    // Set UI to loading state immediately
+    updateUI('loading');
+
+    let responseHandled = false;
+    const timeoutId = setTimeout(() => {
+      if (!responseHandled) {
+        responseHandled = true;
+        updateUI('error', { error: "Request timed out." });
+      }
+    }, 30000);
+
+    chrome.runtime.sendMessage(
+      { action: "ANALYZE_SELECTION", text: text, prompt: SELECTION_PROMPT },
+      (response) => {
+        if (responseHandled) return;
+        responseHandled = true;
+        clearTimeout(timeoutId);
+
+        if (chrome.runtime.lastError) {
+          updateUI('error', { error: "Connection Error: " + chrome.runtime.lastError.message });
+          return;
+        }
+
+        if (response && response.success) {
+          console.log(response.data)
+          updateUI('success', response.data);
+        } else {
+          updateUI('error', { error: response ? response.error : "Unknown error" });
+        }
+      }
+    );
+  });
 }
 
 // ── Scrolling Screenshot Capture ─────────────────
@@ -263,7 +370,7 @@ function createSidebarUI(mode) {
 
   const shadow = container.attachShadow({ mode: 'open' });
 
-  const modeBadge = mode === 'coding' ? '💻 Coding' : '📝 Quiz';
+  const modeBadge = mode === 'coding' ? '💻 Coding' : mode === 'selection' ? '🖱️ Selection' : '📝 Quiz';
 
   const style = document.createElement('style');
   style.textContent = `
@@ -454,6 +561,9 @@ function createSidebarUI(mode) {
   handle.addEventListener('click', toggleSidebar);
   header.addEventListener('click', toggleSidebar);
 
+  // Expose toggle capability globally for the active mode's use
+  window.__analyzerToggleSidebar = toggleSidebar;
+
   const tabsData = {};
   let activeTab = null;
 
@@ -478,6 +588,12 @@ function createSidebarUI(mode) {
           contentContainer.appendChild(content);
           tabsData[provider] = { tab, content };
 
+          // Default state for new tab
+          if (status === 'loading') {
+            tab.classList.add('loading');
+            content.innerHTML = `<span class="loading-text">Thinking...</span>`;
+          }
+
           tab.addEventListener('click', () => {
             Object.values(tabsData).forEach(({ tab: t, content: c }) => {
               t.classList.remove('active');
@@ -500,6 +616,51 @@ function createSidebarUI(mode) {
           content.textContent = result;
         }
       });
+
+      if (!activeTab && Object.keys(tabsData).length > 0) {
+        const firstProvider = Object.keys(tabsData)[0];
+        tabsData[firstProvider].tab.click();
+      }
+    } else if (status === 'loading') {
+      // Clear previous tabs/content before showing loading
+      tabsContainer.innerHTML = '';
+      contentContainer.innerHTML = '';
+      Object.keys(tabsData).forEach(k => delete tabsData[k]);
+      activeTab = null;
+
+      // Set to loading
+      handle.classList.add('loading');
+      if (!tabsData['gemini']) {
+        const provider = 'gemini';
+        const tab = document.createElement('div');
+        tab.className = 'tab loading';
+        tab.dataset.provider = provider;
+        tab.textContent = getProviderDisplayName(provider);
+
+        const content = document.createElement('div');
+        content.className = 'tab-content';
+        content.dataset.provider = provider;
+        content.innerHTML = `<span class="loading-text">Thinking...</span>`;
+
+        tabsContainer.appendChild(tab);
+        contentContainer.appendChild(content);
+        tabsData[provider] = { tab, content };
+
+        tab.addEventListener('click', () => {
+          Object.values(tabsData).forEach(({ tab: t, content: c }) => {
+            t.classList.remove('active');
+            c.classList.remove('active');
+          });
+          tab.classList.add('active');
+          content.classList.add('active');
+          activeTab = provider;
+        });
+      } else {
+        const { tab, content } = tabsData['gemini'];
+        tab.classList.add('loading');
+        tab.classList.remove('error');
+        content.innerHTML = `<span class="loading-text">Thinking...</span>`;
+      }
 
       if (!activeTab && Object.keys(tabsData).length > 0) {
         const firstProvider = Object.keys(tabsData)[0];
