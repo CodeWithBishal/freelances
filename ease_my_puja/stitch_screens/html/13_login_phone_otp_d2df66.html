@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login with Phone OTP</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e6d94c",
+                        "secondary": "#ef4444", // Soft red as per description
+                        "background-light": "#fdfbf7", // Warm cream
+                        "background-dark": "#211f11",
+                        "surface-light": "#f4f1e1", // Pastel yellow header/input area
+                        "surface-dark": "#322f1a",
+                        "text-light": "#1b1a0e",
+                        "text-dark": "#fbfbf8",
+                        "text-muted": "#6b663b"
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "1rem", "2xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark min-h-screen antialiased selection:bg-primary/30">
+<div class="relative flex min-h-[100dvh] w-full flex-col max-w-md mx-auto shadow-2xl bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Header Section -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-b-3xl pb-8 shadow-sm">
+<div class="flex items-center p-4 pb-2 justify-between">
+<button aria-label="Go back" class="flex size-12 shrink-0 items-center justify-center text-text-light dark:text-text-dark hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors">
+<span class="material-symbols-outlined text-[28px]">arrow_back_ios_new</span>
+</button>
+<div class="flex-1 pr-12"></div> <!-- Spacer for balance -->
+</div>
+<div class="px-6 pt-6">
+<div class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mb-6 shadow-md shadow-primary/20">
+<span class="material-symbols-outlined text-[32px] text-text-light">temple_hindu</span>
+</div>
+<h1 class="text-[36px] font-bold leading-tight tracking-tight text-text-light dark:text-text-dark pb-2">Welcome</h1>
+<p class="text-[18px] font-medium text-text-muted dark:text-white/60 leading-snug max-w-[85%]">
+                    Enter your phone number to receive an OTP and connect with verified Pandits.
+                </p>
+</div>
+</div>
+<!-- Main Content Section -->
+<div class="flex-1 flex flex-col px-6 pt-10 pb-6">
+<!-- Input Area -->
+<div class="flex-1">
+<div class="mb-8">
+<label class="block text-sm font-semibold text-text-muted dark:text-white/60 mb-2 uppercase tracking-wider">Mobile Number</label>
+<div class="relative flex items-center bg-white dark:bg-surface-dark rounded-2xl shadow-sm border border-black/5 dark:border-white/5 overflow-hidden transition-all focus-within:ring-2 focus-within:ring-secondary focus-within:border-secondary">
+<div class="flex items-center justify-center pl-5 pr-3 py-4 border-r border-black/5 dark:border-white/5 bg-background-light/50 dark:bg-black/20">
+<span class="text-[18px] font-bold">+91</span>
+<span class="material-symbols-outlined text-[20px] ml-1 text-text-muted">expand_more</span>
+</div>
+<input autocomplete="tel" class="flex-1 bg-transparent border-none text-[20px] font-bold text-text-light dark:text-text-dark focus:ring-0 p-4 placeholder:text-text-muted/50 dark:placeholder:text-white/30 h-16 tracking-wider" placeholder="99999 99999" type="tel"/>
+</div>
+</div>
+</div>
+<!-- Action Button Area -->
+<div class="mt-auto pt-6">
+<p class="text-center text-sm text-text-muted dark:text-white/50 mb-6">
+                    By proceeding, you agree to our <a class="font-bold underline text-text-light dark:text-text-dark" href="#">Terms</a> &amp; <a class="font-bold underline text-text-light dark:text-text-dark" href="#">Privacy Policy</a>.
+                </p>
+<button class="w-full flex items-center justify-center bg-secondary hover:bg-secondary/90 text-white rounded-2xl h-16 px-6 text-[18px] font-bold shadow-lg shadow-secondary/30 transition-transform active:scale-[0.98]">
+<span class="truncate">Get OTP</span>
+<span class="material-symbols-outlined ml-2 text-[24px]">arrow_forward</span>
+</button>
+</div>
+<!-- Safe Area Indicator for iOS -->
+<div class="h-1 w-1/3 mx-auto bg-text-light/20 dark:bg-text-dark/20 rounded-full mt-6 mb-2 hidden md:block"></div>
+</div>
+</div>
+</body></html>

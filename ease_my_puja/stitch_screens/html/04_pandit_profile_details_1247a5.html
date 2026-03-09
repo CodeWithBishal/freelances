@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-width=1.0" name="viewport"/>
+<title>Pandit Profile Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e6d94c",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#211f11",
+                        "accent-red": "#ff6b6b"
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto bg-background-light dark:bg-background-dark border-x border-slate-200 dark:border-slate-800">
+<!-- Top App Bar -->
+<div class="flex items-center p-4 pb-2 justify-between sticky top-0 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-sm z-10 border-b border-slate-200 dark:border-slate-800">
+<button aria-label="Go back" class="flex size-12 shrink-0 items-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<h2 class="text-lg font-bold leading-tight flex-1 text-center">Pandit Profile</h2>
+<button aria-label="Share" class="flex size-12 shrink-0 items-center justify-end text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-2xl">share</span>
+</button>
+</div>
+<!-- Profile Header Section -->
+<div class="flex p-4 @container mt-2">
+<div class="flex w-full flex-col gap-4 items-center">
+<div class="flex gap-4 flex-col items-center relative">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-32 w-32 border-4 border-primary/20" data-alt="Portrait of Pandit Ramesh Sharma" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDKAsrSH4Q-4FVCQedICVMvFZTkgl_gDL5bl6jgWQXk4-nDS9l68EKd8mhFpqaTHegeUTyjqEpSQEJO7K-Yse7No1MimrzikQnwdfK2kMzGkpmCJD4W712ErNG0iODNtuEdBe-sn7nQzrBPzxL48Y6-e04ONw66ZkPF-OC3aPEieCe37DzKWvjRJxOqA87MhoiLPBaHCG6PfmDesxlbYNDvkcVwYE3YPpKBE3gXPudaaYrtVB-PuMsmSxxfdqKipWLxs8SgLdq4nbSH");'></div>
+<div class="absolute bottom-0 right-0 bg-white dark:bg-slate-800 rounded-full p-1 shadow-md">
+<span class="material-symbols-outlined text-accent-red text-xl fill-current" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="flex flex-col items-center justify-center">
+<p class="text-[24px] font-bold leading-tight text-center">Pandit Ramesh Sharma</p>
+<p class="text-slate-600 dark:text-slate-400 text-base font-normal mt-1">Vedic Scholar &amp; Priest</p>
+<p class="text-slate-500 dark:text-slate-500 text-sm mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-base">location_on</span>
+                            Varanasi, UP
+                        </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Stats Section -->
+<div class="flex flex-wrap gap-3 px-4 py-4">
+<div class="flex min-w-[100px] flex-1 flex-col gap-1 rounded-xl bg-primary/10 dark:bg-primary/5 p-3 items-center text-center">
+<p class="text-xl font-bold leading-tight">15+</p>
+<p class="text-slate-600 dark:text-slate-400 text-xs">Years Exp.</p>
+</div>
+<div class="flex min-w-[100px] flex-1 flex-col gap-1 rounded-xl bg-primary/10 dark:bg-primary/5 p-3 items-center text-center">
+<p class="text-xl font-bold leading-tight">500+</p>
+<p class="text-slate-600 dark:text-slate-400 text-xs">Pujas Done</p>
+</div>
+<div class="flex min-w-[100px] flex-1 flex-col gap-1 rounded-xl bg-primary/10 dark:bg-primary/5 p-3 items-center text-center">
+<div class="flex items-center gap-1">
+<p class="text-xl font-bold leading-tight">4.9</p>
+<span class="material-symbols-outlined text-primary text-sm fill-current" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-slate-600 dark:text-slate-400 text-xs">Rating</p>
+</div>
+</div>
+<!-- Specializations -->
+<div class="mt-2">
+<h3 class="text-lg font-bold leading-tight px-4 pb-3 pt-4 border-t border-slate-100 dark:border-slate-800">Specializations</h3>
+<div class="flex gap-2 p-2 flex-wrap px-4">
+<div class="flex h-8 shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 px-4">
+<p class="text-sm font-medium">Satyanarayan Katha</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 px-4">
+<p class="text-sm font-medium">Griha Pravesh</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 px-4">
+<p class="text-sm font-medium">Marriage Ceremony</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 px-4">
+<p class="text-sm font-medium">Navagraha Shanti</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 px-4">
+<p class="text-sm font-medium">Rudrabhishek</p>
+</div>
+</div>
+</div>
+<!-- Certificates -->
+<div class="mt-4">
+<h3 class="text-lg font-bold leading-tight px-4 pb-3 pt-4 border-t border-slate-100 dark:border-slate-800">Certificates &amp; Awards</h3>
+<div class="flex gap-3 overflow-x-auto px-4 pb-4 snap-x hide-scrollbar">
+<div class="snap-start shrink-0 flex flex-col gap-2 w-40">
+<div class="h-28 rounded-lg bg-cover bg-center border border-slate-200 dark:border-slate-700" data-alt="Vedic Studies Certificate" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8GCN6fa4vx7P6bdDwLwj1QlffmLYdnU_hui3SPtHyEjcYl2_Z8-WbIK92Pcmb_AoPxwPpjhTnJHvGgbH2HzdwcxcbpifLZcrSqfuvrVm52yVqsXOe8NjL_opVUK7cBbIhgh2J7GJyvyhqw7xpE6MQWvp72286bAr7taOdEYcmO4ebRMT9X_bE-p5Nfnlr4mdnGxCRRNPqCgmENKglxhFx2SpZeZqDHCiTZMWEouwIwbXybaf-psPISMqK_FMYnyPhFNgTwZ25Wr9R');"></div>
+<p class="text-xs font-medium text-center truncate">Vedic Studies, Benares</p>
+</div>
+<div class="snap-start shrink-0 flex flex-col gap-2 w-40">
+<div class="h-28 rounded-lg bg-cover bg-center border border-slate-200 dark:border-slate-700" data-alt="Astrology Certification" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB3YiIOJuMtWMyIDHhb_hveszYdmur-CMJmc4xQwQ6TyqBb4oDl84thU7g57ZvcyUXVxoqJ0Nm6uRqNpKujPUpMTzqKNwkUQRaQHdD5iyqN-TMkF8hB_mox6A5w3EhvYHQOPUCTIif49R_BR1yqvOaV2bWLFD3EMLWF5GzBwh6jW1rRDgKwH1yYQ7PNtUKFHV8zaatXs9mt4JwvQup3qZSbiHn4zyxhplzGxZRHCJVfUhONV0SwsAZtK8GcSg8OyT8KgS6WfmPOBGdc');"></div>
+<p class="text-xs font-medium text-center truncate">Jyotish Acharya</p>
+</div>
+<div class="snap-start shrink-0 flex flex-col gap-2 w-40">
+<div class="h-28 rounded-lg bg-cover bg-center border border-slate-200 dark:border-slate-700" data-alt="Priest Excellence Award" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDfmQqGiuDgbC9Q_QqmsdN32t5Ow7Hz13VwOooAEpOSNErMFqblqZf_E2JR3KIsypKAqTQBOENMS8hQKqvvjtx6IZUvtKGJ6q6f4erf3OPuLctZxAKp71GM_Rcv0_WDzJsms-JWnXn5u0dMuoIG70VTqzvlVPJTgoPzEwNTp7EDFUnLR0CimQ22cIMLAkgE-Rmm66OLs8flZtZGggfyc9mymV71dIJu1mUJYM-nx10q1U3mCT97K5cuv6Ue9nt_hGCju-84UiTFX68A');"></div>
+<p class="text-xs font-medium text-center truncate">Best Priest Award 2022</p>
+</div>
+</div>
+</div>
+<!-- Reviews -->
+<div class="mt-2 mb-20">
+<div class="flex justify-between items-center px-4 pb-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+<h3 class="text-lg font-bold leading-tight">Reviews (128)</h3>
+<button class="text-sm text-primary font-medium">See all</button>
+</div>
+<div class="flex flex-col gap-4 px-4 pb-4">
+<!-- Review Item 1 -->
+<div class="flex flex-col gap-2 border-b border-slate-100 dark:border-slate-800 pb-4">
+<div class="flex justify-between items-start">
+<div class="flex gap-3 items-center">
+<div class="h-10 w-10 rounded-full bg-cover bg-center" data-alt="Reviewer User Profile" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDCHz7RD1yjqnL-lXdxIkUrNYDYFWCtzVNy7I1tT4aC0UbGiEmzxOr7ivm4zFs1LHwvMB0084BtpdIPhYbotHtLSxW1s7oBNsYfhQQuXbds_YNtBMteOatWCO7inhNrDsS9ADntE5yfSY8cn2NIMuoRKem3fKQ-cf7-TWuaZ-shXwEVlCH7-EXjFMuzRnf__nXaVCgtTjLAexnIfyRvNdqnmm6vQZuutVaNnohV4h8MEYMuvwO-J2VwN8EpDvHPAVZJy-IIla3IwcgV');"></div>
+<div>
+<p class="text-sm font-semibold">Anjali Mehta</p>
+<p class="text-xs text-slate-500">2 days ago</p>
+</div>
+</div>
+<div class="flex items-center bg-primary/10 px-2 py-1 rounded">
+<span class="text-sm font-bold mr-1">5.0</span>
+<span class="material-symbols-outlined text-primary text-xs fill-current" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">Pandit ji conducted the Griha Pravesh puja very systematically. He explained the significance of every mantra. Highly recommended!</p>
+</div>
+<!-- Review Item 2 -->
+<div class="flex flex-col gap-2 pb-2">
+<div class="flex justify-between items-start">
+<div class="flex gap-3 items-center">
+<div class="h-10 w-10 rounded-full bg-cover bg-center" data-alt="Reviewer User Profile" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAuHs-7xRMGJfNNVaGq9YZEYlb4qEaH-ehDPy1q2Ka5SEYCU11YZ7rfy9zaG_nnQzSVDYnH2q3RWhW5nlE4g6ITObwlOz2fO4XtPnALQJj460_f4Xcwlv34mYHm5TXKRrqwy_tYxI3OiObcl9llbetrJMx82fJcg6Nxn5niWA5wwi22eSW0kk8dCxQl643fzSHnz3eAyop0fXErLlQks7Pqukz2_UwM4PkCOmcHGmrESqzXRB7E_gdVEDGgB8DN1rhA2E0yAyGqG7vI');"></div>
+<div>
+<p class="text-sm font-semibold">Vikram Singh</p>
+<p class="text-xs text-slate-500">1 week ago</p>
+</div>
+</div>
+<div class="flex items-center bg-primary/10 px-2 py-1 rounded">
+<span class="text-sm font-bold mr-1">4.8</span>
+<span class="material-symbols-outlined text-primary text-xs fill-current" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">Very knowledgeable and punctual. The Satyanarayan Katha was beautifully narrated.</p>
+</div>
+</div>
+</div>
+<!-- Bottom Action Bar -->
+<div class="fixed bottom-0 w-full max-w-md bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 p-4 pb-6 px-4 z-20">
+<button class="w-full bg-primary text-slate-900 font-bold py-3.5 rounded-xl shadow-sm flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined text-xl">calendar_month</span>
+                Book Appointment
+            </button>
+</div>
+</div>
+<style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Easy My Puja - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ffd84d",
+                        "accent-red": "#FF5A5F",
+                        "background-light": "#fcfbf8",
+                        "background-dark": "#231f0f",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "heading": ["Poppins", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .mandala-bg {
+            background-image: radial-gradient(circle at 2px 2px, rgba(255, 216, 77, 0.1) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 mandala-bg">
+<!-- Header Section -->
+<header class="sticky top-0 z-50 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm border-b border-primary/20 px-4 py-3 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="bg-primary rounded-full p-1 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-900">temple_hindu</span>
+</div>
+<h1 class="font-heading text-xl font-bold tracking-tight text-slate-900 dark:text-primary">Easy My Puja</h1>
+</div>
+<div class="flex items-center gap-3">
+<button class="relative p-2 rounded-full hover:bg-primary/10">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-accent-red rounded-full"></span>
+</button>
+<button class="p-2 rounded-full hover:bg-primary/10">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Search Bar -->
+<div class="px-4 py-3 sticky top-[60px] z-40 bg-background-light dark:bg-background-dark">
+<div class="flex w-full items-center rounded-xl bg-white dark:bg-slate-800 border-2 border-primary/30 shadow-sm overflow-hidden h-14">
+<div class="flex items-center justify-center pl-4 text-primary">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="flex-1 border-none bg-transparent focus:ring-0 text-lg placeholder:text-slate-400 dark:placeholder:text-slate-500" placeholder="Search Poojas, Pandits or Samagri"/>
+<div class="pr-4 text-primary">
+<span class="material-symbols-outlined">mic</span>
+</div>
+</div>
+</div>
+<!-- Main Content Scroll -->
+<main class="pb-24">
+<!-- Hero Slider -->
+<div class="px-4 py-2">
+<div class="relative w-full aspect-[21/9] rounded-2xl overflow-hidden shadow-lg bg-primary/20">
+<div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex flex-col justify-center px-6">
+<span class="text-primary font-bold text-sm uppercase tracking-widest mb-1">Upcoming Festival</span>
+<h2 class="text-white font-heading text-2xl font-bold leading-tight">Maha Shivratri <br/>Special Puja</h2>
+<button class="mt-3 bg-primary text-slate-900 font-bold py-2 px-4 rounded-lg w-fit text-sm">Book Slot Now</button>
+</div>
+<img class="w-full h-full object-cover -z-10" data-alt="Vibrant Hindu festival celebration with oil lamps" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzLd_dwzp0yEk5Ds2oQsMKWv5WBRFwwfE_Y20ZogvcBQp96sVhGr0TQA6bGOVt3rUQl-h8pF0fPpbq7MgozfEo4y2WUAZFlT1Dsm7MxKGQtMrRN687u77RHVi6WDS6W0JvIQs9Z4W5sIXdgFkzISiekVTEWaxBlzfPvb1dwnHO8YqsB4pNs57mCB0Iiz0ndmxj8OOpwUth4WnhgC2GWIsUg035aCJ4qocjZgjmlNH-kcgW0FHd9zN0NyZg-KrBf6r8M9f0dlQUEjfW"/>
+</div>
+<div class="flex justify-center gap-1.5 mt-3">
+<div class="h-1.5 w-6 rounded-full bg-primary"></div>
+<div class="h-1.5 w-1.5 rounded-full bg-primary/30"></div>
+<div class="h-1.5 w-1.5 rounded-full bg-primary/30"></div>
+</div>
+</div>
+<!-- Explore Services Grid -->
+<section class="mt-6 px-4">
+<h3 class="font-heading text-lg font-bold mb-4">Explore Services</h3>
+<div class="grid grid-cols-4 gap-4">
+<div class="flex flex-col items-center gap-1">
+<div class="w-14 h-14 bg-primary/20 rounded-2xl flex items-center justify-center text-accent-red">
+<span class="material-symbols-outlined text-3xl">home_max</span>
+</div>
+<span class="text-[11px] font-semibold text-center leading-tight">Home Puja</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-14 h-14 bg-primary/20 rounded-2xl flex items-center justify-center text-accent-red">
+<span class="material-symbols-outlined text-3xl">temple_hindu</span>
+</div>
+<span class="text-[11px] font-semibold text-center leading-tight">Temple Visit</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-14 h-14 bg-primary/20 rounded-2xl flex items-center justify-center text-accent-red">
+<span class="material-symbols-outlined text-3xl">auto_fix_high</span>
+</div>
+<span class="text-[11px] font-semibold text-center leading-tight">Astrology</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-14 h-14 bg-primary/20 rounded-2xl flex items-center justify-center text-accent-red">
+<span class="material-symbols-outlined text-3xl">shopping_cart</span>
+</div>
+<span class="text-[11px] font-semibold text-center leading-tight">Puja Kits</span>
+</div>
+</div>
+</section>
+<!-- Trending Poojas -->
+<section class="mt-8 px-4">
+<div class="flex justify-between items-end mb-4">
+<h3 class="font-heading text-lg font-bold">Trending Poojas</h3>
+<a class="text-accent-red text-sm font-bold" href="#">View All</a>
+</div>
+<div class="flex overflow-x-auto gap-4 no-scrollbar pb-2">
+<div class="min-w-[160px] bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+<div class="h-32 w-full bg-slate-200">
+<img class="w-full h-full object-cover" data-alt="Ganesh Vandana setup with flowers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA35nXINDJTCMaIhE_GVtJPCEUyhjp6nH8jUufUpxObBy7-pQzJBjpFTlXrN0uYz6N2bFA-W8vHJccS4uUCTmGDBqlERBiZxk_uEiwZxCMMfiNiVNQ7xrsIH-p4vSyercU0ZeThvS1ZWEeHeB65OotoYRcklsIN6Mu5P8QVjJJjSftQbgieTYYXoO4zUPAfVDTLrVacxDNwjXe_GwTRvGAhA3RQ63GGN7jXBvU7NWDlZl7cvWxD63ZbbVbIk6HPxe2jR5bOsJp7g35L"/>
+</div>
+<div class="p-3">
+<h4 class="font-bold text-sm leading-tight">Ganesh Vandana</h4>
+<p class="text-[10px] text-slate-500 mt-1">Duration: 2 Hours</p>
+<div class="flex justify-between items-center mt-2">
+<span class="text-accent-red font-bold">₹1,100</span>
+<button class="bg-primary px-3 py-1 rounded-lg text-[10px] font-bold">Book</button>
+</div>
+</div>
+</div>
+<div class="min-w-[160px] bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+<div class="h-32 w-full bg-slate-200">
+<img class="w-full h-full object-cover" data-alt="Traditional Satyanarayan Katha setup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoGKf3jeScdx6XSfJQSR90tQ13Rhf5lIKLkvns1qS1RJquvDhx3NPYc3YNENUHPJG_Cz-vRqRTn3dAhMDX4f1m3wvXOnu4FSJHIKQdDFBR7YEkej7jgKz5Y4BgwYoIOyO5DFUCJ1WdjplgqefqdpDrgjL8LvyGnTLUHtgXgJsiWsBYZ7YiXQYLHgyb0K9MsJHbhFiv6KZys3dDz0mN_Kk19JwyNJ49WrBQRNNOUj7Lc_QyPpjAo9x4-mduXDKJvXYbPuyK9LHxD2Wo"/>
+</div>
+<div class="p-3">
+<h4 class="font-bold text-sm leading-tight">Satyanarayan Katha</h4>
+<p class="text-[10px] text-slate-500 mt-1">Duration: 3 Hours</p>
+<div class="flex justify-between items-center mt-2">
+<span class="text-accent-red font-bold">₹2,500</span>
+<button class="bg-primary px-3 py-1 rounded-lg text-[10px] font-bold">Book</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Client Videos (Stories Style) -->
+<section class="mt-8">
+<h3 class="px-4 font-heading text-lg font-bold mb-4">Happy Devotees</h3>
+<div class="flex overflow-x-auto gap-3 px-4 no-scrollbar">
+<div class="relative min-w-[100px] h-[160px] rounded-2xl overflow-hidden border-2 border-primary">
+<img class="w-full h-full object-cover" data-alt="A happy customer testimonial video thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmbLGnRigXRzVc4miMNRhcSlGwtV7s2SVqi5bUZSrJf9_zfjcLQ-zSRAqycplwX4moRECtEA1eUrkoZKi3X57qDvT39yg8aibvT5cjAwV96b-XfeopSTEPEQJZPBS9C-OwmlREzkzfGcQd3ynHaD_GLtTpAGPZ3cCA3e4WqLQ9b3ZD6v1DMGHdKrwXzZFThPo5JkU9Mw3hqgDBF2Wyz9SJUTnxAqarZd1_Tl0C1jK1ZyWHjOTFYMRqSmilUnATdF5D9V62WLaWfzza"/>
+<div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-4xl">play_circle</span>
+</div>
+</div>
+<div class="relative min-w-[100px] h-[160px] rounded-2xl overflow-hidden border-2 border-primary">
+<img class="w-full h-full object-cover" data-alt="Smiling woman after spiritual service" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkfL3K7LNHno_71Ut50aqknt09jTudgC_XWh7hLu3E0EjFNBPnv21dp6snb0UBZUUM3BcR1h_e2QphH5qfAGNIfeHD6PwLL8ESE27EYQLNs-G_bO7fE7iXOvFdjAFMTROXfJXT9z_f3R1XrpVxjtxLqy_MBMCAiHxUyyb9B4FHe08zWogy8yevNK6RHdo-j4TNtu14ZhwKGjzL5rG260MLwx3EK2rSDnEnB1_1UzMlwHzDu3c4D1bqEqgDYI8Jmkka8ddK1cN-d5Bt"/>
+<div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-4xl">play_circle</span>
+</div>
+</div>
+<div class="relative min-w-[100px] h-[160px] rounded-2xl overflow-hidden border-2 border-primary">
+<img class="w-full h-full object-cover" data-alt="Happy elderly man testimonial" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChIlOBxHZbCK8iSH1YVPSfrPfTlIrjjAErkcQPh6jpO-QQzbchnIZygKNbJf-UhH7W9VBdgZwlelEa4Dt7Izc0bSzdJwmAdk3dkFVPR--C-Lop60mWSbxPN7oGhkbmScOYQYVJpNT-JS8GXK8ufCSiqg7LRXFEm_9Yb4J-3IXpQyO2urpzWlCKH2LHEiLByYOLzPR-t4e2GSU_cWVq8BxHkpq3xHDcF11QSOb8wfEfLWjDxPgsAWeBC5CLvC_0uQ6oaoDkPs8kUudY"/>
+<div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-4xl">play_circle</span>
+</div>
+</div>
+</div>
+</section>
+<!-- VIP Darshan Slider -->
+<section class="mt-8 px-4">
+<div class="bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-5 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full -mr-16 -mt-16 blur-xl"></div>
+<span class="bg-primary text-slate-900 text-[10px] font-bold px-2 py-0.5 rounded-full mb-2 inline-block">EXCLUSIVE</span>
+<h3 class="text-white font-heading text-xl font-bold">VIP Darshan Booking</h3>
+<p class="text-slate-300 text-xs mt-1">Skip the queues at major temples across India.</p>
+<button class="mt-4 bg-primary text-slate-900 font-bold py-2 px-6 rounded-xl text-sm">Explore Temples</button>
+</div>
+</section>
+<!-- Verified Pandits -->
+<section class="mt-8 px-4">
+<div class="flex justify-between items-end mb-4">
+<h3 class="font-heading text-lg font-bold">Verified Pandits</h3>
+<a class="text-accent-red text-sm font-bold" href="#">See All</a>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="w-16 h-16 rounded-full bg-primary/10 overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Portrait of a traditional Vedic Pandit" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBblsdug8FFJJELlNMh8p7VW9oyN0DJMuUhDYLAG1IO052EhyiIL5EPfboaV1iNasw0-UsnBb3bQvD-aJG5icwOehbx3kUtQ-B-TUU6OMemeizbJkAL3uB006cTMbpsaXGXNNzf7uBKvMJ7P5935IyY6YJYHC0tR1SjdiX82Vmox2SuvFN1GRkWP9Y0mIaVzgSdtrMhEBW70NkzSf-3AYRGcnoVYiiFslsADI3e6KMzwBrLsdNk46DumwpZIQ0xxJuS6JDJ4syzK8wj"/>
+<div class="absolute bottom-0 right-0 bg-green-500 border-2 border-white rounded-full w-4 h-4"></div>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-1">
+<h4 class="font-bold text-sm">Acharya Ram Shashtri</h4>
+<span class="material-symbols-outlined text-blue-500 text-sm">verified</span>
+</div>
+<p class="text-[10px] text-slate-500">Vedic Scholar | 15+ Yrs Exp.</p>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-primary text-xs fill-1">star</span>
+<span class="text-[10px] font-bold">4.9 (420 reviews)</span>
+</div>
+</div>
+<button class="border-2 border-primary px-3 py-1.5 rounded-lg text-[10px] font-bold">Profile</button>
+</div>
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="w-16 h-16 rounded-full bg-primary/10 overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Portrait of a Pandit in traditional attire" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFM86vs4X_ROQmcS5KyBmMQ378jIj6F813PS2ZBFAXsfnDVikm4xXHMWKxkcJqcLl922f70a_SWHv-2TdnpQZCmvxEzCRzDMQ7NpVc81KmG2P51lHMNXNpmjuKxUshFDlGLe3kmK9WwYQIDVQ81wBUVDAD2_6qnaPh1niZ9365LsLl01GHuVFfa7J05djbB_sXdNFBeo-vt9YqG0gJbHfxohXO41CbZdmGmw-en_hmEEuaVCFmHPJ7chKiH2qOak07eRMJ6W2j7GzE"/>
+<div class="absolute bottom-0 right-0 bg-green-500 border-2 border-white rounded-full w-4 h-4"></div>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-1">
+<h4 class="font-bold text-sm">Pt. Suresh Vyas</h4>
+<span class="material-symbols-outlined text-blue-500 text-sm">verified</span>
+</div>
+<p class="text-[10px] text-slate-500">Jyotish Expert | 10+ Yrs Exp.</p>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-primary text-xs fill-1">star</span>
+<span class="text-[10px] font-bold">4.8 (310 reviews)</span>
+</div>
+</div>
+<button class="border-2 border-primary px-3 py-1.5 rounded-lg text-[10px] font-bold">Profile</button>
+</div>
+</div>
+</section>
+<!-- Pandit Videos (Knowledge Center) -->
+<section class="mt-8 px-4">
+<h3 class="font-heading text-lg font-bold mb-4">Spritual Insights</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm">
+<div class="relative aspect-video">
+<img class="w-full h-full object-cover" data-alt="A pandit explaining religious significance" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0a9SSNUfozcuDIjKce0nKYruZjW5gK5VRT6JZB6yhw6rViFchjp9wkVig-9TPc3xk51lxfW8njns-Q7PssjnXNKa9Tl-CSKal-RQMcrrbfEbUf3e0Ph9QaGZMwiV2SPHFL8becVOrgcdH35jyLG-ptDuNqqncDjIROmRG-xxJ80Mni0sEvUJ4f2JWhV_PRkfW949B1LY4Psud_xvsgQkWcvbX_B4B-YohTznGRRh3zRLdYJDLQbmoMx5WRO6IG5o3PPLsutMtNppe"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-3xl">play_circle</span>
+</div>
+</div>
+<div class="p-2">
+<h4 class="font-bold text-[11px] leading-tight line-clamp-2">Importance of Rudrabhishek in Shravan</h4>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm">
+<div class="relative aspect-video">
+<img class="w-full h-full object-cover" data-alt="Puja ritual setup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClMgq0UIaLHiPHLLyMTZaj9sXh1uwqNflqCmSG5RyRUR4cJ6IosDTEWudW-F07r0lEfDnFHMoEXXlPdnTlGIv1IPGU21KXKWBYnKA0yT0dxrR1a1tukGaGu7TVnOpbMEW63Nn73MYBNv_QvqSGBfhSsBbvJGaeTkDQyCG1lZfW0IsJX1x3Z9mHUGPUosYEDgBx6lSMbFiO3crXkHUbr2f72iWV-8qr_b-yMNAfs0DdCmGZDJjNtD1lA55hGELMBfplLZ5paOV-yzko"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-3xl">play_circle</span>
+</div>
+</div>
+<div class="p-2">
+<h4 class="font-bold text-[11px] leading-tight line-clamp-2">How to perform daily Puja at home</h4>
+</div>
+</div>
+</div>
+</section>
+<!-- Store (Products) -->
+<section class="mt-8 px-4">
+<div class="flex justify-between items-end mb-4">
+<h3 class="font-heading text-lg font-bold">Puja Essentials</h3>
+<a class="text-accent-red text-sm font-bold" href="#">Store</a>
+</div>
+<div class="flex overflow-x-auto gap-4 no-scrollbar pb-2">
+<div class="min-w-[140px] flex flex-col">
+<div class="bg-slate-100 dark:bg-slate-800 rounded-2xl p-4 aspect-square flex items-center justify-center relative">
+<img class="w-full h-full object-contain" data-alt="Brass puja lamp and essentials" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrt9RX0_zHzp4hvjEmyM4Q3ghzWbo0fMs-M461iFuiFdyHSs7Agu7yMvuXprCGdO5DATYOyoLjZGgPPJawZvicDaaKeQ9X8qEFgKZR28Ad_-0cG14941VYkeo_kx8GGoKUS68oYDVaViO8VPYP-jOQ6xLikZCQIXhiUA6xlOG-vpHDjvGXaRBzKI9uTa1nzhGEC59-ny1GI6SRanGYCRg7xeW50NrRF3M2P8IY5xBw8JWVCdW6uOv6ZFie2xTlYRZ-czg0_vysEVv2"/>
+<button class="absolute bottom-2 right-2 bg-white shadow-md rounded-full p-1.5 flex items-center justify-center text-accent-red">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+</div>
+<p class="font-bold text-xs mt-2">Premium Incense Sticks</p>
+<p class="text-accent-red font-bold text-sm">₹149</p>
+</div>
+<div class="min-w-[140px] flex flex-col">
+<div class="bg-slate-100 dark:bg-slate-800 rounded-2xl p-4 aspect-square flex items-center justify-center relative">
+<img class="w-full h-full object-contain" data-alt="Pure cow ghee for puja" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBixZFUnaXvkjedD6rWXZPn6OeF2pQ6W6sGB7hRcC8TTTcZSnv2in0_CQtod4jZDUOYhobjOyZhLj_WtrBxP0PF3YwP7Cp04UouHazQGLmd1IukNv5l0aSi6kquaRe7gwNIHG1n8tP4RUgcKL13sJC-x3Cfm2by574JOcXgixfan1N9Uv3XyeHraKLinLlWb42IOenQnpJ5BtaV1FxAHNSw4uetFNGr5XeD0d7Og7lZcOkqH6VlmBu-y-KJBDOFPLQz38MMQFTlAj6u"/>
+<button class="absolute bottom-2 right-2 bg-white shadow-md rounded-full p-1.5 flex items-center justify-center text-accent-red">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+</div>
+<p class="font-bold text-xs mt-2">Pure Cow Ghee (500g)</p>
+<p class="text-accent-red font-bold text-sm">₹599</p>
+</div>
+</div>
+</section>
+<!-- Remedies Offer Banner -->
+<section class="mt-8 px-4">
+<div class="bg-primary/20 border-2 border-dashed border-primary rounded-2xl p-6 flex items-center gap-4">
+<div class="flex-1">
+<h3 class="font-heading text-lg font-bold">Dosh Remedies</h3>
+<p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Personalized solutions for planetary positions.</p>
+<button class="mt-3 bg-accent-red text-white font-bold py-2 px-4 rounded-lg text-xs uppercase tracking-wider">Book Consultation</button>
+</div>
+<div class="w-20 h-20 bg-primary/30 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-accent-red">psychology</span>
+</div>
+</div>
+</section>
+<!-- Blogs -->
+<section class="mt-8 px-4">
+<h3 class="font-heading text-lg font-bold mb-4">Read &amp; Learn</h3>
+<div class="space-y-4">
+<div class="flex gap-4">
+<div class="w-24 h-24 rounded-xl overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Vedic literature reading" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCy-U5iMD9n9PUeDU-JFszhki7wMEHcutVZsjcCrIj0b1Wx2ZjWj2lXhmlXyZeRa21s0006-CTa9UKGW6sV5_vGcs5CXez7hpfWHTvJ0rvpcxeVrQ8fO0MQ-OHMhCCgKJmtY1LKX161HPPEBJ7BmnM4ggIRKaTeyZYbktcOyvEWCHmcPZ1pqtUH-51uGwefiyVlXstsnVgUvVw7NZvCSV5rwAbPEOxueW17G0n9TTdcaOZO9jkH9tFX4ruK3cLLwhEl8WUri2VM0buS"/>
+</div>
+<div class="flex flex-col justify-center">
+<span class="text-[10px] font-bold text-primary uppercase">Culture</span>
+<h4 class="font-bold text-sm leading-tight mt-1">The Science behind chanting Mantras daily</h4>
+<p class="text-[10px] text-slate-500 mt-1">5 min read • By Acharya Ved</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-24 h-24 rounded-xl overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Traditional Indian kitchen spices" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWuK7BXhFQhp_aMv1ZU9IFIP63J_96guzY4wxDCGQR5uyqTnCzgp_YP3qzOIz9C4BYs8tbW1Z7fledxDjCRvJxKpjNVQvwC5dRKqCdoYme-dSM12_ZEVmqQJ1mSQqRMfovoMSTg8FrXmiu2Qa6zsnNiUHjU53kedzWFIt-cbPeDrG2jCMsbZ9D207Na0BwDTJ5VMLthiRKi3-eA8FaizIrBJNavMDZqZ__xCHBFI0x0QONFbhWhCS3yc3yX5R81kmE5eJPnBj89Xfy"/>
+</div>
+<div class="flex flex-col justify-center">
+<span class="text-[10px] font-bold text-primary uppercase">Lifestyle</span>
+<h4 class="font-bold text-sm leading-tight mt-1">Ayurvedic diet tips for festive seasons</h4>
+<p class="text-[10px] text-slate-500 mt-1">4 min read • By Dr. Anjali</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust Badges -->
+<section class="mt-12 bg-white dark:bg-slate-900 px-6 py-8 border-t border-primary/20">
+<div class="flex flex-col items-center text-center gap-6">
+<div class="flex flex-col items-center">
+<div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-accent-red">security</span>
+</div>
+<h5 class="font-bold text-sm">100% Verified Pandits</h5>
+<p class="text-[10px] text-slate-500">Rigorous background checks performed.</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-accent-red">eco</span>
+</div>
+<h5 class="font-bold text-sm">Pure Samagri</h5>
+<p class="text-[10px] text-slate-500">Eco-friendly &amp; organic puja items.</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-accent-red">sentiment_very_satisfied</span>
+</div>
+<h5 class="font-bold text-sm">Spiritual Satisfaction</h5>
+<p class="text-[10px] text-slate-500">Trusted by 1M+ happy devotees.</p>
+</div>
+<div class="mt-4 opacity-40">
+<p class="text-[10px] font-bold uppercase tracking-widest">Proudly Made In India</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Nav Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-2 pb-6 pt-2 flex justify-around items-center z-50">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-[10px] font-bold">Bookings</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-[10px] font-bold">Explore</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="text-[10px] font-bold">Store</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="text-[10px] font-bold">Remedies</span>
+</a>
+</nav>
+</body></html>

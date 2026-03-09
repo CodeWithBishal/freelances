@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Easy My Puja Home Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e6d94c",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#211f11",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Top Bar -->
+<div class="flex items-center p-4 justify-between bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-10">
+<div class="flex items-center gap-2 flex-1">
+<span class="material-symbols-outlined text-primary text-2xl">location_on</span>
+<div class="flex flex-col">
+<h2 class="text-sm font-bold leading-tight">Delivery to</h2>
+<p class="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[150px]">Home - 123 Main Street, Bangalore</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-sm">expand_more</span>
+</div>
+<div class="flex items-center justify-end w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden" data-alt="User profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAbN2_cULbDNxMug7oF95jo0VuHobrlYG0xORP6zXhgE5_8DQj6K0eA0rE563UpJZsIWkYNUuegb0LqfckTdCQlwzJN0F29qXINV5Jd673ezeNQ9F5lKMD4XQYRO3zfVst8QMQNvFAcJHkk4UAC-KphEo-gRg2ijYaQc7S7P22er6RjYz-gctxpkUtjcHXNjftSWOV5aBXh0LZ22eQ67R8HSxdviIOT3kHIE_ss12H1-NcHEbRGp4dj1mk90YEAzO959qu76sEESmHe'); background-size: cover; background-position: center;">
+<!-- Profile Image Placeholder -->
+</div>
+</div>
+<!-- Search Bar -->
+<div class="px-4 py-3 bg-white dark:bg-slate-800">
+<label class="flex flex-col h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-slate-200 dark:border-slate-700 focus-within:ring-2 focus-within:ring-primary/50 transition-shadow">
+<div class="text-slate-400 flex border-none bg-slate-50 dark:bg-slate-900 items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-slate-50 dark:bg-slate-900 focus:border-none h-full placeholder:text-slate-400 px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Search 'Ganesh Chaturthi Puja'" value=""/>
+<div class="text-slate-400 flex border-none bg-slate-50 dark:bg-slate-900 items-center justify-center pr-4 rounded-r-lg border-l-0 border-l border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-xl">mic</span>
+</div>
+</div>
+</label>
+</div>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto pb-20">
+<!-- Banner -->
+<div class="px-4 py-3">
+<div class="bg-cover bg-center flex flex-col justify-end overflow-hidden rounded-xl min-h-[160px] relative shadow-md" data-alt="Festive illustration for puja booking" style='background-image: linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDe2IzScS5705NMBK1fT5x35PnlPwX-EnEaKD4BG5FWmTMWrRtMTvcP0t-NIlNPrcGvrHLIczxQEBsJjlGxLbmfZsc29WnhQNyRri8YOrYDT3WNfAl4TE9whNF12Kwjhntex-2qY1g-E7r87NrrKEOCfpatvLfRt_asQ48wM65Vxmq_C7BShckBccCZqAVTGrz1IwpBoeCstrurlXQzxt1VRInQE7TXtcRMeVM2PzLkNlEVODOZZf87p-W_xrNG7Bs1xtedWwfy04b8");'>
+<div class="absolute inset-0 bg-primary/20 mix-blend-overlay"></div>
+<div class="relative z-10 p-5 w-2/3">
+<h2 class="text-white text-2xl font-bold leading-tight mb-2">Book a Pandit for Navratri</h2>
+<p class="text-white/90 text-sm mb-4">Expert Vedic Pandits at your doorstep.</p>
+<button class="bg-primary text-slate-900 px-4 py-2 rounded-lg text-sm font-semibold shadow-sm hover:bg-primary/90 transition-colors">Book Now</button>
+</div>
+</div>
+</div>
+<!-- Categories Section -->
+<div class="px-4 pt-2 pb-4">
+<h3 class="text-lg font-bold leading-tight mb-4">Explore Services</h3>
+<div class="grid grid-cols-3 gap-3">
+<!-- Category 1 -->
+<a class="flex flex-col items-center gap-2 bg-primary/10 dark:bg-primary/5 rounded-xl p-3 border border-primary/20 hover:bg-primary/20 transition-colors text-center" href="#">
+<div class="w-14 h-14 rounded-full bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-primary text-3xl mb-1">
+<span class="material-symbols-outlined">self_improvement</span>
+</div>
+<p class="text-xs font-semibold leading-tight text-slate-800 dark:text-slate-200">Daily Puja</p>
+</a>
+<!-- Category 2 -->
+<a class="flex flex-col items-center gap-2 bg-primary/10 dark:bg-primary/5 rounded-xl p-3 border border-primary/20 hover:bg-primary/20 transition-colors text-center" href="#">
+<div class="w-14 h-14 rounded-full bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-primary text-3xl mb-1">
+<span class="material-symbols-outlined">celebration</span>
+</div>
+<p class="text-xs font-semibold leading-tight text-slate-800 dark:text-slate-200">Grand Ceremony</p>
+</a>
+<!-- Category 3 -->
+<a class="flex flex-col items-center gap-2 bg-primary/10 dark:bg-primary/5 rounded-xl p-3 border border-primary/20 hover:bg-primary/20 transition-colors text-center" href="#">
+<div class="w-14 h-14 rounded-full bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-primary text-3xl mb-1">
+<span class="material-symbols-outlined">auto_awesome</span>
+</div>
+<p class="text-xs font-semibold leading-tight text-slate-800 dark:text-slate-200">Astrology</p>
+</a>
+<!-- Category 4 -->
+<a class="flex flex-col items-center gap-2 bg-primary/10 dark:bg-primary/5 rounded-xl p-3 border border-primary/20 hover:bg-primary/20 transition-colors text-center" href="#">
+<div class="w-14 h-14 rounded-full bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-primary text-3xl mb-1">
+<span class="material-symbols-outlined">festival</span>
+</div>
+<p class="text-xs font-semibold leading-tight text-slate-800 dark:text-slate-200">Festivals</p>
+</a>
+<!-- Category 5 -->
+<a class="flex flex-col items-center gap-2 bg-primary/10 dark:bg-primary/5 rounded-xl p-3 border border-primary/20 hover:bg-primary/20 transition-colors text-center" href="#">
+<div class="w-14 h-14 rounded-full bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-primary text-3xl mb-1">
+<span class="material-symbols-outlined">favorite</span>
+</div>
+<p class="text-xs font-semibold leading-tight text-slate-800 dark:text-slate-200">Marriage</p>
+</a>
+<!-- Category 6 -->
+<a class="flex flex-col items-center gap-2 bg-primary/10 dark:bg-primary/5 rounded-xl p-3 border border-primary/20 hover:bg-primary/20 transition-colors text-center" href="#">
+<div class="w-14 h-14 rounded-full bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-primary text-3xl mb-1">
+<span class="material-symbols-outlined">storefront</span>
+</div>
+<p class="text-xs font-semibold leading-tight text-slate-800 dark:text-slate-200">Office Puja</p>
+</a>
+</div>
+</div>
+<!-- Featured Section -->
+<div class="px-4 py-4 bg-white dark:bg-slate-800 mt-2 shadow-sm border-t border-b border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-end mb-4">
+<div>
+<h3 class="text-lg font-bold leading-tight">Trending Pujas</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Most booked this week</p>
+</div>
+<a class="text-primary text-sm font-semibold hover:underline" href="#">See All</a>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-2 snap-x hide-scrollbar" style="scrollbar-width: none; -ms-overflow-style: none;">
+<!-- Card 1 -->
+<div class="min-w-[140px] flex flex-col gap-2 snap-start">
+<div class="h-24 rounded-lg bg-cover bg-center shadow-sm relative overflow-hidden" data-alt="Satyanarayan Puja setup" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCby8zlxukeZSB9cF10HdavnRPvQh_AbsbzRrWJPmoyatgLBz--7n_OzZffVCZa9FRc52sYIZhbmr09eUkk1_r_mrY3SzY1wH344GiK8lDj7QU8EAzWDHp2XetnmG6bbPdlVyVSzsWiB3GZ90FFg2ev2iZVSV5YLq7RGL-zQx4fbZHWqt5FHIWAzHoKpk_02w-Y8GcYGnuLxln1eKDs5m2kUwfjJnIHLUj85JPVwPaZL3MVb46FDIkdZw5ckdJaVRtLig2xjSLSDH-s');">
+<div class="absolute top-1 right-1 bg-white/90 dark:bg-slate-800/90 rounded text-[10px] px-1 py-0.5 font-bold flex items-center text-orange-500">
+<span class="material-symbols-outlined text-[12px] mr-0.5">star</span> 4.8
+                        </div>
+</div>
+<div>
+<h4 class="text-sm font-semibold truncate">Satyanarayan Katha</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">₹2,100 onwards</p>
+</div>
+<button class="w-full text-xs font-semibold text-primary border border-primary py-1.5 rounded-md hover:bg-primary/10 transition-colors">Add</button>
+</div>
+<!-- Card 2 -->
+<div class="min-w-[140px] flex flex-col gap-2 snap-start">
+<div class="h-24 rounded-lg bg-cover bg-center shadow-sm relative overflow-hidden" data-alt="Griha Pravesh setup" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBlADvgyRpX83f22956SHVKdWVvcC6gN2szIFEGeWqCxIgLNAIc293TUe1Ouoy2fl6GZ-k_kWloQn7wUWmjahyvt7CoeqnxxOhtQgtOxzvc6L8gjkpq2FGSBQSYKsVQoLCMDGthMwNHfMJ88Ng5oMIh6SWm9tFuqLNjybKL-vSTQwMQ7m_PpAsAdVnwBYAOAHKwtOsTyRjv2TDDXPkiDy8cXk-Yp49BqhdEC9akr7N5YC3C-_SUkJx7j0RxYnlP7kHqbMSX1VTMPYuj');">
+<div class="absolute top-1 right-1 bg-white/90 dark:bg-slate-800/90 rounded text-[10px] px-1 py-0.5 font-bold flex items-center text-orange-500">
+<span class="material-symbols-outlined text-[12px] mr-0.5">star</span> 4.9
+                        </div>
+</div>
+<div>
+<h4 class="text-sm font-semibold truncate">Griha Pravesh</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">₹5,100 onwards</p>
+</div>
+<button class="w-full text-xs font-semibold text-primary border border-primary py-1.5 rounded-md hover:bg-primary/10 transition-colors">Add</button>
+</div>
+<!-- Card 3 -->
+<div class="min-w-[140px] flex flex-col gap-2 snap-start">
+<div class="h-24 rounded-lg bg-cover bg-center shadow-sm relative overflow-hidden" data-alt="Navagraha Shanti setup" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBRZYpZ9MZSz7nVq9ws9ugJB-a5Dqs5Fw9pLqVLFq26GMFhcqY4fA0M201NZV2BEceb1dAZ3WuZe9bJWQiIKPSHxgoHWpGpCQF9mGNUtjg08rnqqip5kzAhzbyPw3WocwrdcRYF1cumQ6P5s_n4xp-CGahQBmb-mJ8Dc1KoR2EicyWkuIeSJ1E_4GrsXZcKcZ68MonXe6fAUs_OkQqczOlIawyHTYvao4qRPQjCj0Sq9y13Ht5vs0h2lLatBtRGz3PzyaFw-yOQf63o');">
+<div class="absolute top-1 right-1 bg-white/90 dark:bg-slate-800/90 rounded text-[10px] px-1 py-0.5 font-bold flex items-center text-orange-500">
+<span class="material-symbols-outlined text-[12px] mr-0.5">star</span> 4.7
+                        </div>
+</div>
+<div>
+<h4 class="text-sm font-semibold truncate">Navagraha Shanti</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">₹3,500 onwards</p>
+</div>
+<button class="w-full text-xs font-semibold text-primary border border-primary py-1.5 rounded-md hover:bg-primary/10 transition-colors">Add</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 px-4 pb-safe pt-2 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+<div class="flex gap-2 justify-between mb-2">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">home</span>
+</div>
+<p class="text-[10px] font-semibold leading-normal">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined text-2xl">event_note</span>
+</div>
+<p class="text-[10px] font-medium leading-normal">Bookings</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined text-2xl">group</span>
+</div>
+<p class="text-[10px] font-medium leading-normal">Pandits</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined text-2xl">person</span>
+</div>
+<p class="text-[10px] font-medium leading-normal">Profile</p>
+</a>
+</div>
+<!-- Safe area padding for iOS -->
+<div class="h-safe"></div>
+</div>
+<style>
+        /* Utility to hide scrollbar but keep functionality */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+    </style>
+</body></html>

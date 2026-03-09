@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rate Your Experience</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ef4444",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#211f11",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen w-full max-w-[480px] mx-auto flex-col overflow-hidden bg-background-light dark:bg-background-dark shadow-2xl">
+<div class="w-full flex items-center p-4 pt-12 pb-4 justify-between bg-background-light dark:bg-background-dark">
+<button class="flex size-10 shrink-0 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-sm">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
+</button>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-[-0.015em]">Rate Experience</h2>
+<div class="size-10"></div> 
+</div>
+<div class="flex-1 overflow-y-auto px-4 flex flex-col gap-6 pb-6">
+<div class="text-center mt-4">
+<h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Puja Completed</h1>
+<p class="text-slate-600 dark:text-slate-400 mt-2 text-lg">Your Satyanarayan Puja is complete. Please rate your experience with the Pandit.</p>
+</div>
+<div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.06)] flex flex-col items-center mt-2">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-28 w-28 shadow-sm border-4 border-slate-50 dark:border-slate-700 mb-4" data-alt="Pandit profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBc9jOFjltpHDPGjC_LvWdZunFwXIXY63tCSrhOeXlH6CDNMPdDCsrtILuIPmKCyWqPyXNIB7EIMqYDutICMnCuatbtWSSi2Fgh8RdM2CjiqT5jPgqE5UCuJcS6FpJgrFSutw38QsywLqOmIJTmbvxpte4na1s3Ti1c8GDEnE3uur5u7zdJonUjP-hHZyYRBjGMzUChVVbVKas1PLe7CIpNiBILYM3jW3gGGY-jCI7eQ2QNdWRWvdNk_xFlc9Y3B9phP50vs6VZ5-Tf");'></div>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Pandit Ram Sharma</h3>
+<p class="text-slate-500 dark:text-slate-400 mt-1 text-base">Vedic Scholar</p>
+<div class="flex justify-center gap-2 mt-8 w-full">
+<button class="focus:outline-none">
+<span class="material-symbols-outlined text-[3.5rem] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button class="focus:outline-none">
+<span class="material-symbols-outlined text-[3.5rem] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button class="focus:outline-none">
+<span class="material-symbols-outlined text-[3.5rem] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button class="focus:outline-none">
+<span class="material-symbols-outlined text-[3.5rem] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button class="focus:outline-none">
+<span class="material-symbols-outlined text-[3.5rem] text-slate-200 dark:text-slate-600">star</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-3 mt-4">
+<label class="text-slate-800 dark:text-slate-200 font-semibold text-lg px-2">Write a Review (Optional)</label>
+<textarea class="w-full bg-white dark:bg-slate-800 border-none rounded-2xl p-5 text-slate-900 dark:text-slate-100 text-lg placeholder-slate-400 shadow-[0_2px_10px_rgba(0,0,0,0.04)] focus:ring-2 focus:ring-primary min-h-[140px] resize-none" placeholder="How was the chanting? Did the puja start on time?"></textarea>
+</div>
+</div>
+<div class="p-4 pb-8 w-full mt-auto bg-background-light dark:bg-background-dark">
+<button class="flex w-full items-center justify-center rounded-full h-16 bg-primary text-white font-bold text-xl shadow-lg shadow-primary/30 hover:bg-red-600 transition-colors">
+      Submit Review
+    </button>
+</div>
+</div>
+
+</body></html>

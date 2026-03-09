@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Live Pandit Tracking</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ef4444", /* Soft red as requested for Call Pandit, using it as primary accent */
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#211f11",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full max-w-[480px] mx-auto flex-col group/design-root overflow-hidden bg-background-light dark:bg-background-dark shadow-2xl">
+<!-- Header -->
+<div class="absolute top-0 w-full z-10 flex items-center p-4 pt-12 pb-4 justify-between bg-gradient-to-b from-background-light/90 to-transparent dark:from-background-dark/90 dark:to-transparent pointer-events-none">
+<button class="flex size-10 shrink-0 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-md pointer-events-auto">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
+</button>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] drop-shadow-sm">Track Pandit</h2>
+<div class="size-10"></div> <!-- Spacer for centering -->
+</div>
+<!-- Map Area -->
+<div class="flex-1 w-full bg-cover bg-center relative" data-alt="Map of city streets showing route" data-location="Varanasi" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB45830K2-8BMymvCG8m7t4lIy0kAfjg6i0Olp1b7Dcx3iT-XCVZ6jtoOaxhJ1C16hXP84lNuW5t2xuQV6hYvp6Xt4chglCTg_rcTFfy-4qxjusjcWuPuYaet7gjgoyc_juGtdf3i_tqkh7ekDutMv6kTOAHiOhPM1Wu8DFainGL7qvN6F0oQwuvpveu5XNZZHdBTP3JrWG7SyOnLH7zwWxeJoLrz2k2hxsuVz9VFvA_PXbX26ZJbiavPsCm7UM4coc1ZJytWQT-Zk9");'>
+<!-- Map Controls -->
+<div class="absolute right-4 top-32 flex flex-col items-end gap-3 z-10">
+<div class="flex flex-col gap-[1px] bg-slate-200 dark:bg-slate-700 rounded-lg overflow-hidden shadow-md">
+<button class="flex size-10 items-center justify-center bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">add</span>
+</button>
+<button class="flex size-10 items-center justify-center bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">remove</span>
+</button>
+</div>
+<button class="flex size-10 items-center justify-center rounded-lg bg-white dark:bg-slate-800 shadow-md hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">my_location</span>
+</button>
+</div>
+<!-- Simulated Path & Markers (Decorative) -->
+<div class="absolute inset-0 pointer-events-none flex items-center justify-center">
+<!-- User Location Marker -->
+<div class="absolute bottom-1/3 right-1/3">
+<div class="size-4 rounded-full bg-blue-500 border-2 border-white shadow-lg"></div>
+<div class="size-12 rounded-full bg-blue-500/20 absolute -top-4 -left-4 animate-pulse"></div>
+</div>
+<!-- Route Line (Abstract) -->
+<svg class="absolute inset-0 w-full h-full" fill="none" viewbox="0 0 400 800" xmlns="http://www.w3.org/2000/svg">
+<path d="M 100 300 Q 150 400 250 500 T 260 550" stroke="#ef4444" stroke-dasharray="8 8" stroke-linecap="round" stroke-width="4"></path>
+</svg>
+<!-- Pandit Location Marker -->
+<div class="absolute top-[35%] left-[25%] flex flex-col items-center">
+<div class="bg-white dark:bg-slate-800 p-1 rounded-full shadow-lg mb-1">
+<div class="bg-cover bg-center rounded-full h-8 w-8" data-alt="Pandit face portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD8y1zG9vF7mtXew03ngCQEgVZVAeq3_5NXjJ74mdbc9lWGURK_fOHs-eiuKF0ixmt0nO6ffCTcg4n7inhe45S9yLk_4Zaysl2NjZWcxmKtGkobbNaWcHURjjqCEYjyiyafT8ivyZ13WYDpCz2aW6BPEjGJtNrWQvWEVlWVFXRZQoLK7-13LWrKqocD67GohKeI8OgWmOde4b4oFonxAKTdyOhjinwmA_8qMvh9N54vZU8FsLRW3HaHsZ0p92Ea4aHfofJRaQbij71Q");'></div>
+</div>
+<div class="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-white dark:border-t-slate-800"></div>
+</div>
+</div>
+<!-- Bottom Sheet -->
+<div class="absolute bottom-0 left-0 w-full flex flex-col justify-end items-stretch pointer-events-auto">
+<div class="flex flex-col items-stretch bg-white dark:bg-slate-800 rounded-t-3xl shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
+<!-- Handle -->
+<div class="flex h-6 w-full items-center justify-center pt-2">
+<div class="h-1.5 w-12 rounded-full bg-slate-300 dark:bg-slate-600"></div>
+</div>
+<div class="flex-1 pb-8">
+<!-- ETA Header -->
+<div class="px-6 py-4 flex flex-col items-center border-b border-slate-100 dark:border-slate-700">
+<h3 class="text-3xl font-bold text-slate-900 dark:text-slate-100">12 min</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Arriving at 10:45 AM • 2.4 km away</p>
+</div>
+<!-- Pandit Details -->
+<div class="flex items-center gap-4 px-6 py-5">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-16 w-16 shadow-sm border border-slate-100 dark:border-slate-700" data-alt="Pandit profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBc9jOFjltpHDPGjC_LvWdZunFwXIXY63tCSrhOeXlH6CDNMPdDCsrtILuIPmKCyWqPyXNIB7EIMqYDutICMnCuatbtWSSi2Fgh8RdM2CjiqT5jPgqE5UCuJcS6FpJgrFSutw38QsywLqOmIJTmbvxpte4na1s3Ti1c8GDEnE3uur5u7zdJonUjP-hHZyYRBjGMzUChVVbVKas1PLe7CIpNiBILYM3jW3gGGY-jCI7eQ2QNdWRWvdNk_xFlc9Y3B9phP50vs6VZ5-Tf");'></div>
+<div class="absolute -bottom-1 -right-1 bg-green-500 size-4 rounded-full border-2 border-white dark:border-slate-800"></div>
+</div>
+<div class="flex flex-col justify-center flex-1">
+<p class="text-slate-900 dark:text-slate-100 text-lg font-semibold leading-tight">Pandit Ram Sharma</p>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">4.9</span>
+<span class="text-slate-400 text-sm">(120+ Pujas)</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Satyanarayan Katha Specialist</p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex px-6 pt-2 gap-4">
+<button class="flex size-14 shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+<span class="material-symbols-outlined">chat</span>
+</button>
+<button class="flex flex-1 items-center justify-center overflow-hidden rounded-full h-14 bg-primary text-white gap-2 font-bold text-lg shadow-lg shadow-primary/30 hover:bg-red-600 transition-colors">
+<span class="material-symbols-outlined">call</span>
+<span>Call Pandit</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

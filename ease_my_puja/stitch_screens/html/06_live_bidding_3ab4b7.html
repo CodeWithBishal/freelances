@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Live Bidding for Puja</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e6d94c",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#211f11",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2a2816",
+                        "neutral-900": "#1a190f",
+                        "neutral-600": "#666141",
+                        "neutral-200": "#e6e3d1",
+                        "neutral-100": "#f2f0e6",
+                        "accept-red": "#e65c4c",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark text-neutral-900 dark:text-neutral-100 min-h-screen flex flex-col mx-auto max-w-md w-full shadow-xl relative overflow-x-hidden">
+<!-- Header -->
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-neutral-200 dark:border-neutral-600/30">
+<h1 class="text-neutral-900 dark:text-neutral-100 text-lg font-bold leading-tight flex-1">Live Bidding</h1>
+</header>
+<!-- Pulsing Header -->
+<section class="flex flex-col items-center justify-center px-4 pt-8 pb-6">
+<div class="relative flex items-center justify-center w-16 h-16 mb-4">
+<span class="absolute inline-flex h-full w-full rounded-full bg-primary/40 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-12 w-12 bg-primary items-center justify-center text-neutral-900 shadow-md">
+<span class="material-symbols-outlined text-3xl">search</span>
+</span>
+</div>
+<h2 class="text-neutral-900 dark:text-neutral-100 text-2xl font-bold leading-tight text-center">Looking for Pandits...</h2>
+<p class="text-neutral-600 dark:text-neutral-200/70 text-sm mt-2">Satyanarayan Puja • Today, 4:00 PM</p>
+</section>
+<!-- Bids List -->
+<main class="flex-1 px-4 pb-24 space-y-4 overflow-y-auto">
+<!-- Bid Card 1 -->
+<article class="bg-surface-light dark:bg-surface-dark rounded-xl p-4 shadow-sm border border-neutral-100 dark:border-neutral-600/20 flex flex-col gap-3 transition-transform hover:-translate-y-1">
+<div class="flex items-start gap-4">
+<div class="shrink-0 relative">
+<img alt="Pandit Rajesh portrait" class="h-[70px] w-[70px] rounded-full object-cover border-2 border-primary/50" data-alt="Pandit wearing traditional attire" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-8QPovpbgnGgdsYcT3k_nbZxglbUVL_-_pUsy2bKpUT1GMJEvd9F8fl0RxYaLzX5SH2vi92EbmwzUJJ0pwDmMRey_7jiKT85h2AaG3jlm8ojiFG46j0Xha7XVNTgdcbFF1rm42NrmKB7gQAkRMZHUl0NMNf0lxh6gnmRI4WoUgTB0SLIGgJAJABsy8cCmJ_qy0UqKXB64FDA7dvKuT31uPYeTXt-LGFaNromvqEtSXo5trQtPUh-xFp0ktLhLipaHovvFlUnBaAv9"/>
+<div class="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-0.5 border-2 border-surface-light dark:border-surface-dark">
+<span class="material-symbols-outlined text-[10px] text-white font-bold block">check</span>
+</div>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<div class="flex justify-between items-start">
+<h3 class="text-neutral-900 dark:text-neutral-100 text-base font-semibold leading-normal">Pandit Rajesh Sharma</h3>
+</div>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-neutral-600 dark:text-neutral-200/80 text-sm font-medium">4.8</span>
+<span class="text-neutral-600 dark:text-neutral-200/50 text-xs mx-1">•</span>
+<span class="text-neutral-600 dark:text-neutral-200/80 text-sm">10 yrs exp</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center gap-1 text-xs font-medium text-neutral-600 dark:text-neutral-200/70 bg-neutral-100 dark:bg-neutral-600/30 px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px]">timer</span> 30 mins away
+                        </span>
+</div>
+</div>
+</div>
+<div class="border-t border-neutral-100 dark:border-neutral-600/20 pt-3 flex items-center justify-between mt-1">
+<div class="flex flex-col">
+<span class="text-xs text-neutral-600 dark:text-neutral-200/60 font-medium uppercase tracking-wider">Offered Price</span>
+<span class="text-neutral-900 dark:text-neutral-100 text-lg font-bold">₹ 500</span>
+</div>
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-10 px-6 bg-accept-red text-white text-sm font-semibold shadow-sm hover:bg-accept-red/90 transition-colors">
+                    Accept
+                </button>
+</div>
+</article>
+<!-- Bid Card 2 -->
+<article class="bg-surface-light dark:bg-surface-dark rounded-xl p-4 shadow-sm border border-neutral-100 dark:border-neutral-600/20 flex flex-col gap-3 transition-transform hover:-translate-y-1">
+<div class="flex items-start gap-4">
+<div class="shrink-0">
+<img alt="Pandit Suresh portrait" class="h-[70px] w-[70px] rounded-full object-cover border-2 border-transparent" data-alt="Portrait of an experienced pandit" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaCkdn_I80yEO8bAy8eI8c51yESkS_7X4TsvoFy9Y82NY8JK5vbNFZSMv2yz5olD5807AtIYNPr-f10BxlcnRTR79Gt6AGUDo2bau7OChUpqrJ9LUzoP4WYmiTaMhZCUDYoV9Dg2L1xfIA2znqJ2JyD8_56yxD66CeqaZudElxf4nt_O-jhGYWd2xsdpqodyhlJRUTwGEz3v8id3YhCEagriZikD9zMAjozcfjW69A8TsByIwSbg6uK9XlNQWwxFYwJvPdLlcxAXf5"/>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<div class="flex justify-between items-start">
+<h3 class="text-neutral-900 dark:text-neutral-100 text-base font-semibold leading-normal">Pandit Suresh Tiwari</h3>
+</div>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-neutral-600 dark:text-neutral-200/80 text-sm font-medium">4.5</span>
+<span class="text-neutral-600 dark:text-neutral-200/50 text-xs mx-1">•</span>
+<span class="text-neutral-600 dark:text-neutral-200/80 text-sm">5 yrs exp</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center gap-1 text-xs font-medium text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px]">bolt</span> Fastest ETA (15 mins)
+                        </span>
+</div>
+</div>
+</div>
+<div class="border-t border-neutral-100 dark:border-neutral-600/20 pt-3 flex items-center justify-between mt-1">
+<div class="flex flex-col">
+<span class="text-xs text-neutral-600 dark:text-neutral-200/60 font-medium uppercase tracking-wider">Offered Price</span>
+<span class="text-neutral-900 dark:text-neutral-100 text-lg font-bold">₹ 650</span>
+</div>
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-10 px-6 bg-accept-red text-white text-sm font-semibold shadow-sm hover:bg-accept-red/90 transition-colors">
+                    Accept
+                </button>
+</div>
+</article>
+<!-- Bid Card 3 -->
+<article class="bg-surface-light dark:bg-surface-dark rounded-xl p-4 shadow-sm border border-neutral-100 dark:border-neutral-600/20 flex flex-col gap-3 transition-transform hover:-translate-y-1">
+<div class="flex items-start gap-4">
+<div class="shrink-0 relative">
+<img alt="Pandit Amit portrait" class="h-[70px] w-[70px] rounded-full object-cover border-2 border-transparent" data-alt="Portrait of a young pandit" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZAwTymlvax8_ZVfyJcQ-Z5MEWTOWtFfvRgVf8KAN1sd-RBo6a9E9fQnpsw1vqq0Y8lsyU8Ql2ZaSsH_hmkoOaYieQUs6PSB8-_Ba60VFrdpKPKV5P-dVgWA7G-W_zrLsQeg2ug2YYqIC4muB7OBcmztxwE5UW6C2Rs5ZTUGnEVap89MsnWsYXutjt_JZYpz0aw2kyXkixco1bzjDovkDpJHt7LCIwCMGOTukaQEfsr48A7Omd9p2aCnIiFXbmSXXRLZXNNe6OnLmB"/>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<div class="flex justify-between items-start">
+<h3 class="text-neutral-900 dark:text-neutral-100 text-base font-semibold leading-normal">Pandit Amit Mishra</h3>
+</div>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-neutral-600 dark:text-neutral-200/80 text-sm font-medium">4.9</span>
+<span class="text-neutral-600 dark:text-neutral-200/50 text-xs mx-1">•</span>
+<span class="text-neutral-600 dark:text-neutral-200/80 text-sm">15 yrs exp</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center gap-1 text-xs font-medium text-neutral-600 dark:text-neutral-200/70 bg-neutral-100 dark:bg-neutral-600/30 px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px]">timer</span> 45 mins away
+                        </span>
+</div>
+</div>
+</div>
+<div class="border-t border-neutral-100 dark:border-neutral-600/20 pt-3 flex items-center justify-between mt-1">
+<div class="flex flex-col">
+<span class="text-xs text-neutral-600 dark:text-neutral-200/60 font-medium uppercase tracking-wider">Offered Price</span>
+<span class="text-neutral-900 dark:text-neutral-100 text-lg font-bold flex items-center gap-2">
+                        ₹ 450
+                        <span class="text-xs font-medium text-primary bg-primary/10 px-1.5 py-0.5 rounded">Lowest</span>
+</span>
+</div>
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-10 px-6 bg-accept-red text-white text-sm font-semibold shadow-sm hover:bg-accept-red/90 transition-colors">
+                    Accept
+                </button>
+</div>
+</article>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-surface-light dark:bg-surface-dark border-t border-neutral-200 dark:border-neutral-600/30 px-4 pb-safe pt-2 z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+<div class="flex gap-2 pb-3">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<p class="text-[10px] font-medium leading-none tracking-wide uppercase mt-1">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-neutral-900 dark:text-primary" href="#">
+<div class="relative">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">currency_rupee</span>
+<span class="absolute -top-1 -right-2 flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accept-red opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-accept-red border-2 border-surface-light dark:border-surface-dark"></span>
+</span>
+</div>
+<p class="text-[10px] font-bold leading-none tracking-wide uppercase mt-1">Bids</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<p class="text-[10px] font-medium leading-none tracking-wide uppercase mt-1">Profile</p>
+</a>
+</div>
+</nav>
+<style>
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 1rem); }
+    </style>
+</body></html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Booking History</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e6d94c",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#211f11",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2a2816",
+                        "neutral-100": "#f5f4eb",
+                        "neutral-200": "#ebe9da",
+                        "neutral-300": "#dbd7c1",
+                        "neutral-400": "#b8b293",
+                        "neutral-500": "#968f6a",
+                        "neutral-600": "#756f4d",
+                        "neutral-700": "#5c573c",
+                        "neutral-800": "#45412d",
+                        "neutral-900": "#332f21",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Lexend', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-neutral-900 dark:text-neutral-100 min-h-screen font-display pb-20">
+<!-- Header -->
+<div class="sticky top-0 z-10 flex items-center bg-background-light dark:bg-background-dark p-4 justify-between border-b border-neutral-200 dark:border-neutral-800">
+<button class="flex size-12 shrink-0 items-center justify-center text-neutral-900 dark:text-neutral-100 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<h2 class="text-lg font-bold leading-tight flex-1 text-center pr-12">Booking History</h2>
+</div>
+<!-- Tabs -->
+<div class="px-4 py-4">
+<div class="flex h-12 flex-1 items-center justify-center rounded-xl bg-neutral-200 dark:bg-neutral-800 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-surface-light dark:has-[:checked]:bg-surface-dark has-[:checked]:shadow-sm has-[:checked]:text-neutral-900 dark:has-[:checked]:text-neutral-100 text-neutral-600 dark:text-neutral-400 text-sm font-medium leading-normal transition-all">
+<span class="truncate">Upcoming</span>
+<input class="invisible w-0" name="booking-tab" type="radio" value="Upcoming"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-surface-light dark:has-[:checked]:bg-surface-dark has-[:checked]:shadow-sm has-[:checked]:text-neutral-900 dark:has-[:checked]:text-neutral-100 text-neutral-600 dark:text-neutral-400 text-sm font-medium leading-normal transition-all">
+<span class="truncate">Past</span>
+<input checked="" class="invisible w-0" name="booking-tab" type="radio" value="Past"/>
+</label>
+</div>
+</div>
+<!-- Booking List -->
+<div class="px-4 flex flex-col gap-4">
+<!-- Card 1 (Completed) -->
+<div class="flex flex-col gap-3 bg-surface-light dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-800">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-600 dark:text-green-400 text-sm">check_circle</span>
+<span class="text-xs font-medium text-green-600 dark:text-green-400">Completed</span>
+</div>
+<span class="text-neutral-500 dark:text-neutral-400 text-xs font-medium">#BK-9284</span>
+</div>
+<div class="flex items-start gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg h-16 w-16 shrink-0 border border-neutral-200 dark:border-neutral-700" data-alt="Satyanarayan Puja setup with flowers and diya" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA_5sE4EV72OUkz8kSuT9iZle7_52pwzZbLUeiQf2qPViX1wEf2DUihKXAwkAzAOB60coWKSbAeUTyEK4VMiwDDgxHGlRkk2I1-upNJb_90oc0F4oVKb0-QIqgz28dgMKyCJJn-M6J2yld4V4O0f0QQj-W_In5ndc8sWpYOIX5dx1oVcVxx76dfMQAeK4UB7H31WhAwy4mnHd_ZgduVhqRS2sWonfaWIW5j1bgHI0bsdAMsg5f8v7VnvWiaEh3LEk6uaiSnQO0nnNn4");'></div>
+<div class="flex flex-1 flex-col justify-center">
+<h3 class="text-base font-semibold leading-tight text-neutral-900 dark:text-neutral-100 mb-1">Satyanarayan Puja</h3>
+<p class="text-neutral-600 dark:text-neutral-400 text-sm flex items-center gap-1 mb-1">
+<span class="material-symbols-outlined text-[16px]">person</span>
+                        Pt. Ramakant Sharma
+                    </p>
+<p class="text-neutral-600 dark:text-neutral-400 text-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">calendar_month</span>
+                        24 Oct 2023, 10:00 AM
+                    </p>
+</div>
+</div>
+<div class="flex gap-2 mt-2 pt-3 border-t border-neutral-200 dark:border-neutral-800">
+<button class="flex-1 bg-primary text-neutral-900 font-medium text-sm py-2 rounded-lg hover:bg-primary/90 transition-colors">Book Again</button>
+<button class="flex-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 font-medium text-sm py-2 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">View Details</button>
+</div>
+</div>
+<!-- Card 2 (Completed) -->
+<div class="flex flex-col gap-3 bg-surface-light dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-800">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-600 dark:text-green-400 text-sm">check_circle</span>
+<span class="text-xs font-medium text-green-600 dark:text-green-400">Completed</span>
+</div>
+<span class="text-neutral-500 dark:text-neutral-400 text-xs font-medium">#BK-8371</span>
+</div>
+<div class="flex items-start gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg h-16 w-16 shrink-0 border border-neutral-200 dark:border-neutral-700" data-alt="Griha Pravesh setup with kalash" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBVdn5012tKb0qf8kSwce63D_jTrZuc20myftWd4xspj1X54ymjX26fvOXkzERkooNQmBTk0EMRy5CN89YpYxvj12vsWtNWIJD26UZTiFWu-5Nmm1GfEWuI2UGrn-3UE8zKRPV81zUTusBut-9bVSxnqszw2_SbzOIUXHzp8-W2ZjkDswcTyx_ix_PXaoqBDZdwX4Iv7FydhaGC2oEe0UxZLr__ppfujzD_5pXVLih1VOj7Bw-y1M2Y6j1QRmSS3I6yQsZBol7ezbfb");'></div>
+<div class="flex flex-1 flex-col justify-center">
+<h3 class="text-base font-semibold leading-tight text-neutral-900 dark:text-neutral-100 mb-1">Griha Pravesh Puja</h3>
+<p class="text-neutral-600 dark:text-neutral-400 text-sm flex items-center gap-1 mb-1">
+<span class="material-symbols-outlined text-[16px]">person</span>
+                        Pt. Suresh Vyas
+                    </p>
+<p class="text-neutral-600 dark:text-neutral-400 text-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">calendar_month</span>
+                        12 Sep 2023, 08:30 AM
+                    </p>
+</div>
+</div>
+<div class="flex gap-2 mt-2 pt-3 border-t border-neutral-200 dark:border-neutral-800">
+<button class="flex-1 bg-primary text-neutral-900 font-medium text-sm py-2 rounded-lg hover:bg-primary/90 transition-colors">Book Again</button>
+<button class="flex-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 font-medium text-sm py-2 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">View Details</button>
+</div>
+</div>
+<!-- Card 3 (Cancelled) -->
+<div class="flex flex-col gap-3 bg-surface-light dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-800 opacity-75">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-red-500 dark:text-red-400 text-sm">cancel</span>
+<span class="text-xs font-medium text-red-500 dark:text-red-400">Cancelled</span>
+</div>
+<span class="text-neutral-500 dark:text-neutral-400 text-xs font-medium">#BK-7102</span>
+</div>
+<div class="flex items-start gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg h-16 w-16 shrink-0 border border-neutral-200 dark:border-neutral-700 grayscale" data-alt="Havan kund setup" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAdRxOCIsQXGwtp9IUhV6wVfxQi9hgEnEj3YN0_bTvYYcj9mBfIlOlheLS-k1Np04IbXbZGZ3d5GzDyWrblxnTcz_rTi9z1TEIfuOBz7tp9yxTWF9R608D0lNJGSfp397DyDgFzdudsx-JcU__RKK_L3U8irvo-ZEnCVoDf7zUCuNCEpEdTXoWIJFNYq-pZnnB86zawBkp9JcEf3wQi4EpUShC-fLQqMNXmVZolxt7rLTw_9ejFEWUafmLejbhZGkx6WiAY_rumX67V");'></div>
+<div class="flex flex-1 flex-col justify-center">
+<h3 class="text-base font-semibold leading-tight text-neutral-900 dark:text-neutral-100 mb-1">Navagraha Shanti</h3>
+<p class="text-neutral-600 dark:text-neutral-400 text-sm flex items-center gap-1 mb-1">
+<span class="material-symbols-outlined text-[16px]">person</span>
+                        Pt. Ramesh Dixit
+                    </p>
+<p class="text-neutral-600 dark:text-neutral-400 text-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">calendar_month</span>
+                        05 Aug 2023, 11:00 AM
+                    </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Nav Bar -->
+<div class="fixed bottom-0 w-full flex gap-2 border-t border-neutral-200 dark:border-neutral-800 bg-surface-light dark:bg-surface-dark px-4 pb-6 pt-3 z-20">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-neutral-500 dark:text-neutral-400 hover:text-primary dark:hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">home</span>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Bookings</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-neutral-500 dark:text-neutral-400 hover:text-primary dark:hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">person</span>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Profile</p>
+</a>
+</div>
+</body></html>
