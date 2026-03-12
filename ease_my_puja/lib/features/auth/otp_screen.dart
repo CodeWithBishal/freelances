@@ -21,9 +21,14 @@ class _OtpScreenState extends State<OtpScreen> {
   final List<FocusNode> _focusList = List.generate(6, (_) => FocusNode());
   bool _isLoading = false;
   int _resendCountdown = 30;
-  late final _timer = _startTimer();
 
-  _startTimer() {
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
     Future.doWhile(() async {
       await Future.delayed(const Duration(seconds: 1));
       if (!mounted) return false;
@@ -44,7 +49,7 @@ class _OtpScreenState extends State<OtpScreen> {
     setState(() {});
   }
 
-  void _onKey(int index, RawKeyEvent e) {
+  void _onKey(int index, KeyEvent e) {
     if (e is KeyDownEvent &&
         e.logicalKey == LogicalKeyboardKey.backspace &&
         _ctrlList[index].text.isEmpty &&
@@ -209,7 +214,7 @@ class _OtpBox extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
   final ValueChanged<String> onChanged;
-  final ValueChanged<RawKeyEvent> onKey;
+  final ValueChanged<KeyEvent> onKey;
   final bool filled;
 
   const _OtpBox({
@@ -222,9 +227,9 @@ class _OtpBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
+    return KeyboardListener(
       focusNode: FocusNode(),
-      onKey: onKey,
+      onKeyEvent: onKey,
       child: SizedBox(
         width: 48,
         height: 56,
