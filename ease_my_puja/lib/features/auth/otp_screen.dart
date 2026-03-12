@@ -98,7 +98,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   style: IconButton.styleFrom(
                     backgroundColor: AppColors.card,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                   ),
                 ),
@@ -249,21 +249,21 @@ class _OtpBox extends StatelessWidget {
             filled: true,
             fillColor: filled ? AppColors.accent : AppColors.card,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide(
                 color: filled ? AppColors.primary : AppColors.border,
                 width: 2,
               ),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide(
                 color: filled ? AppColors.primary : AppColors.border,
                 width: filled ? 2 : 1.5,
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(16),
               borderSide: const BorderSide(
                 color: AppColors.primary,
                 width: 2.5,

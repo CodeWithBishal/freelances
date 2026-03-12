@@ -1,9 +1,7 @@
+import 'package:easy_my_puja/features/auth/otp_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
-import '../../core/widgets/common_widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,195 +11,214 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _phoneCtrl = TextEditingController();
-  bool _isLoading = false;
-
-  void _sendOtp() {
-    if (_phoneCtrl.text.length == 10) {
-      setState(() => _isLoading = true);
-      Future.delayed(const Duration(milliseconds: 800), () {
-        if (mounted) {
-          setState(() => _isLoading = false);
-          context.push('/otp?phone=${_phoneCtrl.text}');
-        }
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _phoneCtrl.dispose();
-    super.dispose();
-  }
+  final TextEditingController _phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.splashGradient),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 32),
-
-                // Back / logo area
-                Center(child: const AppLogo(size: 72)),
-
-                const SizedBox(height: 48),
-
-                // Illustration card
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: AppColors.card,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: AppColors.border),
-                    boxShadow: AppColors.softShadow,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Welcome Back 🙏', style: AppTextStyles.h2),
-                      const SizedBox(height: 6),
-                      Text(
-                        'Enter your phone number to continue',
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.black,
+            size: 20,
+          ),
+          onPressed: () {},
+        ),
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(16),
                       ),
-
-                      const SizedBox(height: 28),
-
-                      // Phone field
-                      Text('Phone Number', style: AppTextStyles.labelMedium),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        controller: _phoneCtrl,
-                        keyboardType: TextInputType.phone,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(10),
-                        ],
-                        onChanged: (_) => setState(() {}),
-                        style: AppTextStyles.bodyLarge,
-                        decoration: InputDecoration(
-                          hintText: '98765 43210',
-                          prefixIcon: Container(
+                      alignment: Alignment.center,
+                      child: const Icon(
+                        Icons.temple_hindu,
+                        color: Colors.black,
+                        size: 32,
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    Text(
+                      'Welcome',
+                      style: AppTextStyles.h1.copyWith(fontSize: 32),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Enter your phone number to\nreceive an OTP and connect\nwith verified Pandits.',
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        height: 1.5,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 48),
+                    Text(
+                      'MOBILE NUMBER',
+                      style: AppTextStyles.labelSmall.copyWith(
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.grey.shade200),
+                      ),
+                      child: Row(
+                        children: [
+                          Padding(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 14,
-                            ),
-                            margin: const EdgeInsets.only(right: 8),
-                            decoration: const BoxDecoration(
-                              border: Border(
-                                right: BorderSide(color: AppColors.border),
-                              ),
+                              horizontal: 16.0,
                             ),
                             child: Row(
-                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Text(
-                                  '🇮🇳',
-                                  style: TextStyle(fontSize: 18),
+                                Text(
+                                  '+91',
+                                  style: AppTextStyles.bodyLarge.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                                const SizedBox(width: 6),
-                                Text('+91', style: AppTextStyles.labelMedium),
+                                const SizedBox(width: 4),
+                                const Icon(Icons.keyboard_arrow_down, size: 16),
                               ],
                             ),
                           ),
-                        ),
+                          Container(
+                            width: 1,
+                            height: 24,
+                            color: Colors.grey.shade300,
+                          ),
+                          Expanded(
+                            child: TextField(
+                              controller: _phoneController,
+                              keyboardType: TextInputType.phone,
+                              style: AppTextStyles.bodyLarge.copyWith(
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2,
+                              ),
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                hintText: '99999 99999',
+                                hintStyle: AppTextStyles.bodyLarge.copyWith(
+                                  color: Colors.grey.shade400,
+                                  letterSpacing: 2,
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 16.0,
+                                ),
+                                fillColor: Colors.transparent,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-
-                      const SizedBox(height: 8),
-                      Text(
-                        'We\'ll send a 6-digit OTP to verify your number',
-                        style: AppTextStyles.caption,
-                      ),
-
-                      const SizedBox(height: 28),
-
-                      PrimaryButton(
-                        label: 'Send OTP',
-                        onTap: _phoneCtrl.text.length == 10 ? _sendOtp : null,
-                        isLoading: _isLoading,
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 32),
-
-                // Divider
-                Row(
-                  children: [
-                    Expanded(child: Divider(color: AppColors.border)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Text('OR', style: AppTextStyles.caption),
                     ),
-                    Expanded(child: Divider(color: AppColors.border)),
                   ],
                 ),
-
-                const SizedBox(height: 24),
-
-                // Continue as guest (demo shortcut)
-                SecondaryButton(
-                  label: '👀  Browse as Guest',
-                  onTap: () => context.go('/home'),
-                ),
-
-                const SizedBox(height: 40),
-
-                // Benefits row
-                ..._benefits.map((b) => _BenefitRow(icon: b.$1, text: b.$2)),
-
-                const SizedBox(height: 24),
-
-                // Terms
-                Center(
-                  child: Text(
-                    'By continuing, you agree to our Terms & Privacy Policy',
-                    style: AppTextStyles.caption,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                children: [
+                  Text.rich(
+                    TextSpan(
+                      text: 'By proceeding, you agree to our ',
+                      style: AppTextStyles.labelMedium.copyWith(
+                        color: Colors.black54,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'Terms',
+                          style: AppTextStyles.labelMedium.copyWith(
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const TextSpan(text: ' & '),
+                        TextSpan(
+                          text: 'Privacy\nPolicy',
+                          style: AppTextStyles.labelMedium.copyWith(
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const TextSpan(text: '.'),
+                      ],
+                    ),
                     textAlign: TextAlign.center,
                   ),
-                ),
-                const SizedBox(height: 16),
-              ],
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.secondary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      OtpScreen(phone: _phoneController.text),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Get OTP',
+                              style: AppTextStyles.h3.copyWith(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(
+                            Icons.arrow_forward,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
-      ),
-    );
-  }
-}
-
-const _benefits = [
-  ('🛡️', 'Aadhaar-verified pandits'),
-  ('⚡', 'Get bids in under 2 minutes'),
-  ('💳', 'Secure escrow payments'),
-];
-
-class _BenefitRow extends StatelessWidget {
-  final String icon;
-  final String text;
-
-  const _BenefitRow({required this.icon, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Row(
-        children: [
-          Text(icon, style: const TextStyle(fontSize: 18)),
-          const SizedBox(width: 12),
-          Text(text, style: AppTextStyles.bodyMedium),
-        ],
       ),
     );
   }

@@ -205,7 +205,7 @@ class _CreatePujaRequestScreenState extends State<CreatePujaRequestScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: AppColors.accent,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: AppColors.border),
                     ),
                     child: Row(
@@ -273,7 +273,7 @@ class _CreatePujaRequestScreenState extends State<CreatePujaRequestScreen> {
                         ),
                         decoration: BoxDecoration(
                           color: AppColors.success.withOpacity(0.12),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: AppColors.success.withOpacity(0.4),
                           ),
@@ -474,7 +474,7 @@ class _SelectionTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color: AppColors.background,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.border),
         ),
         child: Row(

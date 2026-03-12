@@ -129,7 +129,7 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
                               color: r.$3.contains('yourself')
                                   ? AppColors.warning.withOpacity(0.12)
                                   : AppColors.success.withOpacity(0.12),
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
                               r.$3,
@@ -155,7 +155,7 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: AppColors.info.withOpacity(0.08),
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.info.withOpacity(0.3)),
               ),
               child: Row(
@@ -343,7 +343,7 @@ class _PaymentOption extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
           color: selected ? AppColors.accent : AppColors.background,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: selected ? AppColors.primary : AppColors.border,
             width: selected ? 2 : 1,

@@ -4,13 +4,13 @@ class AppColors {
   AppColors._();
 
   // Core palette – Blinkit-inspired, spiritual warm
-  static const Color primary = Color(0xFFFFD84D); // golden amber
-  static const Color primaryDark = Color(0xFFF5C218);
-  static const Color secondary = Color(0xFFFF5A5F); // coral red
-  static const Color background = Color(0xFFFFF8E8); // warm cream
-  static const Color accent = Color(0xFFFFE9A6);
+  static const Color primary = Color(0xFFFBEBAA); // pastel yellow
+  static const Color primaryDark = Color(0xFFF2D16B);
+  static const Color secondary = Color(0xFFE05252); // soft red
+  static const Color background = Color(0xFFFFFDF7); // warm cream
+  static const Color accent = Color(0xFFFFDAB9);
   static const Color card = Color(0xFFFFFFFF);
-  static const Color border = Color(0xFFF2D98C);
+  static const Color border = Color(0xFFF0E5D1);
 
   // Text
   static const Color textPrimary = Color(0xFF1A1A2E);
@@ -32,19 +32,19 @@ class AppColors {
 
   // Gradients
   static const LinearGradient primaryGradient = LinearGradient(
-    colors: [Color(0xFFFFD84D), Color(0xFFFFB800)],
+    colors: [Color(0xFFFBEBAA), Color(0xFFF2D16B)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static const LinearGradient splashGradient = LinearGradient(
-    colors: [Color(0xFFFFF8E8), Color(0xFFFFEFC4)],
+    colors: [Color(0xFFFFFDF7), Color(0xFFFBEBAA)],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
   );
 
   static const LinearGradient cardGradient = LinearGradient(
-    colors: [Color(0xFFFFFFFF), Color(0xFFFFF8E8)],
+    colors: [Color(0xFFFFFFFF), Color(0xFFFFFDF7)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );

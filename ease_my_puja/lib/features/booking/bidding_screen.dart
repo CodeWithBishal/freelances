@@ -319,7 +319,7 @@ class _BidCard extends StatelessWidget {
                               ),
                               decoration: BoxDecoration(
                                 color: AppColors.accent,
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
                                 data.badge!,
@@ -375,7 +375,7 @@ class _BidCard extends StatelessWidget {
                     color: data.type == BidType.accepted
                         ? AppColors.success.withOpacity(0.12)
                         : AppColors.warning.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: data.type == BidType.accepted
                           ? AppColors.success.withOpacity(0.4)
@@ -443,7 +443,7 @@ class _StatChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
       decoration: BoxDecoration(
         color: AppColors.card,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColors.border),
       ),
       child: Row(
