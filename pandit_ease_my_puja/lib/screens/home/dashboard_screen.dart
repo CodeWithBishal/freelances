@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 import '../requests/counter_offer_screen.dart';
 import '../../utils/app_toast.dart';
+import '../../utils/background_bubble_service.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -11,7 +12,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  bool _isOnline = true;
+  bool _isOnline = false;
 
   @override
   Widget build(BuildContext context) {
@@ -110,10 +111,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                     Switch(
                       value: _isOnline,
-                      onChanged: (val) {
-                        setState(() {
-                          _isOnline = val;
-                        });
+                      onChanged: (val) async {
+                        final success = await BackgroundBubbleService.toggleOnline(val);
+                        if (success) {
+                          setState(() {
+                            _isOnline = val;
+                          });
+                        }
                       },
                       activeColor: AppColors.card,
                       activeTrackColor: AppColors.primary,
@@ -269,7 +273,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 18,
                     color: AppColors.textDark,
                   ),
                   maxLines: 2,
@@ -279,9 +283,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               const SizedBox(width: 8),
               Text(
                 price,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 18,
                   color: AppColors.textDark,
                 ),
               ),
@@ -295,17 +299,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 time,
                 style: Theme.of(
                   context,
-                ).textTheme.bodyMedium?.copyWith(color: AppColors.textLight),
+                ).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textDark.withOpacity(0.8),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               Row(
                 children: [
-                  const Icon(Icons.timer, size: 14, color: AppColors.error),
-                  const SizedBox(width: 4),
+                  const Icon(Icons.timer, size: 16, color: AppColors.error),
+                  const SizedBox(width: 6),
                   Text(
                     timer,
                     style: Theme.of(
                       context,
-                    ).textTheme.bodyMedium?.copyWith(color: AppColors.error),
+                    ).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.error,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
@@ -323,6 +335,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   distance,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.textDark.withOpacity(0.8),
+                    fontSize: 14,
                   ),
                 ),
               ),
@@ -339,6 +352,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     user,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.textDark.withOpacity(0.8),
+                      fontSize: 14,
                     ),
                   ),
                 ),

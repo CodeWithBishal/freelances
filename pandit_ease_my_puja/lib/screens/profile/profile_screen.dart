@@ -4,7 +4,6 @@ import '../auth/login_screen.dart';
 import 'subscription_screen.dart';
 import 'reviews_screen.dart';
 import 'wallet_screen.dart';
-import 'bubble_toggle_item.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -168,7 +167,6 @@ class ProfileScreen extends StatelessWidget {
                         ),
                   ),
                   const SizedBox(height: 16),
-                  const BubbleToggleItem(),
                   _buildSettingsItem(
                     context,
                     icon: Icons.person_outline,

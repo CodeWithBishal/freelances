@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import '../../theme/app_colors.dart';
 
 // This acts as the entrypoint for the background 'flutter_overlay_window' UI representation.
@@ -11,24 +12,29 @@ class AppBubbleOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: AppColors.primary,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withOpacity(0.4),
-              blurRadius: 10,
-              spreadRadius: 2,
-            ),
-          ],
-          border: Border.all(color: AppColors.card, width: 2),
-        ),
-        child: const Icon(
-          Icons.temple_hindu,
-          color: AppColors.textDark,
-          size: 32,
+      child: GestureDetector(
+        onTap: () {
+          FlutterOverlayWindow.shareData("open_app");
+        },
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: AppColors.primary,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primary.withOpacity(0.4),
+                blurRadius: 10,
+                spreadRadius: 2,
+              ),
+            ],
+            border: Border.all(color: AppColors.card, width: 2),
+          ),
+          child: const Icon(
+            Icons.temple_hindu,
+            color: AppColors.textDark,
+            size: 32,
+          ),
         ),
       ),
     );
