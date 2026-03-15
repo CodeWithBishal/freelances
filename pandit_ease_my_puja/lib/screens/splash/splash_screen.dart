@@ -10,7 +10,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late AnimationController _rotateController;
   late AnimationController _scaleController;
@@ -21,13 +22,16 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    
+
     // Fade in text and motives
     _fadeController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     );
-    _fadeAnimation = CurvedAnimation(parent: _fadeController, curve: Curves.easeIn);
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeIn,
+    );
 
     // Continuous slow rotation for motives
     _rotateController = AnimationController(
@@ -64,7 +68,12 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     super.dispose();
   }
 
-  Widget _buildMotif(IconData icon, double angle, double distance, double scale) {
+  Widget _buildMotif(
+    IconData icon,
+    double angle,
+    double distance,
+    double scale,
+  ) {
     return AnimatedBuilder(
       animation: _rotateController,
       builder: (context, child) {
@@ -75,10 +84,18 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
             math.sin(currentAngle) * distance,
           ),
           child: Transform.rotate(
-            angle: _rotateController.value * 2 * math.pi * (angle % 2 == 0 ? 1 : -1),
+            angle:
+                _rotateController.value *
+                2 *
+                math.pi *
+                (angle % 2 == 0 ? 1 : -1),
             child: Transform.scale(
               scale: scale,
-              child: Icon(icon, color: AppColors.primary.withOpacity(0.4), size: 40),
+              child: Icon(
+                icon,
+                color: AppColors.primary.withValues(alpha: 0.4),
+                size: 40,
+              ),
             ),
           ),
         );
@@ -89,7 +106,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     // removed unused size variable
-    
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Center(
@@ -105,7 +122,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
               _buildMotif(Icons.flare, math.pi, 120, 0.8),
               _buildMotif(Icons.spa_rounded, 4 * math.pi / 3, 110, 0.9),
               _buildMotif(Icons.temple_hindu, 5 * math.pi / 3, 130, 1.1),
-              
+
               // Central App Name
               ScaleTransition(
                 scale: _scaleAnimation,
@@ -115,7 +132,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                     Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.15),
+                        color: AppColors.primary.withValues(alpha: 0.15),
                         shape: BoxShape.circle,
                         border: Border.all(color: AppColors.border, width: 2),
                       ),
@@ -128,11 +145,12 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                     const SizedBox(height: 24),
                     Text(
                       'Easy My Puja',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textDark,
-                        letterSpacing: -0.5,
-                      ),
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textDark,
+                            letterSpacing: -0.5,
+                          ),
                     ),
                     const SizedBox(height: 8),
                     Text(

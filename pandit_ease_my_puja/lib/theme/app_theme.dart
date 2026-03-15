@@ -31,18 +31,40 @@ class AppTheme {
         ),
       ),
       textTheme: baseTextTheme.copyWith(
-        displayLarge: baseHeadingTheme.displayLarge?.copyWith(color: AppColors.textDark),
-        displayMedium: baseHeadingTheme.displayMedium?.copyWith(color: AppColors.textDark),
-        displaySmall: baseHeadingTheme.displaySmall?.copyWith(color: AppColors.textDark),
-        headlineLarge: baseHeadingTheme.headlineLarge?.copyWith(color: AppColors.textDark),
-        headlineMedium: baseHeadingTheme.headlineMedium?.copyWith(color: AppColors.textDark),
-        headlineSmall: baseHeadingTheme.headlineSmall?.copyWith(color: AppColors.textDark),
-        titleLarge: baseHeadingTheme.titleLarge?.copyWith(color: AppColors.textDark),
-        titleMedium: baseHeadingTheme.titleMedium?.copyWith(color: AppColors.textDark),
-        titleSmall: baseHeadingTheme.titleSmall?.copyWith(color: AppColors.textDark),
+        displayLarge: baseHeadingTheme.displayLarge?.copyWith(
+          color: AppColors.textDark,
+        ),
+        displayMedium: baseHeadingTheme.displayMedium?.copyWith(
+          color: AppColors.textDark,
+        ),
+        displaySmall: baseHeadingTheme.displaySmall?.copyWith(
+          color: AppColors.textDark,
+        ),
+        headlineLarge: baseHeadingTheme.headlineLarge?.copyWith(
+          color: AppColors.textDark,
+        ),
+        headlineMedium: baseHeadingTheme.headlineMedium?.copyWith(
+          color: AppColors.textDark,
+        ),
+        headlineSmall: baseHeadingTheme.headlineSmall?.copyWith(
+          color: AppColors.textDark,
+        ),
+        titleLarge: baseHeadingTheme.titleLarge?.copyWith(
+          color: AppColors.textDark,
+        ),
+        titleMedium: baseHeadingTheme.titleMedium?.copyWith(
+          color: AppColors.textDark,
+        ),
+        titleSmall: baseHeadingTheme.titleSmall?.copyWith(
+          color: AppColors.textDark,
+        ),
         bodyLarge: baseTextTheme.bodyLarge?.copyWith(color: AppColors.textDark),
-        bodyMedium: baseTextTheme.bodyMedium?.copyWith(color: AppColors.textDark),
-        bodySmall: baseTextTheme.bodySmall?.copyWith(color: AppColors.textLight),
+        bodyMedium: baseTextTheme.bodyMedium?.copyWith(
+          color: AppColors.textDark,
+        ),
+        bodySmall: baseTextTheme.bodySmall?.copyWith(
+          color: AppColors.textLight,
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -76,7 +98,10 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.card,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.border),

@@ -15,10 +15,7 @@ class ProfileScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: const Text('Profile'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {},
-          ),
+          IconButton(icon: const Icon(Icons.settings), onPressed: () {}),
         ],
       ),
       body: SingleChildScrollView(
@@ -32,7 +29,11 @@ class ProfileScreen extends StatelessWidget {
                 const CircleAvatar(
                   radius: 50,
                   backgroundColor: AppColors.border,
-                  child: Icon(Icons.person, size: 50, color: AppColors.textLight),
+                  child: Icon(
+                    Icons.person,
+                    size: 50,
+                    color: AppColors.textLight,
+                  ),
                 ),
                 Container(
                   padding: const EdgeInsets.all(4),
@@ -40,16 +41,20 @@ class ProfileScreen extends StatelessWidget {
                     color: AppColors.primary,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.edit, size: 16, color: AppColors.textDark),
+                  child: const Icon(
+                    Icons.edit,
+                    size: 16,
+                    color: AppColors.textDark,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
             Text(
               'Pandit Rajendra Sharma',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
             Text(
@@ -60,7 +65,11 @@ class ProfileScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.location_on, size: 14, color: AppColors.textLight),
+                const Icon(
+                  Icons.location_on,
+                  size: 14,
+                  color: AppColors.textLight,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   'New Delhi, India',
@@ -85,7 +94,12 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => const ReviewsScreen()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const ReviewsScreen(),
+                          ),
+                        );
                       },
                       child: _buildStatColumn(context, '4.8 ⭐', '124 Reviews'),
                     ),
@@ -105,7 +119,7 @@ class ProfileScreen extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: AppColors.accent.withOpacity(0.3),
+                  color: AppColors.accent.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: AppColors.border),
                 ),
@@ -118,13 +132,16 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.workspace_premium, color: Color(0xFFB07A00), size: 20),
+                              const Icon(
+                                Icons.workspace_premium,
+                                color: Color(0xFFB07A00),
+                                size: 20,
+                              ),
                               const SizedBox(width: 8),
                               Text(
                                 'Upgrade to Pro',
-                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -136,18 +153,33 @@ class ProfileScreen extends StatelessWidget {
                           const SizedBox(height: 12),
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (_) => const SubscriptionScreen()));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const SubscriptionScreen(),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
                               minimumSize: Size.zero,
                             ),
-                            child: const Text('View Plans', style: TextStyle(fontSize: 12)),
+                            child: const Text(
+                              'View Plans',
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    Icon(Icons.star, size: 60, color: AppColors.primary.withOpacity(0.5)),
+                    Icon(
+                      Icons.star,
+                      size: 60,
+                      color: AppColors.primary.withValues(alpha: 0.5),
+                    ),
                   ],
                 ),
               ),
@@ -163,8 +195,8 @@ class ProfileScreen extends StatelessWidget {
                   Text(
                     'Account Settings',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   _buildSettingsItem(
@@ -195,15 +227,18 @@ class ProfileScreen extends StatelessWidget {
                     title: 'Wallet & Payments',
                     subtitle: 'Manage earnings and payouts',
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => const WalletScreen()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const WalletScreen()),
+                      );
                     },
                   ),
                   const SizedBox(height: 24),
                   Text(
                     'Support & More',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   _buildSettingsItem(
@@ -218,7 +253,7 @@ class ProfileScreen extends StatelessWidget {
                     leading: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: AppColors.error.withOpacity(0.1),
+                        color: AppColors.error.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(Icons.logout, color: AppColors.error),
@@ -226,14 +261,15 @@ class ProfileScreen extends StatelessWidget {
                     title: Text(
                       'Log Out',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: AppColors.error,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        color: AppColors.error,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     onTap: () {
                       Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (_) => const LoginScreen()),
-                          (route) => false);
+                        MaterialPageRoute(builder: (_) => const LoginScreen()),
+                        (route) => false,
+                      );
                     },
                   ),
                   const SizedBox(height: 32),
@@ -251,15 +287,12 @@ class ProfileScreen extends StatelessWidget {
       children: [
         Text(
           value,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
+        Text(label, style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }
@@ -277,18 +310,20 @@ class ProfileScreen extends StatelessWidget {
       leading: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: iconColor.withOpacity(0.1),
+          color: iconColor.withValues(alpha: 0.1),
           shape: BoxShape.circle,
         ),
         child: Icon(icon, color: iconColor),
       ),
       title: Text(
         title,
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
+        style: Theme.of(
+          context,
+        ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
       ),
-      subtitle: subtitle.isNotEmpty ? Text(subtitle, style: Theme.of(context).textTheme.bodySmall) : null,
+      subtitle: subtitle.isNotEmpty
+          ? Text(subtitle, style: Theme.of(context).textTheme.bodySmall)
+          : null,
       trailing: const Icon(Icons.chevron_right, color: AppColors.textLight),
       onTap: onTap ?? () {},
     );

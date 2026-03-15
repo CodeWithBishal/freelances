@@ -69,7 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
+                      color: Colors.black.withValues(alpha: 0.03),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -80,7 +80,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.2),
+                        color: AppColors.primary.withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.wifi, color: Color(0xFFD4A000)),
@@ -112,14 +112,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Switch(
                       value: _isOnline,
                       onChanged: (val) async {
-                        final success = await BackgroundBubbleService.toggleOnline(val);
+                        final success =
+                            await BackgroundBubbleService.toggleOnline(val);
                         if (success) {
                           setState(() {
                             _isOnline = val;
                           });
                         }
                       },
-                      activeColor: AppColors.card,
+                      activeThumbColor: AppColors.card,
                       activeTrackColor: AppColors.primary,
                       inactiveThumbColor: AppColors.textLight,
                       inactiveTrackColor: AppColors.border,
@@ -146,16 +147,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.error.withOpacity(0.1),
+                      color: AppColors.error.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
                       '2 New',
-                      style: Theme.of(context).textTheme.bodySmall
-                          ?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.error,
-                          ),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.error,
+                      ),
                     ),
                   ),
                 ],
@@ -199,10 +199,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border.withOpacity(0.5)),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -251,10 +251,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border.withOpacity(0.5)),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -297,10 +297,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             children: [
               Text(
                 time,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textDark.withOpacity(0.8),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textDark.withValues(alpha: 0.8),
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
@@ -311,9 +309,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const SizedBox(width: 6),
                   Text(
                     timer,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.error,
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -334,7 +330,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Text(
                   distance,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textDark.withOpacity(0.8),
+                    color: AppColors.textDark.withValues(alpha: 0.8),
                     fontSize: 14,
                   ),
                 ),
@@ -351,7 +347,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Text(
                     user,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textDark.withOpacity(0.8),
+                      color: AppColors.textDark.withValues(alpha: 0.8),
                       fontSize: 14,
                     ),
                   ),
@@ -376,10 +372,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   },
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    side: BorderSide(color: AppColors.error.withOpacity(0.5)),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    side: BorderSide(
+                      color: AppColors.error.withValues(alpha: 0.5),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  child: const Text('Decline', style: TextStyle(color: AppColors.error)),
+                  child: const Text(
+                    'Decline',
+                    style: TextStyle(color: AppColors.error),
+                  ),
                 ),
               ),
               const SizedBox(width: 8),
@@ -389,15 +392,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const CounterOfferScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const CounterOfferScreen(),
+                        ),
                       );
                     },
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 12),
-                      side: BorderSide(color: Colors.orange.withOpacity(0.5)),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      side: BorderSide(
+                        color: Colors.orange.withValues(alpha: 0.5),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    child: const Text('Counter', style: TextStyle(color: Colors.orange)),
+                    child: const Text(
+                      'Counter',
+                      style: TextStyle(color: Colors.orange),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -408,7 +420,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     AppToast.show(
                       context,
                       title: 'Booking Accepted!',
-                      description: 'You can now view this in your Active Bookings.',
+                      description:
+                          'You can now view this in your Active Bookings.',
                       type: ToastType.success,
                     );
                   },
@@ -421,7 +434,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     elevation: 0,
                   ),
-                  child: const Text('Accept', style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: const Text(
+                    'Accept',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],

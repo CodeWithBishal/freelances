@@ -45,10 +45,13 @@ class _CounterOfferScreenState extends State<CounterOfferScreen> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.2),
+                      color: AppColors.primary.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.account_balance_wallet, color: AppColors.primary),
+                    child: const Icon(
+                      Icons.account_balance_wallet,
+                      color: AppColors.primary,
+                    ),
                   ),
                   const SizedBox(width: 16),
                   Column(
@@ -57,16 +60,16 @@ class _CounterOfferScreenState extends State<CounterOfferScreen> {
                       Text(
                         'User Offered Price',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.textLight,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          color: AppColors.textLight,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         '₹2,500',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -86,7 +89,7 @@ class _CounterOfferScreenState extends State<CounterOfferScreen> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.1),
+                      color: Colors.blue.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(Icons.trending_up, color: Colors.blue),
@@ -98,16 +101,16 @@ class _CounterOfferScreenState extends State<CounterOfferScreen> {
                       Text(
                         'Suggested Market Price',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.textLight,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          color: AppColors.textLight,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         '₹3,200',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -119,24 +122,30 @@ class _CounterOfferScreenState extends State<CounterOfferScreen> {
             // Entrance section
             Text(
               'Enter your price',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: _priceController,
               keyboardType: TextInputType.number,
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textDark,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: AppColors.textDark,
+              ),
               decoration: InputDecoration(
                 prefixIcon: const Padding(
                   padding: EdgeInsets.all(16.0),
-                  child: Text('₹', style: TextStyle(fontSize: 24, color: AppColors.textLight)),
+                  child: Text(
+                    '₹',
+                    style: TextStyle(fontSize: 24, color: AppColors.textLight),
+                  ),
                 ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 24,
+                  horizontal: 16,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: const BorderSide(color: AppColors.border),
@@ -161,9 +170,9 @@ class _CounterOfferScreenState extends State<CounterOfferScreen> {
             // Quick Selects
             Text(
               'Quick select',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textLight,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppColors.textLight),
             ),
             const SizedBox(height: 12),
             Row(
@@ -207,7 +216,9 @@ class _CounterOfferScreenState extends State<CounterOfferScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primary.withOpacity(0.2) : AppColors.card,
+            color: isSelected
+                ? AppColors.primary.withValues(alpha: 0.2)
+                : AppColors.card,
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
               color: isSelected ? AppColors.primary : AppColors.border,

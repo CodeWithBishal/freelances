@@ -22,7 +22,10 @@ class _EarningsScreenState extends State<EarningsScreen> {
         elevation: 0,
         title: const Text(
           'Earnings & Analytics',
-          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textDark),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: AppColors.textDark,
+          ),
         ),
         centerTitle: true,
       ),
@@ -52,7 +55,7 @@ class _EarningsScreenState extends State<EarningsScreen> {
                           boxShadow: isSelected
                               ? [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
+                                    color: Colors.black.withValues(alpha: 0.05),
                                     blurRadius: 4,
                                     offset: const Offset(0, 2),
                                   ),
@@ -63,8 +66,12 @@ class _EarningsScreenState extends State<EarningsScreen> {
                         child: Text(
                           _tabs[index],
                           style: TextStyle(
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                            color: isSelected ? AppColors.textDark : AppColors.textLight,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            color: isSelected
+                                ? AppColors.textDark
+                                : AppColors.textLight,
                           ),
                         ),
                       ),
@@ -99,24 +106,33 @@ class _EarningsScreenState extends State<EarningsScreen> {
                     children: [
                       Text(
                         '₹15,450',
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppColors.textDark,
                             ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: const Color(0xFFDFF1CE), // Light green tint
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.trending_up, size: 14, color: AppColors.success),
+                            const Icon(
+                              Icons.trending_up,
+                              size: 14,
+                              color: AppColors.success,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               '+12%',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
                                     color: AppColors.success,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -140,10 +156,12 @@ class _EarningsScreenState extends State<EarningsScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.card,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.border.withOpacity(0.5)),
+                      border: Border.all(
+                        color: AppColors.border.withValues(alpha: 0.5),
+                      ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.02),
+                          color: Colors.black.withValues(alpha: 0.02),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -160,21 +178,25 @@ class _EarningsScreenState extends State<EarningsScreen> {
                                 color: AppColors.primary,
                                 borderRadius: BorderRadius.circular(4),
                               ),
-                              child: const Icon(Icons.book_online, size: 12, color: AppColors.card),
+                              child: const Icon(
+                                Icons.book_online,
+                                size: 12,
+                                color: AppColors.card,
+                              ),
                             ),
                             const SizedBox(width: 8),
                             Text(
                               'Bookings',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.textLight,
-                                  ),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(color: AppColors.textLight),
                             ),
                           ],
                         ),
                         const SizedBox(height: 12),
                         Text(
                           '24',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.textDark,
                               ),
@@ -190,10 +212,12 @@ class _EarningsScreenState extends State<EarningsScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.card,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.border.withOpacity(0.5)),
+                      border: Border.all(
+                        color: AppColors.border.withValues(alpha: 0.5),
+                      ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.02),
+                          color: Colors.black.withValues(alpha: 0.02),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -204,20 +228,24 @@ class _EarningsScreenState extends State<EarningsScreen> {
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.star, size: 16, color: AppColors.primary),
+                            const Icon(
+                              Icons.star,
+                              size: 16,
+                              color: AppColors.primary,
+                            ),
                             const SizedBox(width: 8),
                             Text(
                               'Avg. Rating',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.textLight,
-                                  ),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(color: AppColors.textLight),
                             ),
                           ],
                         ),
                         const SizedBox(height: 12),
                         Text(
                           '4.8',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.textDark,
                               ),
@@ -230,13 +258,13 @@ class _EarningsScreenState extends State<EarningsScreen> {
             ),
             const SizedBox(height: 32),
 
-            // Earnings Trend 
+            // Earnings Trend
             Text(
               'Earnings Trend',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
             ),
             const SizedBox(height: 16),
             Container(
@@ -245,10 +273,12 @@ class _EarningsScreenState extends State<EarningsScreen> {
               decoration: BoxDecoration(
                 color: AppColors.card,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border.withOpacity(0.5)),
+                border: Border.all(
+                  color: AppColors.border.withValues(alpha: 0.5),
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.02),
+                    color: Colors.black.withValues(alpha: 0.02),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -263,10 +293,22 @@ class _EarningsScreenState extends State<EarningsScreen> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(height: 1, color: AppColors.border.withOpacity(0.3)),
-                            Container(height: 1, color: AppColors.border.withOpacity(0.3)),
-                            Container(height: 1, color: AppColors.border.withOpacity(0.3)),
-                            Container(height: 1, color: AppColors.border.withOpacity(0.3)),
+                            Container(
+                              height: 1,
+                              color: AppColors.border.withValues(alpha: 0.3),
+                            ),
+                            Container(
+                              height: 1,
+                              color: AppColors.border.withValues(alpha: 0.3),
+                            ),
+                            Container(
+                              height: 1,
+                              color: AppColors.border.withValues(alpha: 0.3),
+                            ),
+                            Container(
+                              height: 1,
+                              color: AppColors.border.withValues(alpha: 0.3),
+                            ),
                           ],
                         ),
                         // Mock Tooltip
@@ -274,14 +316,21 @@ class _EarningsScreenState extends State<EarningsScreen> {
                           left: 140, // rough position for Thu
                           top: 40,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
                               color: const Color(0xFF2C3243),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: const Text(
                               '₹3,200',
-                              style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
@@ -293,27 +342,70 @@ class _EarningsScreenState extends State<EarningsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [
-                      Text('Mon', style: TextStyle(fontSize: 12, color: AppColors.textLight)),
-                      Text('Tue', style: TextStyle(fontSize: 12, color: AppColors.textLight)),
-                      Text('Wed', style: TextStyle(fontSize: 12, color: AppColors.textLight)),
-                      Text('Thu', style: TextStyle(fontSize: 12, color: AppColors.textDark, fontWeight: FontWeight.bold)),
-                      Text('Fri', style: TextStyle(fontSize: 12, color: AppColors.textLight)),
-                      Text('Sat', style: TextStyle(fontSize: 12, color: AppColors.textLight)),
-                      Text('Sun', style: TextStyle(fontSize: 12, color: AppColors.textLight)),
+                      Text(
+                        'Mon',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textLight,
+                        ),
+                      ),
+                      Text(
+                        'Tue',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textLight,
+                        ),
+                      ),
+                      Text(
+                        'Wed',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textLight,
+                        ),
+                      ),
+                      Text(
+                        'Thu',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textDark,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Fri',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textLight,
+                        ),
+                      ),
+                      Text(
+                        'Sat',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textLight,
+                        ),
+                      ),
+                      Text(
+                        'Sun',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textLight,
+                        ),
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 32),
-            
+
             // Monthly Target
             Text(
               'Monthly Target',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
             ),
             const SizedBox(height: 16),
             Container(
@@ -321,10 +413,12 @@ class _EarningsScreenState extends State<EarningsScreen> {
               decoration: BoxDecoration(
                 color: AppColors.card,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border.withOpacity(0.5)),
+                border: Border.all(
+                  color: AppColors.border.withValues(alpha: 0.5),
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.02),
+                    color: Colors.black.withValues(alpha: 0.02),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -338,14 +432,16 @@ class _EarningsScreenState extends State<EarningsScreen> {
                     children: [
                       Text(
                         '₹15,450 / ₹30,000',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppColors.textDark,
                             ),
                       ),
                       Text(
                         '51%',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary,
                             ),
@@ -359,15 +455,17 @@ class _EarningsScreenState extends State<EarningsScreen> {
                       value: 0.51,
                       minHeight: 10,
                       backgroundColor: Color(0xFFF3F5F7),
-                      valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppColors.primary,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),
                   Text(
                     'Earn ₹14,550 more to achieve your monthly target and unlock a ₹2,000 bonus!',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.textLight,
-                        ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: AppColors.textLight),
                   ),
                 ],
               ),
@@ -381,21 +479,21 @@ class _EarningsScreenState extends State<EarningsScreen> {
                 Text(
                   'Recent Bookings',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
                 ),
                 Text(
                   'View All',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            
+
             _buildRecentBookingCard(
               iconData: Icons.celebration,
               title: 'Satyanarayan Katha',
@@ -437,10 +535,10 @@ class _EarningsScreenState extends State<EarningsScreen> {
       decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border.withOpacity(0.5)),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -451,7 +549,7 @@ class _EarningsScreenState extends State<EarningsScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.15),
+              color: AppColors.primary.withValues(alpha: 0.15),
               shape: BoxShape.circle,
             ),
             child: Icon(iconData, color: AppColors.primary, size: 24),
@@ -464,16 +562,16 @@ class _EarningsScreenState extends State<EarningsScreen> {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textDark,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textDark,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textLight,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: AppColors.textLight),
                 ),
               ],
             ),
@@ -484,13 +582,16 @@ class _EarningsScreenState extends State<EarningsScreen> {
               Text(
                 price,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.success,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.success,
+                ),
               ),
               const SizedBox(height: 6),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFF3F5F7),
                   borderRadius: BorderRadius.circular(12),
@@ -498,9 +599,9 @@ class _EarningsScreenState extends State<EarningsScreen> {
                 child: Text(
                   status,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textLight,
-                        fontSize: 10,
-                      ),
+                    color: AppColors.textLight,
+                    fontSize: 10,
+                  ),
                 ),
               ),
             ],

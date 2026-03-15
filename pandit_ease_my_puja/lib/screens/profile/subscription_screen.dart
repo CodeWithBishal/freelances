@@ -17,7 +17,10 @@ class SubscriptionScreen extends StatelessWidget {
         ),
         title: const Text(
           'Subscription Plans',
-          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textDark),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: AppColors.textDark,
+          ),
         ),
         centerTitle: true,
       ),
@@ -28,17 +31,17 @@ class SubscriptionScreen extends StatelessWidget {
             Text(
               'Choose Your Plan',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textDark,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: AppColors.textDark,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
               'Upgrade to get more puja requests and higher\nranking',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textLight,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppColors.textLight),
             ),
             const SizedBox(height: 32),
 
@@ -50,10 +53,7 @@ class SubscriptionScreen extends StatelessWidget {
               period: '/month',
               buttonText: 'Current Plan',
               isCurrent: true,
-              features: [
-                'Standard Ranking',
-                'Basic Puja Requests',
-              ],
+              features: ['Standard Ranking', 'Basic Puja Requests'],
               iconColor: AppColors.success,
             ),
             const SizedBox(height: 20),
@@ -86,7 +86,7 @@ class SubscriptionScreen extends StatelessWidget {
               period: '/month',
               buttonText: 'Upgrade to Gold',
               badge: 'Best Value',
-              badgeColor: AppColors.primary.withOpacity(0.15),
+              badgeColor: AppColors.primary.withValues(alpha: 0.15),
               badgeTextColor: AppColors.primary,
               features: [
                 'Top Ranking',
@@ -126,12 +126,14 @@ class SubscriptionScreen extends StatelessWidget {
         color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: outlineBorder ? AppColors.primary : AppColors.border.withOpacity(0.5),
+          color: outlineBorder
+              ? AppColors.primary
+              : AppColors.border.withValues(alpha: 0.5),
           width: outlineBorder ? 2 : 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -144,7 +146,10 @@ class SubscriptionScreen extends StatelessWidget {
               top: 0,
               right: 0,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: badgeColor ?? AppColors.primary,
                   borderRadius: const BorderRadius.only(
@@ -170,8 +175,8 @@ class SubscriptionScreen extends StatelessWidget {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Row(
@@ -179,7 +184,8 @@ class SubscriptionScreen extends StatelessWidget {
                   children: [
                     Text(
                       price,
-                      style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                      style: Theme.of(context).textTheme.displayMedium
+                          ?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: AppColors.textDark,
                             height: 1,
@@ -190,8 +196,8 @@ class SubscriptionScreen extends StatelessWidget {
                       child: Text(
                         period,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppColors.textLight,
-                            ),
+                          color: AppColors.textLight,
+                        ),
                       ),
                     ),
                   ],
@@ -202,8 +208,12 @@ class SubscriptionScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: isCurrent ? const Color(0xFFF3F5F7) : buttonColor,
-                      foregroundColor: isCurrent ? AppColors.textDark : buttonTextColor,
+                      backgroundColor: isCurrent
+                          ? const Color(0xFFF3F5F7)
+                          : buttonColor,
+                      foregroundColor: isCurrent
+                          ? AppColors.textDark
+                          : buttonTextColor,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -217,7 +227,9 @@ class SubscriptionScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-                ...features.map((feature) => _buildFeatureRow(feature, iconColor)),
+                ...features.map(
+                  (feature) => _buildFeatureRow(feature, iconColor),
+                ),
               ],
             ),
           ),
@@ -233,12 +245,7 @@ class SubscriptionScreen extends StatelessWidget {
         children: [
           Icon(Icons.check_circle, size: 20, color: iconColor),
           const SizedBox(width: 12),
-          Text(
-            text,
-            style: const TextStyle(
-              color: AppColors.textDark,
-            ),
-          ),
+          Text(text, style: const TextStyle(color: AppColors.textDark)),
         ],
       ),
     );

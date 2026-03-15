@@ -29,10 +29,13 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
               decoration: BoxDecoration(
                 color: AppColors.card,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.primary.withOpacity(0.3), width: 2),
+                border: Border.all(
+                  color: AppColors.primary.withValues(alpha: 0.3),
+                  width: 2,
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     blurRadius: 20,
                     spreadRadius: 5,
                   ),
@@ -45,31 +48,38 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                      color: AppColors.accent.withOpacity(0.3),
+                      color: AppColors.accent.withValues(alpha: 0.3),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.self_improvement, size: 60, color: AppColors.primary),
+                    child: const Icon(
+                      Icons.self_improvement,
+                      size: 60,
+                      color: AppColors.primary,
+                    ),
                   ),
                   const SizedBox(height: 24),
                   Text(
                     'Satyanarayan Katha',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textDark,
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textDark,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Started at 09:15 AM',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textLight,
-                        ),
+                      color: AppColors.textLight,
+                    ),
                   ),
                   const SizedBox(height: 24),
-                  
+
                   // Progress Info
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.background,
                       borderRadius: BorderRadius.circular(12),
@@ -82,16 +92,14 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
                           children: [
                             Text(
                               'Expected Duration',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: AppColors.textLight,
-                                  ),
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(color: AppColors.textLight),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               '2 Hours',
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -105,14 +113,14 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
                           children: [
                             Text(
                               'Time Elapsed',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: AppColors.textLight,
-                                  ),
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(color: AppColors.textLight),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               '45 Mins',
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.primary,
                                   ),
@@ -125,21 +133,21 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // Helpful Options
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 'Helpful Resources',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 16),
-            
+
             _buildResourceCard(
               context: context,
               icon: Icons.menu_book,
@@ -153,9 +161,9 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
               title: 'Samagri Tracker',
               subtitle: 'Check list of items used',
             ),
-            
+
             const SizedBox(height: 48),
-            
+
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -168,7 +176,10 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text('Complete Puja', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                child: const Text(
+                  'Complete Puja',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ],
@@ -188,10 +199,10 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
       decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border.withOpacity(0.5)),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -202,7 +213,7 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.15),
+              color: AppColors.primary.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: const Color(0xFF6B4C00)),
@@ -215,25 +226,29 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textLight,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: AppColors.textLight),
                 ),
               ],
             ),
           ),
-          const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textLight),
+          const Icon(
+            Icons.arrow_forward_ios,
+            size: 14,
+            color: AppColors.textLight,
+          ),
         ],
       ),
     );
   }
-  
+
   void _showCompletePujaBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -266,16 +281,16 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
               const SizedBox(height: 24),
               Text(
                 'Complete Puja',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Text(
                 'Enter the 4-digit OTP provided by the devotee to complete this booking.',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textLight,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: AppColors.textLight),
               ),
               const SizedBox(height: 32),
               Row(
@@ -287,7 +302,8 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
                       textAlign: TextAlign.center,
                       keyboardType: TextInputType.number,
                       maxLength: 1,
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
                         counterText: '',
                         filled: true,
@@ -302,7 +318,10 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
                         ),
                         focusedBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12)),
-                          borderSide: BorderSide(color: AppColors.primary, width: 2),
+                          borderSide: BorderSide(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
                         ),
                       ),
                       onChanged: (value) {
@@ -324,7 +343,9 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
                     Navigator.pop(context); // Close bottom sheet
                     // Navigate back to Dashboard and remove history
                     Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => const DashboardScreen()),
+                      MaterialPageRoute(
+                        builder: (context) => const DashboardScreen(),
+                      ),
                       (Route<dynamic> route) => false,
                     );
                   },
@@ -338,10 +359,7 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
                   ),
                   child: const Text(
                     'Verify & Complete',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

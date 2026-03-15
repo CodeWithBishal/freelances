@@ -27,10 +27,7 @@ class _MainLayoutState extends State<MainLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _pages),
       bottomNavigationBar: Container(
         color: AppColors.background,
         child: SafeArea(
@@ -41,22 +38,44 @@ class _MainLayoutState extends State<MainLayout> {
               decoration: BoxDecoration(
                 color: AppColors.card,
                 borderRadius: BorderRadius.circular(30),
-                border: Border.all(color: AppColors.border.withOpacity(0.5)),
+                border: Border.all(
+                  color: AppColors.border.withValues(alpha: 0.5),
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 15,
                     offset: const Offset(0, 4),
-                  )
+                  ),
                 ],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildNavItem(0, CupertinoIcons.house_fill, CupertinoIcons.house, 'Home'),
-                  _buildNavItem(1, CupertinoIcons.ticket_fill, CupertinoIcons.ticket, 'Bookings'),
-                  _buildNavItem(2, CupertinoIcons.chart_bar_square_fill, CupertinoIcons.chart_bar_square, 'Earnings'),
-                  _buildNavItem(3, CupertinoIcons.person_crop_circle_fill, CupertinoIcons.person_crop_circle, 'Profile'),
+                  _buildNavItem(
+                    0,
+                    CupertinoIcons.house_fill,
+                    CupertinoIcons.house,
+                    'Home',
+                  ),
+                  _buildNavItem(
+                    1,
+                    CupertinoIcons.ticket_fill,
+                    CupertinoIcons.ticket,
+                    'Bookings',
+                  ),
+                  _buildNavItem(
+                    2,
+                    CupertinoIcons.chart_bar_square_fill,
+                    CupertinoIcons.chart_bar_square,
+                    'Earnings',
+                  ),
+                  _buildNavItem(
+                    3,
+                    CupertinoIcons.person_crop_circle_fill,
+                    CupertinoIcons.person_crop_circle,
+                    'Profile',
+                  ),
                 ],
               ),
             ),
@@ -66,7 +85,12 @@ class _MainLayoutState extends State<MainLayout> {
     );
   }
 
-  Widget _buildNavItem(int index, IconData activeIcon, IconData inactiveIcon, String label) {
+  Widget _buildNavItem(
+    int index,
+    IconData activeIcon,
+    IconData inactiveIcon,
+    String label,
+  ) {
     final isSelected = _currentIndex == index;
     return GestureDetector(
       onTap: () => setState(() => _currentIndex = index),

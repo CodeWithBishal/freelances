@@ -43,7 +43,7 @@ class ActiveBookingScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.success.withOpacity(0.1),
+                  color: AppColors.success.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -148,7 +148,10 @@ class ActiveBookingScreen extends StatelessWidget {
             color: AppColors.card,
             shape: BoxShape.circle,
             boxShadow: [
-              BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 4),
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 4,
+              ),
             ],
           ),
           child: IconButton(
@@ -191,7 +194,7 @@ class ActiveBookingScreen extends StatelessWidget {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: 0.2),
                             blurRadius: 10,
                             spreadRadius: 2,
                           ),
@@ -221,7 +224,7 @@ class ActiveBookingScreen extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 20,
                     offset: const Offset(0, -5),
                   ),
@@ -291,7 +294,9 @@ class ActiveBookingScreen extends StatelessWidget {
                               ),
                               Container(
                                 decoration: BoxDecoration(
-                                  color: AppColors.primary.withOpacity(0.1),
+                                  color: AppColors.primary.withValues(
+                                    alpha: 0.1,
+                                  ),
                                   shape: BoxShape.circle,
                                 ),
                                 child: IconButton(
@@ -349,7 +354,8 @@ class ActiveBookingScreen extends StatelessWidget {
                                 AppToast.show(
                                   context,
                                   title: 'Navigation Started',
-                                  description: 'Opening Google Maps to devotee location...',
+                                  description:
+                                      'Opening Google Maps to devotee location...',
                                   type: ToastType.success,
                                 );
                               },
@@ -398,7 +404,9 @@ class ActiveBookingScreen extends StatelessWidget {
                                   vertical: 16,
                                 ),
                                 side: BorderSide(
-                                  color: AppColors.success.withOpacity(0.5),
+                                  color: AppColors.success.withValues(
+                                    alpha: 0.5,
+                                  ),
                                 ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16),

@@ -18,9 +18,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   void _submit() {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const MainLayout()),
-    );
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (_) => const MainLayout()));
   }
 
   @override
@@ -29,7 +29,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(), // In a real app, handle back to login properly
+          onPressed: () => Navigator.of(
+            context,
+          ).pop(), // In a real app, handle back to login properly
         ),
         title: const Text('Register as Pandit'),
       ),
@@ -47,8 +49,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   Text(
                     'Personal Details',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -59,13 +61,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
                   _buildLabel(context, 'Full Name (as per Aadhaar)'),
                   TextField(
-                    decoration: const InputDecoration(hintText: 'Enter your full name'),
+                    decoration: const InputDecoration(
+                      hintText: 'Enter your full name',
+                    ),
                   ),
                   const SizedBox(height: 16),
 
                   _buildLabel(context, 'Phone Number'),
                   TextField(
-                    decoration: const InputDecoration(hintText: '+91 00000 00000'),
+                    decoration: const InputDecoration(
+                      hintText: '+91 00000 00000',
+                    ),
                     keyboardType: TextInputType.phone,
                   ),
                   const SizedBox(height: 16),
@@ -79,12 +85,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
                   _buildLabel(context, 'Primary Specialization'),
                   DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(hintText: 'Select specialization'),
-                    value: _selectedSpecialization,
-                    items: ['Vedic Scholar', 'Astrologer', 'Karma Kanda', 'Purohit']
-                        .map((s) => DropdownMenuItem(value: s, child: Text(s)))
-                        .toList(),
-                    onChanged: (val) => setState(() => _selectedSpecialization = val),
+                    decoration: const InputDecoration(
+                      hintText: 'Select specialization',
+                    ),
+                    initialValue: _selectedSpecialization,
+                    items:
+                        [
+                              'Vedic Scholar',
+                              'Astrologer',
+                              'Karma Kanda',
+                              'Purohit',
+                            ]
+                            .map(
+                              (s) => DropdownMenuItem(value: s, child: Text(s)),
+                            )
+                            .toList(),
+                    onChanged: (val) =>
+                        setState(() => _selectedSpecialization = val),
                   ),
                   const SizedBox(height: 16),
 
@@ -107,8 +124,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       OutlinedButton.icon(
                         onPressed: _addLanguage,
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
                         ),
                         icon: const Icon(Icons.add, size: 16),
                         label: const Text('Add'),
@@ -118,7 +140,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ],
               ),
             ),
-            
+
             const Divider(height: 1, color: AppColors.border),
 
             // Verification Documents
@@ -130,8 +152,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   Text(
                     'Verification Documents',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   _buildUploadCard(
@@ -165,18 +187,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       Text(
                         'Video Introduction',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
-                          color: AppColors.accent.withOpacity(0.5),
+                          color: AppColors.accent.withValues(alpha: 0.5),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
                           'Recommended',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
                                 color: const Color(0xFFB07A00),
                                 fontWeight: FontWeight.bold,
                               ),
@@ -189,7 +215,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(32),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1E2130), // Dark background for video area
+                      color: const Color(
+                        0xFF1E2130,
+                      ), // Dark background for video area
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
@@ -200,12 +228,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             color: AppColors.primary,
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.videocam, size: 32, color: AppColors.textDark),
+                          child: const Icon(
+                            Icons.videocam,
+                            size: 32,
+                            color: AppColors.textDark,
+                          ),
                         ),
                         const SizedBox(height: 16),
                         const Text(
                           'Record a short introduction',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
                         const SizedBox(height: 8),
                         const Text(
@@ -243,14 +279,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       child: Text(
         text,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: AppColors.textDark,
-            ),
+          fontWeight: FontWeight.w600,
+          color: AppColors.textDark,
+        ),
       ),
     );
   }
 
-  Widget _buildUploadCard({required BuildContext context, required IconData icon, required String title, required String subtitle}) {
+  Widget _buildUploadCard({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required String subtitle,
+  }) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -275,16 +316,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               children: [
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                Text(
-                  subtitle,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
+                Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
               ],
             ),
           ),
-          Icon(Icons.upload_file, color: AppColors.textLight.withOpacity(0.5)),
+          Icon(
+            Icons.upload_file,
+            color: AppColors.textLight.withValues(alpha: 0.5),
+          ),
         ],
       ),
     );

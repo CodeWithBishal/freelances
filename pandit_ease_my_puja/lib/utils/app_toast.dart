@@ -10,7 +10,7 @@ class AppToast {
     Duration duration = const Duration(seconds: 3),
   }) {
     ToastificationType toastType;
-    
+
     switch (type) {
       case ToastType.success:
         toastType = ToastificationType.success;
@@ -46,15 +46,9 @@ class AppToast {
       borderRadius: BorderRadius.circular(12.0),
       boxShadow: highModeShadow,
       showProgressBar: false,
-      closeButtonShowType: CloseButtonShowType.none,
       margin: const EdgeInsets.only(bottom: 24, left: 16, right: 16),
     );
   }
 }
 
-enum ToastType {
-  success,
-  error,
-  warning,
-  info,
-}
+enum ToastType { success, error, warning, info }
