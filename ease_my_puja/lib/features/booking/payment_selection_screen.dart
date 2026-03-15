@@ -357,7 +357,7 @@ class _PayMethodTile extends StatelessWidget {
                   ),
               ],
             ),
-            if (child != null) child!,
+            ?child,
           ],
         ),
       ),

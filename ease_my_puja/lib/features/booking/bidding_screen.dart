@@ -13,7 +13,7 @@ class BiddingScreen extends StatefulWidget {
 
 class _BiddingScreenState extends State<BiddingScreen> {
   String _sortBy = 'Price';
-  int _timeLeft = 540; // 9 minutes
+  final int _timeLeft = 540; // 9 minutes
 
   final _sortOptions = ['Price', 'Rating', 'Distance', 'ETA'];
 
@@ -221,7 +221,7 @@ class _BiddingScreenState extends State<BiddingScreen> {
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: _bids.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (_, i) => _BidCard(
                 data: _bids[i],
                 onSelect: () => context.push('/home/pandit-profile'),
