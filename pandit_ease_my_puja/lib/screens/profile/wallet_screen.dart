@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
+import '../../widgets/custom_cached_image.dart';
 
 class WalletScreen extends StatelessWidget {
   const WalletScreen({super.key});
@@ -32,8 +33,8 @@ class WalletScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.primary,
                 borderRadius: BorderRadius.circular(16),
-                image: const DecorationImage(
-                  image: NetworkImage('https://www.transparenttextures.com/patterns/microbial-mat.png'), // Subtle dots texture pattern
+                image: DecorationImage(
+                  image: CustomCachedImage.provider('https://www.transparenttextures.com/patterns/microbial-mat.png'), // Subtle dots texture pattern
                   opacity: 0.1,
                   fit: BoxFit.cover,
                 ),

@@ -3,6 +3,7 @@ import '../../theme/app_colors.dart';
 import '../requests/counter_offer_screen.dart';
 import '../../utils/app_toast.dart';
 import '../../utils/background_bubble_service.dart';
+import '../../widgets/custom_cached_image.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -41,9 +42,9 @@ class DashboardScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 20,
-                    backgroundImage: NetworkImage(
+                    backgroundImage: CustomCachedImage.provider(
                       'https://i.pravatar.cc/150?img=11',
                     ), // Placeholder avatar
                   ),

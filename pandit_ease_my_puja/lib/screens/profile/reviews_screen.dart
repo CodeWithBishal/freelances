@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
+import '../../widgets/custom_cached_image.dart';
 
 class ReviewsScreen extends StatelessWidget {
   const ReviewsScreen({super.key});
@@ -205,7 +206,7 @@ class ReviewsScreen extends StatelessWidget {
                     ),
                   )
                 : CircleAvatar(
-                    backgroundImage: NetworkImage(imageUrl ?? ''),
+                    backgroundImage: CustomCachedImage.provider(imageUrl ?? ''),
                   ),
             const SizedBox(width: 12),
             Column(

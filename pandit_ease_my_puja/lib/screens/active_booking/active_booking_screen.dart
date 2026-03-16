@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../../theme/app_colors.dart';
 import '../../utils/app_toast.dart';
+import '../../widgets/custom_cached_image.dart';
 import 'active_puja_screen.dart';
 
 class ActiveBookingScreen extends StatelessWidget {
@@ -174,10 +175,10 @@ class ActiveBookingScreen extends StatelessWidget {
             right: 0,
             height: MediaQuery.of(context).size.height * 0.45,
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: Color(0xFFE0E0E0),
                 image: DecorationImage(
-                  image: NetworkImage('https://i.stack.imgur.com/H1lBS.png'),
+                  image: CustomCachedImage.provider('https://i.stack.imgur.com/H1lBS.png'),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
                     Colors.black12,
@@ -259,9 +260,9 @@ class ActiveBookingScreen extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  const CircleAvatar(
+                                  CircleAvatar(
                                     radius: 24,
-                                    backgroundImage: NetworkImage(
+                                    backgroundImage: CustomCachedImage.provider(
                                       'https://i.pravatar.cc/150?img=11',
                                     ),
                                   ),
