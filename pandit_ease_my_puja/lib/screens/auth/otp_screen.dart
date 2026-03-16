@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_colors.dart';
 import '../registration/registration_screen.dart';
+import '../registration/mandir_registration_screen.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phoneNumber;
@@ -13,18 +14,29 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  final List<TextEditingController> _otpControllers =
-      List.generate(4, (index) => TextEditingController());
-  
+  final List<TextEditingController> _otpControllers = List.generate(
+    4,
+    (index) => TextEditingController(),
+  );
+
   bool _hasError = false;
 
-  void _verifyOtp() {
+  Future<void> _verifyOtp() async {
     final otp = _otpControllers.map((c) => c.text).join();
-    if (otp.length == 4 && otp != "0000") { // Just a mock check
-      // Navigate to registration
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const RegistrationScreen()),
-      );
+    if (otp.length == 4 && otp != "0000") {
+      // Just a mock check
+      final prefs = await SharedPreferences.getInstance();
+      final String userType = prefs.getString('user_type') ?? 'pandit';
+
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => userType == 'mandir'
+                ? const MandirRegistrationScreen()
+                : const RegistrationScreen(),
+          ),
+        );
+      }
     } else {
       setState(() {
         _hasError = true;
@@ -62,16 +74,16 @@ class _OtpScreenState extends State<OtpScreen> {
             const SizedBox(height: 24),
             Text(
               'Enter OTP',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
               'Code sent to +91 ${widget.phoneNumber}',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            
+
             const SizedBox(height: 48),
 
             // OTP Fields
@@ -87,9 +99,9 @@ class _OtpScreenState extends State<OtpScreen> {
                     keyboardType: TextInputType.number,
                     maxLength: 1,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: _hasError ? AppColors.error : AppColors.textDark,
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: _hasError ? AppColors.error : AppColors.textDark,
+                    ),
                     decoration: InputDecoration(
                       counterText: '',
                       border: OutlineInputBorder(
@@ -107,7 +119,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide(
-                          color: _hasError ? AppColors.error : AppColors.primary,
+                          color: _hasError
+                              ? AppColors.error
+                              : AppColors.primary,
                           width: 2,
                         ),
                       ),
@@ -116,8 +130,8 @@ class _OtpScreenState extends State<OtpScreen> {
                       if (value.isNotEmpty && index < 3) {
                         FocusScope.of(context).nextFocus();
                       } else if (value.isNotEmpty && index == 3) {
-                         // Auto verify if last digit entered
-                         _verifyOtp();
+                        // Auto verify if last digit entered
+                        _verifyOtp();
                       }
                       // Clear error on type
                       if (_hasError) {
@@ -128,7 +142,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
               ),
             ),
-            
+
             if (_hasError) ...[
               const SizedBox(height: 16),
               const Row(
@@ -143,9 +157,9 @@ class _OtpScreenState extends State<OtpScreen> {
                 ],
               ),
             ],
-            
+
             const SizedBox(height: 32),
-            
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -156,17 +170,17 @@ class _OtpScreenState extends State<OtpScreen> {
                 Text(
                   'Resend OTP',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
                 ),
                 const SizedBox(width: 16),
                 const Text('00:45'),
               ],
             ),
-            
+
             const SizedBox(height: 48),
-            
+
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

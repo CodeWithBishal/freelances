@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import '../../theme/app_colors.dart';
 import 'otp_screen.dart';
 
@@ -55,9 +54,9 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 24),
             Text(
               'Login as Pandit',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
@@ -72,9 +71,9 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text(
                 'Mobile Number',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textDark,
-                    ),
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textDark,
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -87,9 +86,14 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
                     decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(color: AppColors.border)),
+                      border: Border(
+                        right: BorderSide(color: AppColors.border),
+                      ),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -98,9 +102,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(width: 8),
                         Text(
                           '+91',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -137,4 +140,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-

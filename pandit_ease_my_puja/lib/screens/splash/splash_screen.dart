@@ -1,7 +1,10 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_colors.dart';
-import '../auth/login_screen.dart'; // We'll build this next
+import '../auth/login_screen.dart';
+import '../auth/user_selection_screen.dart';
+import '../language/language_selection_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -51,11 +54,27 @@ class _SplashScreenState extends State<SplashScreen>
     _fadeController.forward();
 
     // Navigate to next screen after splash
-    Future.delayed(const Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 4), () async {
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
-        );
+        final prefs = await SharedPreferences.getInstance();
+        final bool isLanguageSelected = prefs.getBool('language_selected') ?? false;
+        final bool isUserTypeSelected = prefs.getBool('user_type_selected') ?? false;
+
+        if (mounted) {
+          if (!isLanguageSelected) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => const LanguageSelectionScreen()),
+            );
+          } else if (!isUserTypeSelected) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => const UserSelectionScreen()),
+            );
+          } else {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => const LoginScreen()),
+            );
+          }
+        }
       }
     });
   }
