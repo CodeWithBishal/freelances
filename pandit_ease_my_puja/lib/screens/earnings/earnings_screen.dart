@@ -494,7 +494,7 @@ class _EarningsScreenState extends State<EarningsScreen> {
             ),
             const SizedBox(height: 16),
 
-            _buildRecentBookingCard(
+            const _RecentBookingCard(
               iconData: Icons.celebration,
               title: 'Satyanarayan Katha',
               subtitle: 'Today, 10:00 AM • Sharma Family',
@@ -502,7 +502,7 @@ class _EarningsScreenState extends State<EarningsScreen> {
               status: 'Completed',
             ),
             const SizedBox(height: 12),
-            _buildRecentBookingCard(
+            const _RecentBookingCard(
               iconData: Icons.home_work_outlined,
               title: 'Griha Pravesh',
               subtitle: 'Yesterday • Gupta Family',
@@ -510,7 +510,7 @@ class _EarningsScreenState extends State<EarningsScreen> {
               status: 'Completed',
             ),
             const SizedBox(height: 12),
-            _buildRecentBookingCard(
+            const _RecentBookingCard(
               iconData: Icons.thumb_up_alt_outlined,
               title: 'Namakaran',
               subtitle: 'Tue, 24 Oct • Patel Family',
@@ -523,13 +523,25 @@ class _EarningsScreenState extends State<EarningsScreen> {
     );
   }
 
-  Widget _buildRecentBookingCard({
-    required IconData iconData,
-    required String title,
-    required String subtitle,
-    required String price,
-    required String status,
-  }) {
+}
+
+class _RecentBookingCard extends StatelessWidget {
+  final IconData iconData;
+  final String title;
+  final String subtitle;
+  final String price;
+  final String status;
+
+  const _RecentBookingCard({
+    required this.iconData,
+    required this.title,
+    required this.subtitle,
+    required this.price,
+    required this.status,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(

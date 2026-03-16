@@ -4,15 +4,8 @@ import '../requests/counter_offer_screen.dart';
 import '../../utils/app_toast.dart';
 import '../../utils/background_bubble_service.dart';
 
-class DashboardScreen extends StatefulWidget {
+class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
-
-  @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
-}
-
-class _DashboardScreenState extends State<DashboardScreen> {
-  bool _isOnline = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,75 +52,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               const SizedBox(height: 24),
 
               // Online Status Card
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 16,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.card,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.03),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.2),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.wifi, color: Color(0xFFD4A000)),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _isOnline ? 'Online' : 'Offline',
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.textDark,
-                                ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            _isOnline
-                                ? 'Ready for bookings'
-                                : 'Not accepting bookings',
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(color: AppColors.textLight),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Switch(
-                      value: _isOnline,
-                      onChanged: (val) async {
-                        final success =
-                            await BackgroundBubbleService.toggleOnline(val);
-                        if (success) {
-                          setState(() {
-                            _isOnline = val;
-                          });
-                        }
-                      },
-                      activeThumbColor: AppColors.card,
-                      activeTrackColor: AppColors.primary,
-                      inactiveThumbColor: AppColors.textLight,
-                      inactiveTrackColor: AppColors.border,
-                    ),
-                  ],
-                ),
-              ),
+              const _OnlineStatusCard(),
               const SizedBox(height: 32),
 
               // Incoming Requests Header
@@ -163,7 +88,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               const SizedBox(height: 16),
 
               // Request Cards
-              _buildRequestCard(
+              const _RequestCard(
                 title: 'Satyanarayan Puja',
                 time: 'Tomorrow, 10:00 AM',
                 price: '₹1,500',
@@ -172,7 +97,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 user: 'Rahul Sharma • Samagri Required',
               ),
               const SizedBox(height: 16),
-              _buildRequestCard(
+              const _RequestCard(
                 title: 'Griha Pravesh',
                 time: 'Sunday, 08:00 AM',
                 price: '₹3,000',
@@ -189,63 +114,115 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildOverviewCard({
-    required IconData icon,
-    required String title,
-    required String value,
-  }) {
+}
+
+class _OnlineStatusCard extends StatefulWidget {
+  const _OnlineStatusCard();
+
+  @override
+  State<_OnlineStatusCard> createState() => _OnlineStatusCardState();
+}
+
+class _OnlineStatusCardState extends State<_OnlineStatusCard> {
+  bool _isOnline = false;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 16,
+      ),
       decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
-            children: [
-              Icon(icon, size: 16, color: const Color(0xFFD4A000)),
-              const SizedBox(width: 8),
-              Text(
-                title,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: AppColors.textLight),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            value,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: AppColors.textDark,
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.2),
+              shape: BoxShape.circle,
             ),
+            child: const Icon(Icons.wifi, color: Color(0xFFD4A000)),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _isOnline ? 'Online' : 'Offline',
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textDark,
+                      ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  _isOnline
+                      ? 'Ready for bookings'
+                      : 'Not accepting bookings',
+                  style: Theme.of(context).textTheme.bodyMedium
+                      ?.copyWith(color: AppColors.textLight),
+                ),
+              ],
+            ),
+          ),
+          Switch(
+            value: _isOnline,
+            onChanged: (val) async {
+              final success =
+                  await BackgroundBubbleService.toggleOnline(val);
+              if (success && mounted) {
+                setState(() {
+                  _isOnline = val;
+                });
+              }
+            },
+            activeThumbColor: AppColors.card,
+            activeTrackColor: AppColors.primary,
+            inactiveThumbColor: AppColors.textLight,
+            inactiveTrackColor: AppColors.border,
           ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildRequestCard({
-    required String title,
-    required String time,
-    required String price,
-    required String timer,
-    required String distance,
-    required String user,
-    bool noCounter = false,
-    bool noUser = false,
-  }) {
+class _RequestCard extends StatelessWidget {
+  final String title;
+  final String time;
+  final String price;
+  final String timer;
+  final String distance;
+  final String user;
+  final bool noCounter;
+  final bool noUser;
+
+  const _RequestCard({
+    required this.title,
+    required this.time,
+    required this.price,
+    required this.timer,
+    required this.distance,
+    required this.user,
+    this.noCounter = false,
+    this.noUser = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(

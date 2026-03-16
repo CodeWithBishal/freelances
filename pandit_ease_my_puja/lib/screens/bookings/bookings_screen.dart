@@ -124,8 +124,8 @@ class _BookingsScreenState extends State<BookingsScreen>
   Widget _buildUpcomingTab() {
     return ListView(
       padding: const EdgeInsets.all(16.0),
-      children: [
-        _buildBookingCard(
+      children: const [
+        _BookingCard(
           title: 'Satyanarayan Pooja',
           location: 'Andheri West, Mumbai',
           price: '₹2,100',
@@ -135,8 +135,8 @@ class _BookingsScreenState extends State<BookingsScreen>
           statusColor: AppColors.primary,
           isUpcoming: true,
         ),
-        const SizedBox(height: 16),
-        _buildBookingCard(
+        SizedBox(height: 16),
+        _BookingCard(
           title: 'Griha Pravesh',
           location: 'Bandra East, Mumbai',
           price: '₹5,500',
@@ -153,8 +153,8 @@ class _BookingsScreenState extends State<BookingsScreen>
   Widget _buildPastTab() {
     return ListView(
       padding: const EdgeInsets.all(16.0),
-      children: [
-        _buildBookingCard(
+      children: const [
+        _BookingCard(
           title: 'Vastu Shanti',
           location: 'Juhu, Mumbai',
           price: '₹4,000',
@@ -164,8 +164,8 @@ class _BookingsScreenState extends State<BookingsScreen>
           statusColor: AppColors.success,
           isUpcoming: false,
         ),
-        const SizedBox(height: 16),
-        _buildBookingCard(
+        SizedBox(height: 16),
+        _BookingCard(
           title: 'Namakaran',
           location: 'Powai, Mumbai',
           price: '₹1,500',
@@ -179,16 +179,31 @@ class _BookingsScreenState extends State<BookingsScreen>
     );
   }
 
-  Widget _buildBookingCard({
-    required String title,
-    required String location,
-    required String price,
-    required String date,
-    required String time,
-    required String status,
-    required Color statusColor,
-    required bool isUpcoming,
-  }) {
+}
+
+class _BookingCard extends StatelessWidget {
+  final String title;
+  final String location;
+  final String price;
+  final String date;
+  final String time;
+  final String status;
+  final Color statusColor;
+  final bool isUpcoming;
+
+  const _BookingCard({
+    required this.title,
+    required this.location,
+    required this.price,
+    required this.date,
+    required this.time,
+    required this.status,
+    required this.statusColor,
+    required this.isUpcoming,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.card,
