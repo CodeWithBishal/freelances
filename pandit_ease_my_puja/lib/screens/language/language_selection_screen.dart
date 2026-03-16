@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_colors.dart';
 import '../auth/user_selection_screen.dart';
@@ -38,7 +39,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
 
     if (mounted) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const UserSelectionScreen()),
+        CupertinoPageRoute(builder: (_) => const UserSelectionScreen()),
       );
     }
   }

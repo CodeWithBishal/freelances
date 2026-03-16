@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_colors.dart';
 import '../auth/login_screen.dart';
@@ -59,19 +60,20 @@ class _SplashScreenState extends State<SplashScreen>
         final prefs = await SharedPreferences.getInstance();
         final bool isLanguageSelected = prefs.getBool('language_selected') ?? false;
         final bool isUserTypeSelected = prefs.getBool('user_type_selected') ?? false;
+        final bool isLoggedIn = prefs.getBool('is_logged_in') ?? false; // Added isLoggedIn
 
         if (mounted) {
           if (!isLanguageSelected) {
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => const LanguageSelectionScreen()),
+              CupertinoPageRoute(builder: (_) => const LanguageSelectionScreen()),
             );
-          } else if (!isUserTypeSelected) {
+          } else if (isUserTypeSelected && !isLoggedIn) { // Modified condition
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => const UserSelectionScreen()),
+              CupertinoPageRoute(builder: (_) => const UserSelectionScreen()),
             );
           } else {
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => const LoginScreen()),
+              CupertinoPageRoute(builder: (_) => const LoginScreen()),
             );
           }
         }

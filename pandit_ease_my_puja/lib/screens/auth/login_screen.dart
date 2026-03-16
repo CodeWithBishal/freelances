@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../../theme/app_colors.dart';
 import 'otp_screen.dart';
 
@@ -15,7 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _sendOtp() {
     if (_phoneController.text.length == 10) {
       Navigator.of(context).push(
-        MaterialPageRoute(
+        CupertinoPageRoute(
           builder: (_) => OtpScreen(phoneNumber: _phoneController.text),
         ),
       );

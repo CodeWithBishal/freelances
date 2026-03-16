@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../../theme/app_colors.dart';
 import '../auth/login_screen.dart';
 import 'subscription_screen.dart';
@@ -96,7 +97,7 @@ class ProfileScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
+                          CupertinoPageRoute(
                             builder: (_) => const ReviewsScreen(),
                           ),
                         );
@@ -155,7 +156,7 @@ class ProfileScreen extends StatelessWidget {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
+                                CupertinoPageRoute(
                                   builder: (_) => const SubscriptionScreen(),
                                 ),
                               );
@@ -229,7 +230,7 @@ class ProfileScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const WalletScreen()),
+                        CupertinoPageRoute(builder: (_) => const WalletScreen()),
                       );
                     },
                   ),
@@ -267,7 +268,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     onTap: () {
                       Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (_) => const LoginScreen()),
+                        CupertinoPageRoute(builder: (_) => const LoginScreen()),
                         (route) => false,
                       );
                     },

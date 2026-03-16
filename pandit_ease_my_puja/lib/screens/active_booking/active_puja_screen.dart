@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../../theme/app_colors.dart';
+import '../main_layout.dart';
 import '../home/dashboard_screen.dart';
 
 class ActivePujaScreen extends StatefulWidget {
@@ -343,8 +345,8 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
                     Navigator.pop(context); // Close bottom sheet
                     // Navigate back to Dashboard and remove history
                     Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (context) => const DashboardScreen(),
+                      CupertinoPageRoute(
+                        builder: (context) => const MainLayout(),
                       ),
                       (Route<dynamic> route) => false,
                     );

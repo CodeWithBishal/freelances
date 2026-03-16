@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../../theme/app_colors.dart';
 import '../requests/counter_offer_screen.dart';
 import '../../utils/app_toast.dart';
@@ -370,7 +371,7 @@ class _RequestCard extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
+                        CupertinoPageRoute(
                           builder: (_) => const CounterOfferScreen(),
                         ),
                       );

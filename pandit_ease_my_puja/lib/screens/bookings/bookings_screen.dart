@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../../theme/app_colors.dart';
 import '../active_booking/active_booking_screen.dart';
 
@@ -356,7 +357,7 @@ class _BookingCard extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
+                          CupertinoPageRoute(
                             builder: (_) => const ActiveBookingScreen(),
                           ),
                         );

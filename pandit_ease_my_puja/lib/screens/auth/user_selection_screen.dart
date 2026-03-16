@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_colors.dart';
 import 'login_screen.dart';
@@ -27,7 +28,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
 
     if (mounted) {
       Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
+        CupertinoPageRoute(builder: (_) => const LoginScreen()),
       );
     }
   }

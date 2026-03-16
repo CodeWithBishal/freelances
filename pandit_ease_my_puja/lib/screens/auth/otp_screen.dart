@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_colors.dart';
 import '../registration/registration_screen.dart';
@@ -30,7 +31,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
       if (mounted) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
+          CupertinoPageRoute(
             builder: (_) => userType == 'mandir'
                 ? const MandirRegistrationScreen()
                 : const RegistrationScreen(),
