@@ -8,7 +8,8 @@ class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({super.key});
 
   @override
-  State<LanguageSelectionScreen> createState() => _LanguageSelectionScreenState();
+  State<LanguageSelectionScreen> createState() =>
+      _LanguageSelectionScreenState();
 }
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
@@ -27,9 +28,9 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
 
   Future<void> _saveSelectionAndContinue() async {
     if (selectedLanguage == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a language')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please select a language')));
       return;
     }
 
@@ -63,27 +64,28 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                   Text(
                     'Choose your language',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textDark,
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textDark,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'अपनी भाषा चुनें (Select your preferred language)',
+                    'Select your preferred language',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textLight,
-                        ),
+                      color: AppColors.textLight,
+                    ),
                   ),
                   const SizedBox(height: 32),
                   GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: 1.2,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                          childAspectRatio: 1.2,
+                        ),
                     itemCount: languages.length,
                     itemBuilder: (context, index) {
                       final lang = languages[index];
@@ -101,7 +103,9 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                             color: AppColors.card,
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                              color: isSelected ? AppColors.primary : Colors.transparent,
+                              color: isSelected
+                                  ? AppColors.primary
+                                  : Colors.transparent,
                               width: 2,
                             ),
                             boxShadow: [
@@ -120,7 +124,10 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                                   children: [
                                     Text(
                                       lang['nativeName']!,
-                                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.copyWith(
                                             fontWeight: FontWeight.bold,
                                             color: AppColors.textDark,
                                           ),
@@ -128,7 +135,10 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                                     const SizedBox(height: 4),
                                     Text(
                                       lang['name']!,
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
                                             color: AppColors.textLight,
                                           ),
                                     ),
