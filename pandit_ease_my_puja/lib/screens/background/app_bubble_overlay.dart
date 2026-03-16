@@ -12,28 +12,35 @@ class AppBubbleOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      child: GestureDetector(
-        onTap: () {
-          FlutterOverlayWindow.shareData("open_app");
-        },
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.primary.withValues(alpha: 0.4),
-                blurRadius: 10,
-                spreadRadius: 2,
+      child: Center(
+        child: GestureDetector(
+          onTap: () {
+            FlutterOverlayWindow.shareData("open_app");
+          },
+          behavior: HitTestBehavior.opaque,
+          child: Container(
+            width: 48, // Standard tap target size
+            height: 48,
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              color: Colors.transparent,
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: AppColors.textDark.withValues(alpha: 0.15),
+                  width: 1,
+                ),
               ),
-            ],
-            border: Border.all(color: AppColors.card, width: 2),
-          ),
-          child: const Icon(
-            Icons.temple_hindu,
-            color: AppColors.textDark,
-            size: 32,
+              child: const Icon(
+                Icons.temple_hindu,
+                color: AppColors.textDark,
+                size: 20,
+              ),
+            ),
           ),
         ),
       ),
