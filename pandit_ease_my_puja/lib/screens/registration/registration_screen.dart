@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../../theme/app_colors.dart';
 import '../main_layout.dart';
 
@@ -20,7 +21,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   void _submit() {
     Navigator.of(
       context,
-    ).pushReplacement(MaterialPageRoute(builder: (_) => const MainLayout()));
+    ).pushReplacement(CupertinoPageRoute(builder: (_) => const MainLayout()));
   }
 
   @override
@@ -60,16 +61,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   const SizedBox(height: 24),
 
                   _buildLabel(context, 'Full Name (as per Aadhaar)'),
-                  TextField(
-                    decoration: const InputDecoration(
+                  const TextField(
+                    decoration: InputDecoration(
                       hintText: 'Enter your full name',
                     ),
                   ),
                   const SizedBox(height: 16),
 
                   _buildLabel(context, 'Phone Number'),
-                  TextField(
-                    decoration: const InputDecoration(
+                  const TextField(
+                    decoration: InputDecoration(
                       hintText: '+91 00000 00000',
                     ),
                     keyboardType: TextInputType.phone,
@@ -77,8 +78,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   const SizedBox(height: 16),
 
                   _buildLabel(context, 'Years of Experience'),
-                  TextField(
-                    decoration: const InputDecoration(hintText: 'e.g. 10'),
+                  const TextField(
+                    decoration: InputDecoration(hintText: 'e.g. 10'),
                     keyboardType: TextInputType.number,
                   ),
                   const SizedBox(height: 16),
@@ -90,7 +91,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     initialValue: _selectedSpecialization,
                     items:
-                        [
+                        const [
                               'Vedic Scholar',
                               'Astrologer',
                               'Karma Kanda',

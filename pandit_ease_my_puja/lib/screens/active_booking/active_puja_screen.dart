@@ -310,11 +310,11 @@ class _ActivePujaScreenState extends State<ActivePujaScreen> {
                         fillColor: AppColors.background,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: AppColors.border),
+                          borderSide: const BorderSide(color: AppColors.border),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: AppColors.border),
+                          borderSide: const BorderSide(color: AppColors.border),
                         ),
                         focusedBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12)),

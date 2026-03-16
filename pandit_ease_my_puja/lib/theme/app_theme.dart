@@ -9,6 +9,12 @@ class AppTheme {
     final baseHeadingTheme = GoogleFonts.poppinsTextTheme();
 
     return ThemeData(
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        },
+      ),
       useMaterial3: true,
       scaffoldBackgroundColor: AppColors.background,
       primaryColor: AppColors.primary,

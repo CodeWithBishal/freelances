@@ -256,7 +256,7 @@ class ProfileScreen extends StatelessWidget {
                         color: AppColors.error.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(Icons.logout, color: AppColors.error),
+                      child: const Icon(Icons.logout, color: AppColors.error),
                     ),
                     title: Text(
                       'Log Out',

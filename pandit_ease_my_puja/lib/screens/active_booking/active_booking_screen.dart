@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../../theme/app_colors.dart';
 import '../../utils/app_toast.dart';
 import 'active_puja_screen.dart';
@@ -109,7 +110,7 @@ class ActiveBookingScreen extends StatelessWidget {
                           Navigator.pop(context); // Close sheet
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(
+                            CupertinoPageRoute(
                               builder: (_) => const ActivePujaScreen(),
                             ),
                           );
