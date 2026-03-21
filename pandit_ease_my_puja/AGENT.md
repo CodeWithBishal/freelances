@@ -394,4 +394,117 @@ Key differentiators:
 
 ---
 
+## 🧩 Backend (Common for Both Apps)
+
+### Appwrite (Core Backend)
+
+#### 1. Auth
+
+* Phone OTP (Primary)
+* Email/Password (Optional)
+* Role stored in user metadata (customer / pandit / mandir)
+
+#### 2. Database (Shared Collections)
+
+* users
+* pandits
+* mandirs
+* puja_requests
+* pandit_offers
+* bookings
+* transactions
+* reviews
+* availability
+
+#### 3. Geo Queries
+
+* Nearby Pandit discovery (for customer app)
+* Distance-based request filtering (for pandit app)
+
+#### 4. Functions
+
+* Matching engine (customer → pandit)
+* Booking lifecycle automation
+* OTP validation (start + complete puja)
+* Payment + payout triggers
+* Notification triggers
+
+---
+
+## 🔔 Firebase (Support Services for Both Apps)
+
+### 1. FCM
+
+* Customer app:
+
+  * Offer received
+  * Booking confirmed
+  * Pandit arrival updates
+* Pandit app:
+
+  * New booking requests
+  * Counter responses(max 3 times)
+
+### 2. Crashlytics
+
+* Error monitoring for both apps
+
+### 3. Remote Config
+
+* Dynamic pricing tweaks
+* Base pricing etc.
+* Feature flags (enable/disable features)
+
+### 4. Analytics(admin panel)
+
+* Funnel tracking (booking conversion)
+* Retention tracking
+* User behavior insights
+
+---
+
+# 🔄 Booking Lifecycle
+
+```
+REQUEST_CREATED
+ → MATCHING
+ → OFFER_RECEIVED
+ → ACCEPTED
+ → CONFIRMED
+ → TRACKING
+ → IN_PROGRESS
+ → COMPLETED
+ → PAID
+ → REVIEWED
+```
+
+---
+
+# ⚠️ Edge Cases
+
+* No Pandits found → retry / expand radius(till 10mins), hexagonal search like uber
+* Multiple offers → choose best → counter offer max of 3 times
+* Payment failure → retry
+* Cancellation → before start
+* Network issues → retry logic
+
+---
+
+# 🔐 Security
+
+* OTP-based authentication
+* Secure payments
+* Role-based access
+
+---
+
+# 📈 Future Enhancements
+
+* Real-time chat
+* Dynamic pricing
+* Subscription offers
+* Loyalty rewards
+
+---
+
 # ✅ End of Agent Spec

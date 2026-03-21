@@ -306,7 +306,7 @@ UNAUTHENTICATED
 * Pandit app:
 
   * New booking requests
-  * Counter responses
+  * Counter responses(max 3 times)
 
 ### 2. Crashlytics
 
@@ -315,9 +315,10 @@ UNAUTHENTICATED
 ### 3. Remote Config
 
 * Dynamic pricing tweaks
+* Base pricing etc.
 * Feature flags (enable/disable features)
 
-### 4. Analytics
+### 4. Analytics(admin panel)
 
 * Funnel tracking (booking conversion)
 * Retention tracking
@@ -344,8 +345,8 @@ REQUEST_CREATED
 
 # ⚠️ Edge Cases
 
-* No Pandits found → retry / expand radius(till 10mins)
-* Multiple offers → choose best → counter offers
+* No Pandits found → retry / expand radius(till 10mins), hexagonal search like uber
+* Multiple offers → choose best → counter offer max of 3 times
 * Payment failure → retry
 * Cancellation → before start
 * Network issues → retry logic
