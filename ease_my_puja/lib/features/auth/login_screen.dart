@@ -1,5 +1,5 @@
-import 'package:easy_my_puja/features/auth/otp_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
 
@@ -175,7 +175,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        context.push('/otp?phone=${_phoneController.text}');
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.secondary,
                         shape: RoundedRectangleBorder(
@@ -186,22 +188,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      OtpScreen(phone: _phoneController.text),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              'Get OTP',
-                              style: AppTextStyles.h3.copyWith(
-                                color: Colors.white,
-                                fontSize: 18,
-                              ),
+                          Text(
+                            'Get OTP',
+                            style: AppTextStyles.h3.copyWith(
+                              color: Colors.white,
+                              fontSize: 18,
                             ),
                           ),
                           const SizedBox(width: 8),

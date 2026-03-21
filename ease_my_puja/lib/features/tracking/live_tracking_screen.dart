@@ -52,20 +52,21 @@ class LiveTrackingScreen extends StatelessWidget {
           _MapPlaceholder(),
 
           // Bottom panel
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: _BottomPanel(context),
+          DraggableScrollableSheet(
+            initialChildSize: 0.5,
+            minChildSize: 0.35,
+            maxChildSize: 0.9,
+            builder: (context, scrollController) {
+              return _BottomPanel(context, scrollController);
+            },
           ),
         ],
       ),
     );
   }
 
-  Widget _BottomPanel(BuildContext context) {
+  Widget _BottomPanel(BuildContext context, ScrollController scrollController) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
       decoration: const BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
@@ -77,47 +78,52 @@ class LiveTrackingScreen extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: ListView(
+        controller: scrollController,
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
         children: [
           // Drag handle
-          Container(
-            width: 40,
-            height: 4,
-            margin: const EdgeInsets.only(bottom: 16),
-            decoration: BoxDecoration(
-              color: AppColors.border,
-              borderRadius: BorderRadius.circular(2),
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                color: AppColors.border,
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
           ),
 
           // Status
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            decoration: BoxDecoration(
-              color: AppColors.warning.withOpacity(0.12),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.warning.withOpacity(0.4)),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 8,
-                  height: 8,
-                  margin: const EdgeInsets.only(right: 6),
-                  decoration: const BoxDecoration(
-                    color: AppColors.warning,
-                    shape: BoxShape.circle,
+          Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.warning.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.warning.withOpacity(0.4)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    margin: const EdgeInsets.only(right: 6),
+                    decoration: const BoxDecoration(
+                      color: AppColors.warning,
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                ),
-                Text(
-                  'Pandit is en route',
-                  style: AppTextStyles.labelMedium.copyWith(
-                    color: AppColors.warning,
+                  Text(
+                    'Pandit is en route',
+                    style: AppTextStyles.labelMedium.copyWith(
+                      color: AppColors.warning,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
 
@@ -169,7 +175,7 @@ class LiveTrackingScreen extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Progress strip
-          Row(
+          const Row(
             children: [
               _Step(icon: '📋', label: 'Accepted', done: true),
               _StepLine(done: true),
@@ -231,6 +237,195 @@ class LiveTrackingScreen extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+
+          const SizedBox(height: 24),
+          const Divider(height: 1, color: AppColors.border),
+          const SizedBox(height: 24),
+
+          // Booking Details Summary
+          Text('Booking Details', style: AppTextStyles.h4),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.background,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.border),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.calendar_today_outlined,
+                      size: 20,
+                      color: AppColors.textSecondary,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Date & Time', style: AppTextStyles.labelMedium),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Mon, 15 Oct • 10:00 AM',
+                            style: AppTextStyles.bodyMedium,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  child: Divider(height: 1, color: AppColors.border),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.location_on_outlined,
+                      size: 20,
+                      color: AppColors.textSecondary,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Address', style: AppTextStyles.labelMedium),
+                          const SizedBox(height: 4),
+                          Text(
+                            '123, Sector 4, HSR Layout, Bengaluru, Karnataka 560102',
+                            style: AppTextStyles.bodyMedium,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // Ad banner (non-sticky)
+          Container(
+            height: 100,
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFF3E0), // Light orange background for ad
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: const Color(0xFFFFCC80)),
+            ),
+            child: Row(
+              children: [
+                const SizedBox(width: 16),
+                const Text('🔥', style: TextStyle(fontSize: 40)),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Get 50% Off on Puja Samagri',
+                        style: AppTextStyles.labelLarge,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Use code: DIWALI50',
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // Order Puja items
+          InkWell(
+            onTap: () {}, // Navigate to EMP store
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                borderRadius: BorderRadius.circular(16),
+                color: AppColors.primary.withOpacity(0.05),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.shopping_bag_outlined,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Order Puja Items',
+                          style: AppTextStyles.labelLarge,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Get pure samagri delivered from EMP Store',
+                          style: AppTextStyles.bodySmall.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.chevron_right, color: AppColors.primary),
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // More Content - Policies and Support
+          Text('Support & More', style: AppTextStyles.h4),
+          const SizedBox(height: 12),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(
+              Icons.support_agent_outlined,
+              color: AppColors.textSecondary,
+            ),
+            title: const Text('Support Chat'),
+            trailing: const Icon(Icons.chevron_right, size: 20),
+            onTap: () {},
+          ),
+          const Divider(height: 1, color: AppColors.border),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(
+              Icons.policy_outlined,
+              color: AppColors.textSecondary,
+            ),
+            title: const Text('Cancellation Policy'),
+            trailing: const Icon(Icons.chevron_right, size: 20),
+            onTap: () {},
           ),
         ],
       ),

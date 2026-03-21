@@ -14,50 +14,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedNav = 0;
 
-  final _pujaCategories = [
-    ('🪔', 'Satyanarayan\nKatha'),
-    ('🏠', 'Griha\nPravesh'),
-    ('👶', 'Namkaran\nSamskara'),
-    ('💍', 'Vivah\nPuja'),
-    ('🌙', 'Navgrah\nPuja'),
-    ('🔱', 'Rudrabhishek'),
-    ('🌸', 'Lakshmi\nPuja'),
-    ('⭐', 'More'),
-  ];
-
-  final _upcomingPandits = [
-    _PanditData(
-      name: 'Pt. Ramesh Sharma',
-      specialty: 'Vedic Rituals',
-      rating: 4.9,
-      reviews: 234,
-      distance: '1.2 km',
-      price: '₹1,500',
-      emoji: '👨‍🦳',
-      availableNow: true,
-    ),
-    _PanditData(
-      name: 'Pt. Suresh Joshi',
-      specialty: 'South Indian Puja',
-      rating: 4.7,
-      reviews: 180,
-      distance: '2.5 km',
-      price: '₹1,200',
-      emoji: '👨‍🦱',
-      availableNow: true,
-    ),
-    _PanditData(
-      name: 'Pt. Anil Trivedi',
-      specialty: 'North Indian Rites',
-      rating: 4.8,
-      reviews: 312,
-      distance: '3.1 km',
-      price: '₹2,000',
-      emoji: '🧔',
-      availableNow: false,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,14 +31,39 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 16),
                     _buildSearchBar(),
                     const SizedBox(height: 20),
-                    _buildActiveBanner(),
+                    // Section 1 — Hero Slider
+                    _buildHeroSlider(),
                     const SizedBox(height: 24),
-                    _buildCategorySection(),
+                    // Section 2 — Explore Services
+                    _buildExploreServices(),
                     const SizedBox(height: 24),
-                    _buildFeaturedPandits(),
+                    // Section 3 — Trending Poojas
+                    _buildTrendingPoojas(),
                     const SizedBox(height: 24),
-                    _buildFestivalBanner(),
+                    // Section 4 — Video Testimonials (Clients)
+                    _buildClientTestimonials(),
                     const SizedBox(height: 24),
+                    // Section 5 — Trusted Specialists
+                    _buildTrustedSpecialists(),
+                    const SizedBox(height: 24),
+                    // Section 6 — VIP Darshan Slider
+                    _buildVipDarshanSlider(),
+                    const SizedBox(height: 24),
+                    // Section 7 — Pandit Testimonials
+                    _buildPanditTestimonials(),
+                    const SizedBox(height: 24),
+                    // Section 8 — Emp Store
+                    _buildEmpStore(),
+                    const SizedBox(height: 24),
+                    // Section 9 — EMP Remedies
+                    _buildEmpRemedies(),
+                    const SizedBox(height: 24),
+                    // Section 10 — Blog Section
+                    _buildBlogSection(),
+                    const SizedBox(height: 24),
+                    // Section 11 — Trust Indicators
+                    _buildTrustIndicators(),
+                    const SizedBox(height: 32),
                   ],
                 ),
               ),
@@ -111,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           const Spacer(),
-          // Location chip
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
@@ -138,7 +118,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(width: 10),
-          // Profile
           CircleAvatar(
             radius: 20,
             backgroundColor: AppColors.primary,
@@ -196,96 +175,86 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildActiveBanner() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF667eea), Color(0xFF764ba2)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF667eea).withOpacity(0.3),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+  // Section 1
+  Widget _buildHeroSlider() {
+    final slides = [
+      ('Book a Pandit Instantly', '🪔'),
+      ('VIP Temple Darshan Booking', '🛕'),
+      ('Online Pooja Services', '💻'),
+      ('Festival Special Poojas', '🎊'),
+    ];
+
+    return SizedBox(
+      height: 160,
+      child: PageView.builder(
+        itemCount: slides.length,
+        itemBuilder: (context, index) {
+          final slide = slides[index];
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 3,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white24,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    '🔥 TRENDING',
-                    style: AppTextStyles.caption.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Book for Holi Festival',
-                  style: AppTextStyles.h3.copyWith(color: Colors.white),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Get 20% off on all pujas',
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: Colors.white70,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                ElevatedButton(
-                  onPressed: () => context.push('/home/create-request'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: const Color(0xFF764ba2),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    'Book Now',
-                    style: AppTextStyles.labelMedium.copyWith(
-                      color: const Color(0xFF764ba2),
-                    ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        slide.$1,
+                        style: AppTextStyles.h3.copyWith(color: Colors.white),
+                      ),
+                      const SizedBox(height: 12),
+                      ElevatedButton(
+                        onPressed: () => context.push('/home/create-request'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: const Color(0xFF764ba2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text('Book Now'),
+                      ),
+                    ],
                   ),
                 ),
+                Text(slide.$2, style: const TextStyle(fontSize: 60)),
               ],
             ),
-          ),
-          const Text('🪔', style: TextStyle(fontSize: 60)),
-        ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildCategorySection() {
+  // Section 2
+  Widget _buildExploreServices() {
+    final services = [
+      ('🪔', 'Satyanarayan Pooja'),
+      ('🏠', 'Griha Pravesh'),
+      ('💍', 'Marriage Rituals'),
+      ('💻', 'Online Pooja'),
+      ('🛕', 'Temple Darshan'),
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          title: 'Puja Types',
+          title: 'Explore Services',
           actionLabel: 'View All',
           onAction: () {},
         ),
@@ -294,38 +263,35 @@ class _HomeScreenState extends State<HomeScreen> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            childAspectRatio: 0.85,
+            crossAxisCount: 3,
+            childAspectRatio: 0.9,
             mainAxisSpacing: 12,
-            crossAxisSpacing: 8,
+            crossAxisSpacing: 12,
           ),
-          itemCount: _pujaCategories.length,
+          itemCount: services.length,
           itemBuilder: (_, i) {
-            final cat = _pujaCategories[i];
-            return GestureDetector(
-              onTap: () => context.push('/home/create-request'),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.card,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.border),
-                  boxShadow: AppColors.softShadow,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(cat.$1, style: const TextStyle(fontSize: 26)),
-                    const SizedBox(height: 6),
-                    Text(
-                      cat.$2,
-                      style: AppTextStyles.caption.copyWith(
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.center,
+            final svc = services[i];
+            return Container(
+              decoration: BoxDecoration(
+                color: AppColors.card,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.border),
+                boxShadow: AppColors.softShadow,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(svc.$1, style: const TextStyle(fontSize: 32)),
+                  const SizedBox(height: 8),
+                  Text(
+                    svc.$2,
+                    style: AppTextStyles.caption.copyWith(
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
-                ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             );
           },
@@ -334,27 +300,92 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildFeaturedPandits() {
+  // Section 3
+  Widget _buildTrendingPoojas() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          title: 'Pandits Near You',
+          title: 'Trending Poojas',
           actionLabel: 'See All',
           onAction: () {},
         ),
         const SizedBox(height: 14),
         SizedBox(
-          height: 200,
+          height: 180,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: _upcomingPandits.length,
+            itemCount: 3,
             separatorBuilder: (_, _) => const SizedBox(width: 12),
             itemBuilder: (_, i) {
-              final p = _upcomingPandits[i];
-              return GestureDetector(
-                onTap: () => context.push('/home/pandit-profile'),
-                child: _PanditCard(data: p),
+              return Container(
+                width: 160,
+                decoration: BoxDecoration(
+                  color: AppColors.card,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.border),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          height: 100,
+                          decoration: const BoxDecoration(
+                            color: AppColors.accent,
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(15),
+                            ),
+                          ),
+                          child: const Center(
+                            child: Text('🌹', style: TextStyle(fontSize: 40)),
+                          ),
+                        ),
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Text(
+                              '🔥 Popular',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Navgrah Shanti',
+                            style: AppTextStyles.labelMedium,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '₹2,100 - ₹5,100',
+                            style: AppTextStyles.caption.copyWith(
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               );
             },
           ),
@@ -363,45 +394,509 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildFestivalBanner() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.accent,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Row(
-        children: [
-          const Text('🌸', style: TextStyle(fontSize: 40)),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Request a Puja Today!', style: AppTextStyles.h4),
-                const SizedBox(height: 4),
-                Text(
-                  'Post your puja request & get bids from nearby pandits in minutes',
-                  style: AppTextStyles.bodySmall,
+  // Section 4
+  Widget _buildClientTestimonials() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Hear from our Devotees', style: AppTextStyles.h3),
+        const SizedBox(height: 14),
+        SizedBox(
+          height: 160,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: 3,
+            separatorBuilder: (_, _) => const SizedBox(width: 12),
+            itemBuilder: (_, i) {
+              return Container(
+                width: 240,
+                decoration: BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.border),
                 ),
-              ],
-            ),
+                child: Stack(
+                  children: [
+                    Container(
+                      height: 100,
+                      decoration: const BoxDecoration(
+                        color: Colors.black87,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(15),
+                        ),
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.play_circle_fill,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: const BoxDecoration(
+                          color: AppColors.card,
+                          borderRadius: BorderRadius.vertical(
+                            bottom: Radius.circular(15),
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Aarti S.', style: AppTextStyles.labelMedium),
+                            Text(
+                              '"Beautiful arrangement..."',
+                              style: AppTextStyles.caption,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
-          const SizedBox(width: 8),
-          GestureDetector(
-            onTap: () => context.push('/home/create-request'),
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(16),
+        ),
+      ],
+    );
+  }
+
+  // Section 5
+  Widget _buildTrustedSpecialists() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SectionHeader(
+          title: 'Trusted Specialists',
+          actionLabel: 'See All',
+          onAction: () {},
+        ),
+        const SizedBox(height: 14),
+        SizedBox(
+          height: 170,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: 3,
+            separatorBuilder: (_, _) => const SizedBox(width: 12),
+            itemBuilder: (_, i) {
+              return Container(
+                width: 140,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.card,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.border),
+                ),
+                child: Column(
+                  children: [
+                    const CircleAvatar(
+                      radius: 24,
+                      backgroundColor: AppColors.accent,
+                      child: Text('👨‍🦳', style: TextStyle(fontSize: 24)),
+                    ),
+                    const SizedBox(height: 8),
+                    Text('Pt. Ramesh', style: AppTextStyles.labelMedium),
+                    Text('Vedic, 15+ yrs', style: AppTextStyles.caption),
+                    const SizedBox(height: 4),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.verified, color: Colors.blue, size: 14),
+                        SizedBox(width: 4),
+                        Text(
+                          'Verified',
+                          style: TextStyle(fontSize: 10, color: Colors.blue),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.star, color: Colors.orange, size: 14),
+                        Text(' 4.9', style: TextStyle(fontSize: 12)),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Section 6
+  Widget _buildVipDarshanSlider() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('VIP Temple Darshan', style: AppTextStyles.h3),
+        const SizedBox(height: 14),
+        SizedBox(
+          height: 140,
+          child: PageView.builder(
+            itemCount: 4,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF3E0),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.orange.shade200),
+                ),
+                child: Row(
+                  children: [
+                    const Text('🛕', style: TextStyle(fontSize: 50)),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Kashi Vishwanath', style: AppTextStyles.h4),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Fast entry pass & QR Verification',
+                            style: AppTextStyles.caption,
+                          ),
+                          const SizedBox(height: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.orange,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Text(
+                              'Book Darshan',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Section 7
+  Widget _buildPanditTestimonials() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Trusted by Pandits', style: AppTextStyles.h3),
+        const SizedBox(height: 14),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF3E5F5),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: const Row(
+            children: [
+              CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.white,
+                child: Icon(
+                  Icons.play_arrow_rounded,
+                  color: Colors.orange,
+                  size: 30,
+                ),
               ),
-              child: const Icon(Icons.arrow_forward_rounded, size: 18),
-            ),
+              SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '"EMP has grown my reach immensely!"',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      '- Pt. Sharma, Varanasi',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
+    );
+  }
+
+  // Section 8
+  Widget _buildEmpStore() {
+    final items = [
+      ('Pooja Kit', '₹599', '📦'),
+      ('Incense Sticks', '₹150', '🕯️'),
+      ('Brass Diya', '₹299', '🪔'),
+      ('Coconut', '₹40', '🥥'),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SectionHeader(
+          title: 'EMP Store',
+          actionLabel: 'Shop All',
+          onAction: () {},
+        ),
+        const SizedBox(height: 14),
+        SizedBox(
+          height: 160,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: items.length,
+            separatorBuilder: (_, _) => const SizedBox(width: 12),
+            itemBuilder: (_, i) {
+              final item = items[i];
+              return Container(
+                width: 120,
+                decoration: BoxDecoration(
+                  color: AppColors.card,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.border),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(item.$3, style: const TextStyle(fontSize: 40)),
+                    const SizedBox(height: 8),
+                    Text(item.$1, style: AppTextStyles.labelMedium),
+                    Text(
+                      item.$2,
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.secondary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(80, 24),
+                        padding: EdgeInsets.zero,
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.textPrimary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () {},
+                      child: const Text(
+                        'Add to Cart',
+                        style: TextStyle(fontSize: 10),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Section 9
+  Widget _buildEmpRemedies() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('EMP Remedies', style: AppTextStyles.h3),
+        const SizedBox(height: 14),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE8EAF6),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Column(
+                  children: [
+                    Text('🔮', style: TextStyle(fontSize: 30)),
+                    SizedBox(height: 8),
+                    Text(
+                      'Astrology',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE0F7FA),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Column(
+                  children: [
+                    Text('💎', style: TextStyle(fontSize: 30)),
+                    SizedBox(height: 8),
+                    Text(
+                      'Gemstones',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF1F8E9),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Column(
+                  children: [
+                    Text('🏡', style: TextStyle(fontSize: 30)),
+                    SizedBox(height: 8),
+                    Text(
+                      'Vastu',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  // Section 10
+  Widget _buildBlogSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Easy My Puja Blogs', style: AppTextStyles.h3),
+        const SizedBox(height: 14),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: AppColors.card,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.border),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: AppColors.accent,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Center(
+                  child: Text('📖', style: TextStyle(fontSize: 30)),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'How to perform Diwali Pooja at home',
+                      style: AppTextStyles.labelMedium,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Step by step guide for the perfect rituals...',
+                      style: AppTextStyles.caption,
+                    ),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Read more',
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Section 11
+  Widget _buildTrustIndicators() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildTrustBadge(Icons.lock_outline, 'Safe &\nConfidential'),
+        _buildTrustBadge(Icons.verified_user_outlined, 'Verified\nPandits'),
+        _buildTrustBadge(Icons.security_outlined, 'Secure\nPayment'),
+      ],
+    );
+  }
+
+  Widget _buildTrustBadge(IconData icon, String text) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: const BoxDecoration(
+            color: Color(0xFFF5F5F5),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: Colors.grey.shade700, size: 24),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          text,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 10,
+            color: Colors.grey,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
     );
   }
 
@@ -488,98 +983,6 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }),
         ),
-      ),
-    );
-  }
-}
-
-class _PanditData {
-  final String name, specialty, distance, price, emoji;
-  final double rating;
-  final int reviews;
-  final bool availableNow;
-
-  const _PanditData({
-    required this.name,
-    required this.specialty,
-    required this.rating,
-    required this.reviews,
-    required this.distance,
-    required this.price,
-    required this.emoji,
-    required this.availableNow,
-  });
-}
-
-class _PanditCard extends StatelessWidget {
-  final _PanditData data;
-
-  const _PanditCard({required this.data});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 148,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.border),
-        boxShadow: AppColors.softShadow,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: AppColors.accent,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Text(data.emoji, style: const TextStyle(fontSize: 22)),
-                ),
-              ),
-              const Spacer(),
-              if (data.availableNow)
-                Container(
-                  width: 10,
-                  height: 10,
-                  decoration: const BoxDecoration(
-                    color: AppColors.success,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            data.name,
-            style: AppTextStyles.labelMedium,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 3),
-          Text(
-            data.specialty,
-            style: AppTextStyles.caption,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 6),
-          RatingRow(rating: data.rating, reviewCount: data.reviews),
-          const Spacer(),
-          Row(
-            children: [
-              Text(data.price, style: AppTextStyles.priceSmall),
-              const Spacer(),
-              Text(data.distance, style: AppTextStyles.caption),
-            ],
-          ),
-        ],
       ),
     );
   }

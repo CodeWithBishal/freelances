@@ -111,9 +111,9 @@ class _ArrivalVerificationScreenState extends State<ArrivalVerificationScreen>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: _otp.split('').map((digit) {
                       return Container(
-                        width: 48,
+                        width: 46,
                         height: 56,
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        margin: const EdgeInsets.symmetric(horizontal: 2),
                         decoration: BoxDecoration(
                           gradient: AppColors.primaryGradient,
                           borderRadius: BorderRadius.circular(16),
