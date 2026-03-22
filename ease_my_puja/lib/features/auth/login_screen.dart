@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios_new,
-            color: Colors.black,
+            color: AppColors.textPrimary,
             size: 20,
           ),
           onPressed: () {},
@@ -39,23 +39,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
+                    // App icon with Blinkit Yellow
                     Container(
-                      width: 60,
-                      height: 60,
+                      width: 64,
+                      height: 64,
                       decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(16),
+                        gradient: AppColors.primaryGradient,
+                        borderRadius: BorderRadius.circular(18),
+                        boxShadow: AppColors.cardShadow,
                       ),
                       alignment: Alignment.center,
                       child: const Icon(
                         Icons.temple_hindu,
-                        color: Colors.black,
-                        size: 32,
+                        color: AppColors.textPrimary,
+                        size: 34,
                       ),
                     ),
                     const SizedBox(height: 32),
                     Text(
-                      'Welcome',
+                      'Welcome 🙏',
                       style: AppTextStyles.h1.copyWith(fontSize: 32),
                     ),
                     const SizedBox(height: 12),
@@ -63,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       'Enter your phone number to\nreceive an OTP and connect\nwith verified Pandits.',
                       style: AppTextStyles.bodyMedium.copyWith(
                         height: 1.5,
-                        color: Colors.black87,
+                        color: AppColors.textSecondary,
                       ),
                     ),
                     const SizedBox(height: 48),
@@ -72,14 +74,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: AppTextStyles.labelSmall.copyWith(
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.2,
+                        color: AppColors.textSecondary,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.card,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.grey.shade200),
+                        border: Border.all(color: AppColors.border, width: 1.5),
+                        boxShadow: AppColors.softShadow,
                       ),
                       child: Row(
                         children: [
@@ -96,14 +100,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: 4),
-                                const Icon(Icons.keyboard_arrow_down, size: 16),
+                                const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 16,
+                                  color: AppColors.textSecondary,
+                                ),
                               ],
                             ),
                           ),
                           Container(
                             width: 1,
                             height: 24,
-                            color: Colors.grey.shade300,
+                            color: AppColors.border,
                           ),
                           Expanded(
                             child: TextField(
@@ -119,14 +127,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 focusedBorder: InputBorder.none,
                                 hintText: '99999 99999',
                                 hintStyle: AppTextStyles.bodyLarge.copyWith(
-                                  color: Colors.grey.shade400,
+                                  color: AppColors.textHint,
                                   letterSpacing: 2,
                                 ),
                                 contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16.0,
                                   vertical: 16.0,
                                 ),
-                                fillColor: Colors.transparent,
                               ),
                             ),
                           ),
@@ -145,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextSpan(
                       text: 'By proceeding, you agree to our ',
                       style: AppTextStyles.labelMedium.copyWith(
-                        color: Colors.black54,
+                        color: AppColors.textSecondary,
                       ),
                       children: [
                         TextSpan(
@@ -153,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: AppTextStyles.labelMedium.copyWith(
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.underline,
-                            color: Colors.black,
+                            color: AppColors.textPrimary,
                           ),
                         ),
                         const TextSpan(text: ' & '),
@@ -162,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: AppTextStyles.labelMedium.copyWith(
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.underline,
-                            color: Colors.black,
+                            color: AppColors.textPrimary,
                           ),
                         ),
                         const TextSpan(text: '.'),
@@ -191,14 +198,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           Text(
                             'Get OTP',
                             style: AppTextStyles.h3.copyWith(
-                              color: Colors.white,
+                              color: AppColors.card,
                               fontSize: 18,
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Icon(
+                          Icon(
                             Icons.arrow_forward,
-                            color: Colors.white,
+                            color: AppColors.card,
                             size: 20,
                           ),
                         ],

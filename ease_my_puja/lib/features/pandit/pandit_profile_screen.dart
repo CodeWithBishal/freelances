@@ -71,7 +71,7 @@ class _PanditProfileScreenState extends State<PanditProfileScreen>
             leading: Padding(
               padding: const EdgeInsets.all(8),
               child: CircleAvatar(
-                backgroundColor: Colors.white70,
+                backgroundColor: AppColors.card.withOpacity(0.7),
                 child: IconButton(
                   icon: const Icon(
                     Icons.arrow_back_ios_new_rounded,
@@ -86,7 +86,7 @@ class _PanditProfileScreenState extends State<PanditProfileScreen>
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: CircleAvatar(
-                  backgroundColor: Colors.white70,
+                  backgroundColor: AppColors.card.withOpacity(0.7),
                   child: IconButton(
                     icon: const Icon(
                       Icons.share_outlined,
@@ -100,9 +100,9 @@ class _PanditProfileScreenState extends State<PanditProfileScreen>
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0xFFFFE9A6), Color(0xFFFFF8E8)],
+                    colors: [AppColors.primary.withOpacity(0.4), AppColors.primary.withOpacity(0.1)],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   ),
@@ -221,10 +221,10 @@ class _PanditProfileScreenState extends State<PanditProfileScreen>
       ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: AppColors.card,
           border: Border(top: BorderSide(color: AppColors.border)),
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8)],
+          boxShadow: [BoxShadow(color: AppColors.textPrimary.withOpacity(0.12), blurRadius: 8)],
         ),
         child: Row(
           children: [

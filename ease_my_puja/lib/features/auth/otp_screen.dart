@@ -83,126 +83,177 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.card,
       body: Container(
         decoration: const BoxDecoration(gradient: AppColors.splashGradient),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 16),
-                IconButton(
+          bottom: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: IconButton(
                   icon: const Icon(Icons.arrow_back_ios_new_rounded),
                   onPressed: () => context.pop(),
                   style: IconButton.styleFrom(
                     backgroundColor: AppColors.card,
+                    elevation: 2,
+                    shadowColor: AppColors.primaryDark.withOpacity(0.2),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
                 ),
+              ),
 
-                const SizedBox(height: 32),
-
-                // Title
-                Text('Verify OTP 🔐', style: AppTextStyles.h1),
-                const SizedBox(height: 8),
-                RichText(
-                  text: TextSpan(
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.textSecondary,
+              // Animated icon / Graphic area
+              Expanded(
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(32),
+                    decoration: BoxDecoration(
+                      color: AppColors.card.withOpacity(0.95),
+                      shape: BoxShape.circle,
+                      boxShadow: AppColors.cardShadow,
                     ),
-                    children: [
-                      const TextSpan(text: 'OTP sent to  '),
-                      TextSpan(
-                        text: '+91 ${widget.phone}',
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.textPrimary,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 40),
-
-                // 6-digit OTP boxes
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(
-                    6,
-                    (i) => _OtpBox(
-                      controller: _ctrlList[i],
-                      focusNode: _focusList[i],
-                      onChanged: (v) => _onChanged(i, v),
-                      onKey: (e) => _onKey(i, e),
-                      filled: _ctrlList[i].text.isNotEmpty,
+                    child: const Icon(
+                      Icons.mark_email_read_rounded,
+                      size: 80,
+                      color: AppColors.primaryDark,
                     ),
                   ),
                 ),
+              ),
 
-                const SizedBox(height: 16),
-
-                // Resend
-                Row(
+              // Bottom card
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.card,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                  boxShadow: AppColors.softShadow,
+                ),
+                padding: const EdgeInsets.fromLTRB(28, 40, 28, 32),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Didn't receive OTP? ",
-                      style: AppTextStyles.bodySmall,
-                    ),
-                    _resendCountdown > 0
-                        ? Text(
-                            'Resend in ${_resendCountdown}s',
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: AppColors.textHint,
-                            ),
-                          )
-                        : GestureDetector(
-                            onTap: () => setState(() => _resendCountdown = 30),
-                            child: Text(
-                              'Resend OTP',
-                              style: AppTextStyles.bodySmall.copyWith(
-                                color: AppColors.secondary,
-                                fontWeight: FontWeight.w700,
-                              ),
+                    Text('Verify OTP 🔐', style: AppTextStyles.h1.copyWith(fontSize: 28)),
+                    const SizedBox(height: 12),
+                    RichText(
+                      text: TextSpan(
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.textSecondary,
+                          height: 1.4,
+                        ),
+                        children: [
+                          const TextSpan(text: 'We\'ve sent a 6-digit code to\n'),
+                          TextSpan(
+                            text: '+91 ${widget.phone}',
+                            style: AppTextStyles.bodyMedium.copyWith(
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.w800,
                             ),
                           ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 36),
+
+                    // 6-digit OTP boxes
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(
+                        6,
+                        (i) => _OtpBox(
+                          controller: _ctrlList[i],
+                          focusNode: _focusList[i],
+                          onChanged: (v) => _onChanged(i, v),
+                          onKey: (e) => _onKey(i, e),
+                          filled: _ctrlList[i].text.isNotEmpty,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // Resend
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Didn't receive code?",
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.textSecondary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        _resendCountdown > 0
+                            ? Text(
+                                '00:${_resendCountdown.toString().padLeft(2, '0')}',
+                                style: AppTextStyles.bodyLarge.copyWith(
+                                  color: AppColors.textHint,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            : GestureDetector(
+                                onTap: () => setState(() => _resendCountdown = 30),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.secondary.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(color: AppColors.secondary.withOpacity(0.3)),
+                                  ),
+                                  child: Text(
+                                    'Resend OTP',
+                                    style: AppTextStyles.bodySmall.copyWith(
+                                      color: AppColors.secondary,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 40),
+
+                    PrimaryButton(
+                      label: 'Verify & Continue',
+                      onTap: _isComplete ? _verify : null,
+                      isLoading: _isLoading,
+                    ),
+
+                    const SizedBox(height: 24),
+                    SafeArea(
+                      top: false,
+                      child: Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.verified_user_rounded,
+                              size: 16,
+                              color: AppColors.success,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              'Your number is strictly confidential',
+                              style: AppTextStyles.caption.copyWith(
+                                color: AppColors.textSecondary,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-
-                const SizedBox(height: 40),
-
-                PrimaryButton(
-                  label: 'Verify & Continue',
-                  onTap: _isComplete ? _verify : null,
-                  isLoading: _isLoading,
-                ),
-
-                const Spacer(),
-
-                // Trust note
-                Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.lock_outline_rounded,
-                        size: 14,
-                        color: AppColors.textHint,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        'Your number is never shared with anyone',
-                        style: AppTextStyles.caption,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -232,7 +283,7 @@ class _OtpBox extends StatelessWidget {
       onKeyEvent: onKey,
       child: SizedBox(
         width: 48,
-        height: 56,
+        height: 60,
         child: TextField(
           controller: controller,
           focusNode: focusNode,
@@ -240,32 +291,29 @@ class _OtpBox extends StatelessWidget {
           keyboardType: TextInputType.number,
           maxLength: 1,
           textAlign: TextAlign.center,
-          style: AppTextStyles.h3,
+          style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
           buildCounter:
               (_, {required currentLength, required isFocused, maxLength}) =>
                   null,
           decoration: InputDecoration(
             counterText: '',
             filled: true,
-            fillColor: filled ? AppColors.accent : AppColors.card,
+            fillColor: filled ? AppColors.success.withOpacity(0.08) : AppColors.background,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(
-                color: filled ? AppColors.primary : AppColors.border,
-                width: 2,
-              ),
+              borderSide: BorderSide.none,
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide(
-                color: filled ? AppColors.primary : AppColors.border,
-                width: filled ? 2 : 1.5,
+                color: filled ? AppColors.success.withOpacity(0.6) : AppColors.border,
+                width: filled ? 2 : 1,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
               borderSide: const BorderSide(
-                color: AppColors.primary,
+                color: AppColors.secondary,
                 width: 2.5,
               ),
             ),

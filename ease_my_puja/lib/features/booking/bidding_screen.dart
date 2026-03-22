@@ -154,7 +154,7 @@ class _BiddingScreenState extends State<BiddingScreen> {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.card,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(

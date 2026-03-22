@@ -123,7 +123,7 @@ class _ArrivalVerificationScreenState extends State<ArrivalVerificationScreen>
                           child: Text(
                             digit,
                             style: AppTextStyles.h2.copyWith(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                             ),
                           ),
                         ),

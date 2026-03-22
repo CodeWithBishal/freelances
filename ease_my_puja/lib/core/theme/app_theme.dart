@@ -25,7 +25,7 @@ class AppTheme {
         ),
 
     // ─── Typography ───────────────────────────────────────────────────
-    textTheme: GoogleFonts.interTextTheme().copyWith(
+    textTheme: GoogleFonts.poppinsTextTheme().copyWith(
       displayLarge: GoogleFonts.poppins(
         fontSize: 32,
         fontWeight: FontWeight.w700,
@@ -71,17 +71,17 @@ class AppTheme {
         fontWeight: FontWeight.w500,
         color: AppColors.textSecondary,
       ),
-      bodyLarge: GoogleFonts.inter(
+      bodyLarge: GoogleFonts.poppins(
         fontSize: 18,
         fontWeight: FontWeight.w400,
         color: AppColors.textPrimary,
       ),
-      bodyMedium: GoogleFonts.inter(
+      bodyMedium: GoogleFonts.poppins(
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: AppColors.textPrimary,
       ),
-      bodySmall: GoogleFonts.inter(
+      bodySmall: GoogleFonts.poppins(
         fontSize: 14,
         fontWeight: FontWeight.w400,
         color: AppColors.textSecondary,
@@ -91,12 +91,12 @@ class AppTheme {
         fontWeight: FontWeight.w600,
         color: AppColors.textPrimary,
       ),
-      labelMedium: GoogleFonts.inter(
+      labelMedium: GoogleFonts.poppins(
         fontSize: 14,
         fontWeight: FontWeight.w500,
         color: AppColors.textSecondary,
       ),
-      labelSmall: GoogleFonts.inter(
+      labelSmall: GoogleFonts.poppins(
         fontSize: 12,
         fontWeight: FontWeight.w400,
         color: AppColors.textHint,
@@ -163,7 +163,7 @@ class AppTheme {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: AppColors.textPrimary,
-        textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500),
+        textStyle: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500),
       ),
     ),
 
@@ -199,8 +199,8 @@ class AppTheme {
         borderRadius: BorderRadius.circular(16),
         borderSide: const BorderSide(color: AppColors.error, width: 1.5),
       ),
-      hintStyle: GoogleFonts.inter(fontSize: 14, color: AppColors.textHint),
-      labelStyle: GoogleFonts.inter(
+      hintStyle: GoogleFonts.poppins(fontSize: 14, color: AppColors.textHint),
+      labelStyle: GoogleFonts.poppins(
         fontSize: 14,
         color: AppColors.textSecondary,
       ),
@@ -223,7 +223,7 @@ class AppTheme {
       selectedColor: AppColors.primary,
       side: const BorderSide(color: AppColors.border),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      labelStyle: GoogleFonts.inter(
+      labelStyle: GoogleFonts.poppins(
         fontSize: 12,
         fontWeight: FontWeight.w500,
         color: AppColors.textPrimary,

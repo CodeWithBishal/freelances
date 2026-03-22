@@ -51,7 +51,7 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
                     width: 60,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: Colors.white30,
+                      color: AppColors.card.withOpacity(0.35),
                       shape: BoxShape.circle,
                     ),
                     child: const Center(

@@ -359,7 +359,7 @@ class _CreatePujaRequestScreenState extends State<CreatePujaRequestScreen> {
                                   ? const Icon(
                                       Icons.check_rounded,
                                       size: 14,
-                                      color: Colors.white,
+                                      color: AppColors.textPrimary,
                                     )
                                   : null,
                             ),

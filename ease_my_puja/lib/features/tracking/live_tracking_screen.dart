@@ -18,7 +18,7 @@ class LiveTrackingScreen extends StatelessWidget {
         leading: Padding(
           padding: const EdgeInsets.all(8),
           child: CircleAvatar(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.card,
             child: IconButton(
               icon: const Icon(
                 Icons.arrow_back_ios_new_rounded,
@@ -33,7 +33,7 @@ class LiveTrackingScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8),
             child: CircleAvatar(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.card,
               child: IconButton(
                 icon: const Icon(
                   Icons.more_vert_rounded,
@@ -67,12 +67,12 @@ class LiveTrackingScreen extends StatelessWidget {
 
   Widget _BottomPanel(BuildContext context, ScrollController scrollController) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
+            color: AppColors.textPrimary.withOpacity(0.12),
             blurRadius: 20,
             offset: Offset(0, -4),
           ),
@@ -317,9 +317,9 @@ class LiveTrackingScreen extends StatelessWidget {
           Container(
             height: 100,
             decoration: BoxDecoration(
-              color: const Color(0xFFFFF3E0), // Light orange background for ad
+              color: AppColors.primary.withOpacity(0.15), // Light background for ad
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFFFCC80)),
+              border: Border.all(color: AppColors.primaryDark.withOpacity(0.5)),
             ),
             child: Row(
               children: [
@@ -368,7 +368,7 @@ class LiveTrackingScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: const BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.card,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -438,7 +438,7 @@ class _MapPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.62,
-      color: const Color(0xFFDEE4ED),
+      color: AppColors.border,
       child: Stack(
         children: [
           // Grid lines simulating a map
@@ -498,7 +498,7 @@ class _MapPlaceholder extends StatelessWidget {
                   ),
                   child: const Icon(
                     Icons.home_rounded,
-                    color: Colors.white,
+                    color: AppColors.card,
                     size: 20,
                   ),
                 ),
@@ -516,7 +516,7 @@ class _GridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color(0xFFCFD8E3)
+      ..color = AppColors.border
       ..strokeWidth = 1;
 
     for (double x = 0; x < size.width; x += 40) {
@@ -528,7 +528,7 @@ class _GridPainter extends CustomPainter {
 
     // Horizontal roads
     final roadPaint = Paint()
-      ..color = Colors.white
+      ..color = AppColors.card
       ..strokeWidth = 16;
     canvas.drawLine(
       Offset(0, size.height * 0.4),
