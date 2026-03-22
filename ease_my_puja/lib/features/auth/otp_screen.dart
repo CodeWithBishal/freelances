@@ -282,8 +282,8 @@ class _OtpBox extends StatelessWidget {
       focusNode: FocusNode(),
       onKeyEvent: onKey,
       child: SizedBox(
-        width: 48,
-        height: 60,
+        width: 40,
+        height: 56,
         child: TextField(
           controller: controller,
           focusNode: focusNode,

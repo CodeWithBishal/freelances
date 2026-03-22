@@ -79,6 +79,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 8),
                     Container(
+                      width: double.infinity,
+                      clipBehavior: Clip.antiAlias,
                       decoration: BoxDecoration(
                         color: AppColors.card,
                         borderRadius: BorderRadius.circular(16),
@@ -86,12 +88,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         boxShadow: AppColors.softShadow,
                       ),
                       child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 16.0,
                             ),
                             child: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
                                   '+91',
@@ -125,6 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 border: InputBorder.none,
                                 enabledBorder: InputBorder.none,
                                 focusedBorder: InputBorder.none,
+                                filled: false,
                                 hintText: '99999 99999',
                                 hintStyle: AppTextStyles.bodyLarge.copyWith(
                                   color: AppColors.textHint,

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
 
+// ─── Home Screen ──────────────────────────────────────────────────────────────
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -10,15 +11,36 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  int _selectedNav = 0;
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  bool _isOnlinePuja = false;
   final PageController _heroPageCtrl = PageController();
+  final PageController _darshanPageCtrl = PageController();
   int _heroPage = 0;
-  bool _isOnlinePuja = false; // false = Offline, true = Online
+  int _darshanPage = 0;
+  int _selectedService = 0;
+  late TabController _serviceTabCtrl;
+
+  final List<String> _serviceTabs = [
+    'All', 'Satyanarayan', 'Griha Pravesh', 'Marriage', 'Online', 'Darshan',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _serviceTabCtrl = TabController(length: _serviceTabs.length, vsync: this);
+    _serviceTabCtrl.addListener(() {
+      if (!_serviceTabCtrl.indexIsChanging) {
+        setState(() => _selectedService = _serviceTabCtrl.index);
+      }
+    });
+  }
 
   @override
   void dispose() {
     _heroPageCtrl.dispose();
+    _darshanPageCtrl.dispose();
+    _serviceTabCtrl.dispose();
     super.dispose();
   }
 
@@ -27,460 +49,228 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
+          slivers: [
+            _buildAppBar(),
+            SliverToBoxAdapter(child: _buildBody()),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ─── AppBar ────────────────────────────────────────────────────────────────
+  SliverAppBar _buildAppBar() {
+    return SliverAppBar(
+      pinned: false,
+      floating: true,
+      snap: true,
+      elevation: 0,
+      backgroundColor: AppColors.background,
+      expandedHeight: 110,
+      automaticallyImplyLeading: false,
+      flexibleSpace: FlexibleSpaceBar(
+        collapseMode: CollapseMode.none,
+        background: Container(
+          color: AppColors.background,
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(),
-              _buildModeSelector(),
-              _buildSearchBar(),
-              _buildHeroBanner(),
-              _buildQuickActions(),
-              _buildSectionLabel('Popular Services'),
-              _buildServicesGrid(),
-              _buildSectionLabel('Trending Poojas', actionLabel: 'See All'),
-              _buildTrendingPoojas(),
-              _buildPromoBanner(),
-              _buildSectionLabel('Trusted Pandits', actionLabel: 'View All'),
-              _buildPanditList(),
-              _buildSectionLabel('VIP Temple Darshan'),
-              _buildVipDarshanSlider(),
-              _buildSectionLabel('EMP Remedies'),
-              _buildRemediesRow(),
-              _buildSectionLabel('EMP Store', actionLabel: 'Shop All'),
-              _buildStoreList(),
-              _buildTestimonialBanner(),
-              _buildTrustRow(),
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: _buildBottomNav(),
-    );
-  }
-
-  // ─── Header (scrolls with content) ──────────────────────────────────────────
-  Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 16, 16, 16),
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        border: const Border(bottom: BorderSide(color: AppColors.border, width: 0.8)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // App icon
-          Container(
-            width: 38,
-            height: 38,
-            decoration: BoxDecoration(
-              gradient: AppColors.primaryGradient,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Center(
-              child: Text('ॐ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Namaste 🙏',
-                style: AppTextStyles.caption.copyWith(
-                  color: AppColors.textSecondary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                'Rahul Singh',
-                style: AppTextStyles.h4.copyWith(fontSize: 16),
-              ),
-            ],
-          ),
-          const Spacer(),
-          // Location chip
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.12),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.primary.withOpacity(0.3)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+              Row(
                 children: [
-                  const Icon(Icons.location_on_rounded, size: 13, color: AppColors.secondary),
-                  const SizedBox(width: 4),
-                  Text(
-                    'Pune, MH',
-                    style: AppTextStyles.caption.copyWith(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w700,
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      gradient: AppColors.primaryGradient,
+                      borderRadius: BorderRadius.circular(10),
                     ),
+                    child: const Center(child: Text('🪔', style: TextStyle(fontSize: 18))),
                   ),
-                  const SizedBox(width: 2),
-                  const Icon(Icons.keyboard_arrow_down_rounded, size: 14, color: AppColors.textSecondary),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          // Notification bell
-          Stack(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.notifications_outlined, color: AppColors.textPrimary, size: 24),
-                onPressed: () {},
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
-              ),
-              Positioned(
-                top: 4,
-                right: 4,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: AppColors.secondary,
-                    shape: BoxShape.circle,
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Namaste 🙏',
+                          style: AppTextStyles.caption.copyWith(
+                              color: AppColors.textSecondary, fontWeight: FontWeight.w600)),
+                      Text('Rahul Singh', style: AppTextStyles.h4.copyWith(fontSize: 14)),
+                    ],
                   ),
-                ),
-              ),
-            ],
-          ),
-          // Avatar
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              color: AppColors.accent,
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColors.primaryDark, width: 2),
-            ),
-            child: Center(
-              child: Text(
-                'R',
-                style: AppTextStyles.h4.copyWith(color: AppColors.secondary, fontSize: 16),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─── Online / Offline Mode Selector ──────────────────────────────────────────
-  Widget _buildModeSelector() {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
-        boxShadow: AppColors.softShadow,
-      ),
-      child: Row(
-        children: [
-          _ModeTab(
-            icon: '📍',
-            label: 'Offline Puja',
-            sublabel: 'Pandit at home',
-            selected: !_isOnlinePuja,
-            onTap: () => setState(() => _isOnlinePuja = false),
-            activeColor: AppColors.primary,
-            activeBg: AppColors.primary,
-          ),
-          _ModeTab(
-            icon: '💻',
-            label: 'Online Puja',
-            sublabel: 'Live video rituals',
-            selected: _isOnlinePuja,
-            onTap: () => setState(() => _isOnlinePuja = true),
-            activeColor: AppColors.secondary,
-            activeBg: AppColors.secondary,
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─── Search ──────────────────────────────────────────────────────────────────
-  Widget _buildSearchBar() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-      child: GestureDetector(
-        onTap: () {},
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          decoration: BoxDecoration(
-            color: AppColors.card,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.border),
-            boxShadow: AppColors.softShadow,
-          ),
-          child: Row(
-            children: [
-              const Icon(
-                Icons.search_rounded,
-                color: AppColors.textHint,
-                size: 20,
-              ),
-              const SizedBox(width: 10),
-              Text(
-                'Search puja, pandit, ritual...',
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.textHint,
-                ),
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.all(7),
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(
-                  Icons.tune_rounded,
-                  size: 16,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // ─── Hero Banner ─────────────────────────────────────────────────────────────
-  Widget _buildHeroBanner() {
-    final slides = [
-      _HeroSlide(
-        emoji: '🪔',
-        title: 'Book a Pandit\nInstantly',
-        subtitle: 'Verified pandits near you',
-        ctaLabel: 'Book Now',
-        gradient: const LinearGradient(
-          colors: [Color(0xFFF8CB46), Color(0xFFFFAA00)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      _HeroSlide(
-        emoji: '🛕',
-        title: 'VIP Temple\nDarshan',
-        subtitle: 'Fast entry pass & QR',
-        ctaLabel: 'Book Darshan',
-        gradient: const LinearGradient(
-          colors: [Color(0xFF0C831F), Color(0xFF0A6618)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      _HeroSlide(
-        emoji: '🎊',
-        title: 'Festival Special\nPoojas',
-        subtitle: 'Exclusive packages',
-        ctaLabel: 'Explore',
-        gradient: const LinearGradient(
-          colors: [Color(0xFFE23744), Color(0xFFC02030)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-    ];
-
-    return Column(
-      children: [
-        const SizedBox(height: 16),
-        SizedBox(
-          height: 172,
-          child: PageView.builder(
-            controller: _heroPageCtrl,
-            itemCount: slides.length,
-            onPageChanged: (i) => setState(() => _heroPage = i),
-            itemBuilder: (_, i) {
-              final s = slides[i];
-              return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  gradient: s.gradient,
-                  borderRadius: BorderRadius.circular(22),
-                  boxShadow: AppColors.cardShadow,
-                ),
-                child: Stack(
-                  children: [
-                    // Decorative circle
-                    Positioned(
-                      right: -20,
-                      top: -20,
-                      child: Container(
-                        width: 140,
-                        height: 140,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.card.withOpacity(0.08),
-                        ),
+                  const Spacer(),
+                  // Online / Offline toggle
+                  GestureDetector(
+                    onTap: () => setState(() => _isOnlinePuja = !_isOnlinePuja),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: _isOnlinePuja ? AppColors.secondary : AppColors.primary,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: AppColors.softShadow,
                       ),
-                    ),
-                    Positioned(
-                      right: 20,
-                      top: 10,
-                      child: Container(
-                        width: 90,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.card.withOpacity(0.1),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 100, 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
+                          Text(_isOnlinePuja ? '💻' : '📍',
+                              style: const TextStyle(fontSize: 12)),
+                          const SizedBox(width: 5),
                           Text(
-                            s.title,
-                            style: AppTextStyles.h2.copyWith(
-                              color: AppColors.card,
-                              height: 1.2,
-                              fontSize: 22,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            s.subtitle,
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: AppColors.card.withOpacity(0.85),
-                            ),
-                          ),
-                          const SizedBox(height: 14),
-                          GestureDetector(
-                            onTap: () => context.push('/home/create-request'),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.card,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                s.ctaLabel,
-                                style: AppTextStyles.labelSmall.copyWith(
-                                  color: AppColors.textPrimary,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
+                            _isOnlinePuja ? 'Online' : 'Offline',
+                            style: AppTextStyles.caption.copyWith(
+                              color: _isOnlinePuja ? AppColors.card : AppColors.textPrimary,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 11,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Positioned(
-                      right: 16,
-                      bottom: 16,
-                      child: Text(s.emoji, style: const TextStyle(fontSize: 62)),
+                  ),
+                  const SizedBox(width: 8),
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.notifications_outlined,
+                            color: AppColors.textPrimary, size: 22),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(minWidth: 34, minHeight: 34),
+                      ),
+                      Positioned(
+                        top: 2,
+                        right: 2,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: AppColors.secondary, shape: BoxShape.circle),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: 34,
+                    height: 34,
+                    decoration: BoxDecoration(
+                      color: AppColors.accent,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.primaryDark, width: 2),
                     ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(slides.length, (i) {
-            final active = i == _heroPage;
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              margin: const EdgeInsets.symmetric(horizontal: 3),
-              width: active ? 20 : 6,
-              height: 6,
-              decoration: BoxDecoration(
-                color: active ? AppColors.primary : AppColors.border,
-                borderRadius: BorderRadius.circular(3),
+                    child: Center(
+                      child: Text('R',
+                          style: AppTextStyles.h4.copyWith(
+                              color: AppColors.secondary, fontSize: 14)),
+                    ),
+                  ),
+                ],
               ),
-            );
-          }),
-        ),
-      ],
-    );
-  }
-
-  // ─── Quick Actions ────────────────────────────────────────────────────────────
-  Widget _buildQuickActions() {
-    final actions = [
-      _QuickAction('🪔', 'Book\nPandit', AppColors.primary.withOpacity(0.12), AppColors.primary),
-      _QuickAction('🛕', 'Darshan\nPass', AppColors.success.withOpacity(0.12), AppColors.success),
-      _QuickAction('📦', 'Puja\nKit', AppColors.secondary.withOpacity(0.1), AppColors.secondary),
-      _QuickAction('🔮', 'Astro\nChat', AppColors.statusAssigned.withOpacity(0.12), AppColors.statusAssigned),
-    ];
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
-      child: Row(
-        children: actions.map((a) {
-          return Expanded(
-            child: GestureDetector(
-              onTap: () => context.push('/home/create-request'),
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                decoration: BoxDecoration(
-                  color: a.bgColor,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: a.accentColor.withOpacity(0.2)),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(a.emoji, style: const TextStyle(fontSize: 26)),
-                    const SizedBox(height: 6),
-                    Text(
-                      a.label,
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.caption.copyWith(
-                        color: a.accentColor,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 10.5,
-                        height: 1.4,
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: AppColors.card,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: AppColors.border),
+                          boxShadow: AppColors.softShadow,
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.search_rounded,
+                                color: AppColors.textHint, size: 18),
+                            const SizedBox(width: 8),
+                            Text('Search puja, pandit...',
+                                style: AppTextStyles.bodySmall
+                                    .copyWith(color: AppColors.textHint)),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.location_on_rounded,
+                              size: 14, color: AppColors.secondary),
+                          const SizedBox(width: 4),
+                          Text('Pune',
+                              style: AppTextStyles.caption.copyWith(
+                                  color: AppColors.textPrimary, fontWeight: FontWeight.w700)),
+                          const Icon(Icons.arrow_drop_down_rounded,
+                              size: 16, color: AppColors.textSecondary),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          );
-        }).toList(),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  // ─── Section Label ────────────────────────────────────────────────────────────
-  Widget _buildSectionLabel(String title, {String? actionLabel}) {
+  // ─── Body ──────────────────────────────────────────────────────────────────
+  Widget _buildBody() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 8),
+        _buildHeroSlider(),
+        _buildExploreServices(),
+        _buildSectionHeader('Trending Poojas', actionLabel: 'See All'),
+        _buildTrendingPoojas(),
+        _buildSectionHeader('Client Stories', actionLabel: 'View All'),
+        _buildVideoTestimonials(isClient: true),
+        _buildSectionHeader('Trusted Specialists', actionLabel: 'View All'),
+        _buildTrustedSpecialists(),
+        _buildSectionHeader('VIP Temple Darshan'),
+        _buildVipDarshanSlider(),
+        _buildSectionHeader('What Pandits Say'),
+        _buildVideoTestimonials(isClient: false),
+        _buildSectionHeader('EMP Store', actionLabel: 'Shop All'),
+        _buildEmpStore(),
+        _buildSectionHeader('EMP Remedies'),
+        _buildRemedies(),
+        _buildFestivalOfferBanner(),
+        _buildSectionHeader('EMP Blogs', actionLabel: 'Read All'),
+        _buildBlogSection(),
+        _buildTrustIndicators(),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  // ─── Section Header ────────────────────────────────────────────────────────
+  Widget _buildSectionHeader(String title, {String? actionLabel}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
       child: Row(
         children: [
           Container(
             width: 4,
-            height: 18,
+            height: 20,
             decoration: BoxDecoration(
-              color: AppColors.secondary,
-              borderRadius: BorderRadius.circular(2),
-            ),
+              color: AppColors.secondary, borderRadius: BorderRadius.circular(2)),
           ),
           const SizedBox(width: 10),
           Text(title, style: AppTextStyles.h4),
@@ -494,13 +284,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: AppColors.primary.withOpacity(0.12),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Text(
-                  actionLabel,
-                  style: AppTextStyles.caption.copyWith(
-                    color: AppColors.textPrimary,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                child: Text(actionLabel,
+                    style: AppTextStyles.caption.copyWith(
+                        color: AppColors.textPrimary, fontWeight: FontWeight.w700)),
               ),
             ),
         ],
@@ -508,83 +294,259 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ─── Services Grid ────────────────────────────────────────────────────────────
-  Widget _buildServicesGrid() {
-    final services = [
-      ('🪔', 'Satyanarayan', AppColors.primary.withOpacity(0.1)),
-      ('🏠', 'Griha Pravesh', AppColors.success.withOpacity(0.1)),
-      ('💍', 'Vivah Puja', AppColors.secondary.withOpacity(0.1)),
-      ('💻', 'Online Pooja', AppColors.info.withOpacity(0.1)),
-      ('🌙', 'Navgrah Puja', AppColors.statusAssigned.withOpacity(0.1)),
-      ('🔱', 'Rudrabhishek', AppColors.warning.withOpacity(0.1)),
+  // ─── Section 1: Hero Slider ────────────────────────────────────────────────
+  Widget _buildHeroSlider() {
+    final slides = [
+      _HeroSlide('🪔', 'Book a Pandit\nInstantly', 'Verified experts at your doorstep',
+          const LinearGradient(colors: [Color(0xFFF8CB46), Color(0xFFFFAA00)],
+              begin: Alignment.topLeft, end: Alignment.bottomRight)),
+      _HeroSlide('🛕', 'VIP Temple\nDarshan Booking', 'Skip queues — fast entry QR pass',
+          const LinearGradient(colors: [Color(0xFF0C831F), Color(0xFF0A6018)],
+              begin: Alignment.topLeft, end: Alignment.bottomRight)),
+      _HeroSlide('💻', 'Online Pooja\nServices', 'Live sacred rituals from anywhere',
+          const LinearGradient(colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
+              begin: Alignment.topLeft, end: Alignment.bottomRight)),
+      _HeroSlide('🎊', 'Festival Special\nPoojas', 'Exclusive packages for every occasion',
+          const LinearGradient(colors: [Color(0xFFE23744), Color(0xFFC02030)],
+              begin: Alignment.topLeft, end: Alignment.bottomRight)),
     ];
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          childAspectRatio: 0.88,
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
+    return Column(
+      children: [
+        SizedBox(
+          height: 178,
+          child: PageView.builder(
+            controller: _heroPageCtrl,
+            itemCount: slides.length,
+            onPageChanged: (i) => setState(() => _heroPage = i),
+            itemBuilder: (_, i) => _buildHeroCard(slides[i]),
+          ),
         ),
-        itemCount: services.length,
-        itemBuilder: (_, i) {
-          final svc = services[i];
-          return GestureDetector(
-            onTap: () => context.push('/home/create-request'),
-            child: Container(
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(slides.length, (i) {
+            final active = i == _heroPage;
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              margin: const EdgeInsets.symmetric(horizontal: 3),
+              width: active ? 24 : 6, height: 6,
               decoration: BoxDecoration(
-                color: AppColors.card,
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(color: AppColors.border),
-                boxShadow: AppColors.softShadow,
+                color: active ? AppColors.primary : AppColors.border,
+                borderRadius: BorderRadius.circular(3),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color: svc.$3,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(svc.$1, style: const TextStyle(fontSize: 26)),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    svc.$2,
-                    style: AppTextStyles.caption.copyWith(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 11,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+            );
+          }),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeroCard(_HeroSlide s) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        gradient: s.gradient,
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            right: -24, top: -24,
+            child: Container(
+              width: 150, height: 150,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.07),
               ),
             ),
-          );
-        },
+          ),
+          Positioned(
+            right: 16, bottom: 0,
+            child: Text(s.emoji, style: const TextStyle(fontSize: 78)),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 22, 100, 22),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(s.title,
+                    style: AppTextStyles.h3.copyWith(
+                        color: Colors.white, fontSize: 21, height: 1.2)),
+                const SizedBox(height: 6),
+                Text(s.subtitle,
+                    style: AppTextStyles.bodySmall
+                        .copyWith(color: Colors.white.withOpacity(0.85))),
+                const SizedBox(height: 14),
+                GestureDetector(
+                  onTap: () => context.push('/home/create-request'),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.12),
+                          blurRadius: 8, offset: const Offset(0, 3),
+                        )
+                      ],
+                    ),
+                    child: Text('Book Now →',
+                        style: AppTextStyles.caption.copyWith(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.w800, fontSize: 12)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  // ─── Trending Poojas ──────────────────────────────────────────────────────────
+  // ─── Section 2: Explore Services ──────────────────────────────────────────
+  Widget _buildExploreServices() {
+    final allServices = <String, List<_ServiceItem>>{
+      'All': [
+        _ServiceItem('🪔', 'Satyanarayan'), _ServiceItem('🏠', 'Griha Pravesh'),
+        _ServiceItem('💍', 'Marriage'), _ServiceItem('💻', 'Online Pooja'),
+        _ServiceItem('🛕', 'Darshan'), _ServiceItem('🌙', 'Navgrah Shanti'),
+        _ServiceItem('🔱', 'Rudrabhishek'), _ServiceItem('🌺', 'Durga Puja'),
+      ],
+      'Satyanarayan': [
+        _ServiceItem('🪔', 'Katha'), _ServiceItem('🌸', 'Prasad Kit'),
+        _ServiceItem('📿', 'Panchamrit'),
+      ],
+      'Griha Pravesh': [
+        _ServiceItem('🏠', 'House Warming'), _ServiceItem('🔥', 'Havan'),
+        _ServiceItem('🌿', 'Vastu Puja'),
+      ],
+      'Marriage': [
+        _ServiceItem('💍', 'Vivah Puja'), _ServiceItem('📿', 'Kundali Match'),
+        _ServiceItem('🎊', 'Mehendi Ritual'),
+      ],
+      'Online': [
+        _ServiceItem('💻', 'Live Satyanarayan'), _ServiceItem('📱', 'Video Havan'),
+        _ServiceItem('🙏', 'E-Prasad'),
+      ],
+      'Darshan': [
+        _ServiceItem('🛕', 'Tirupati'), _ServiceItem('✨', 'Kashi'),
+        _ServiceItem('🌟', 'Shirdi'),
+      ],
+    };
+
+    final key = _serviceTabs[_selectedService];
+    final items = allServices[key] ?? allServices['All']!;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionHeader('Explore Services'),
+        SizedBox(
+          height: 38,
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            scrollDirection: Axis.horizontal,
+            itemCount: _serviceTabs.length,
+            separatorBuilder: (_, __) => const SizedBox(width: 8),
+            itemBuilder: (_, i) {
+              final active = _selectedService == i;
+              return GestureDetector(
+                onTap: () => setState(() => _selectedService = i),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: active ? AppColors.primary : AppColors.card,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                        color: active ? AppColors.primaryDark : AppColors.border),
+                    boxShadow: active ? AppColors.softShadow : null,
+                  ),
+                  child: Text(_serviceTabs[i],
+                      style: AppTextStyles.caption.copyWith(
+                        color: active ? AppColors.textPrimary : AppColors.textSecondary,
+                        fontWeight: active ? FontWeight.w700 : FontWeight.w500,
+                      )),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 14),
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+          child: Padding(
+            key: ValueKey(_selectedService),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4, childAspectRatio: 0.85,
+                mainAxisSpacing: 10, crossAxisSpacing: 10,
+              ),
+              itemCount: items.length,
+              itemBuilder: (_, i) {
+                final svc = items[i];
+                return GestureDetector(
+                  onTap: () => context.push('/home/create-request'),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.card,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: AppColors.border),
+                      boxShadow: AppColors.softShadow,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 46, height: 46,
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Text(svc.emoji,
+                                style: const TextStyle(fontSize: 22)),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(svc.label,
+                            style: AppTextStyles.caption.copyWith(
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.w600, fontSize: 10),
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ─── Section 3: Trending Poojas ────────────────────────────────────────────
   Widget _buildTrendingPoojas() {
     final poojas = [
-      ('🌹', 'Navgrah Shanti', '₹2,100 - ₹5,100', true),
-      ('🪔', 'Satyanarayan', '₹1,500 - ₹3,000', false),
-      ('🌸', 'Lakshmi Puja', '₹800 - ₹2,500', false),
+      _PoojasCard('🌹', 'Navgrah Shanti', '₹2,100 – ₹5,100', 4.9, true),
+      _PoojasCard('🪔', 'Satyanarayan Katha', '₹1,500 – ₹3,000', 4.8, false),
+      _PoojasCard('🌸', 'Lakshmi Puja', '₹800 – ₹2,500', 4.7, true),
+      _PoojasCard('🔱', 'Rudrabhishek', '₹3,000 – ₹7,000', 4.9, false),
     ];
 
     return SizedBox(
-      height: 184,
+      height: 198,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
@@ -595,7 +557,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return GestureDetector(
             onTap: () => context.push('/home/create-request'),
             child: Container(
-              width: 155,
+              width: 160,
               decoration: BoxDecoration(
                 color: AppColors.card,
                 borderRadius: BorderRadius.circular(18),
@@ -608,45 +570,35 @@ class _HomeScreenState extends State<HomeScreen> {
                   Stack(
                     children: [
                       Container(
-                        height: 100,
+                        height: 108,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [
-                              AppColors.primary.withOpacity(0.2),
-                              AppColors.primary.withOpacity(0.05),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
+                            colors: [AppColors.primary.withOpacity(0.18),
+                              AppColors.primary.withOpacity(0.04)],
+                            begin: Alignment.topLeft, end: Alignment.bottomRight,
                           ),
                           borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(17),
-                          ),
+                              top: Radius.circular(17)),
                         ),
                         child: Center(
-                          child: Text(p.$1, style: const TextStyle(fontSize: 44)),
+                          child: Text(p.emoji,
+                              style: const TextStyle(fontSize: 50)),
                         ),
                       ),
-                      if (p.$4)
+                      if (p.isPopular)
                         Positioned(
-                          top: 8,
-                          right: 8,
+                          top: 8, right: 8,
                           child: Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 7,
-                              vertical: 3,
-                            ),
+                                horizontal: 7, vertical: 3),
                             decoration: BoxDecoration(
                               color: AppColors.secondary,
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: Text(
-                              '🔥 Popular',
-                              style: AppTextStyles.caption.copyWith(
-                                color: AppColors.card,
-                                fontSize: 9,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
+                            child: Text('🔥 Popular',
+                                style: AppTextStyles.caption.copyWith(
+                                    color: AppColors.card, fontSize: 9,
+                                    fontWeight: FontWeight.w700)),
                           ),
                         ),
                     ],
@@ -656,18 +608,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          p.$2,
-                          style: AppTextStyles.labelMedium.copyWith(fontSize: 13),
-                        ),
+                        Text(p.label,
+                            style: AppTextStyles.labelSmall.copyWith(
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.w700, fontSize: 12),
+                            maxLines: 1, overflow: TextOverflow.ellipsis),
                         const SizedBox(height: 3),
-                        Text(
-                          p.$3,
-                          style: AppTextStyles.caption.copyWith(
-                            color: AppColors.secondary,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        Row(
+                          children: [
+                            const Icon(Icons.star_rounded,
+                                color: AppColors.warning, size: 12),
+                            const SizedBox(width: 2),
+                            Text('${p.rating}',
+                                style: AppTextStyles.caption.copyWith(
+                                    fontWeight: FontWeight.w600)),
+                          ],
                         ),
+                        const SizedBox(height: 2),
+                        Text(p.priceRange,
+                            style: AppTextStyles.caption.copyWith(
+                                color: AppColors.secondary,
+                                fontWeight: FontWeight.w700)),
                       ],
                     ),
                   ),
@@ -680,97 +641,124 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ─── Promo Banner ──────────────────────────────────────────────────────────────
-  Widget _buildPromoBanner() {
-    return GestureDetector(
-      onTap: () => context.push('/home/create-request'),
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(16, 24, 16, 0),
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF0C831F), Color(0xFF0A6618)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.success.withOpacity(0.3),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
-            )
-          ],
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text(
-                      'LIMITED OFFER',
-                      style: AppTextStyles.caption.copyWith(
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 9,
-                        letterSpacing: 0.8,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'First Puja 20% OFF',
-                    style: AppTextStyles.h3.copyWith(color: AppColors.card),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Use code PUJA20 at checkout',
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.card.withOpacity(0.8),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-                    decoration: BoxDecoration(
-                      color: AppColors.card,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      'Book Now →',
-                      style: AppTextStyles.labelSmall.copyWith(
-                        color: AppColors.success,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+  // ─── Sections 4 & 7: Video Testimonials ───────────────────────────────────
+  Widget _buildVideoTestimonials({required bool isClient}) {
+    final items = isClient
+        ? [
+            _TestimonialCard('👩', 'Aarti Sharma', 'Pune',
+                '"Absolutely divine experience! Pandit ji made everything so smooth."'),
+            _TestimonialCard('👨', 'Ravi Kumar', 'Mumbai',
+                '"Book and done in minutes. Will use again for Diwali Puja!"'),
+            _TestimonialCard('👩‍🦱', 'Sunita Patel', 'Surat',
+                '"Great app. Very trusted pandits. 5 stars!"'),
+          ]
+        : [
+            _TestimonialCard('👨‍🦳', 'Pt. Ramesh Ji', '15 Yrs Exp.',
+                '"EMP gives us more clients while we focus on rituals."'),
+            _TestimonialCard('🧔', 'Pt. Suresh Ji', '20 Yrs Exp.',
+                '"This platform has transformed how I connect with devotees."'),
+          ];
+
+    return SizedBox(
+      height: 160,
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        scrollDirection: Axis.horizontal,
+        itemCount: items.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 12),
+        itemBuilder: (_, i) {
+          final t = items[i];
+          return Container(
+            width: 240,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: AppColors.card,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: AppColors.border),
+              boxShadow: AppColors.softShadow,
             ),
-            const Text('🌸', style: TextStyle(fontSize: 68)),
-          ],
-        ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          width: 42, height: 42,
+                          decoration: BoxDecoration(
+                            color: AppColors.accent,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                                color: AppColors.primaryDark, width: 2),
+                          ),
+                          child: Center(
+                            child: Text(t.emoji,
+                                style: const TextStyle(fontSize: 20)),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0, right: 0,
+                          child: Container(
+                            width: 16, height: 16,
+                            decoration: BoxDecoration(
+                              color: AppColors.secondary,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                  color: AppColors.card, width: 1.5),
+                            ),
+                            child: const Icon(Icons.play_arrow_rounded,
+                                size: 11, color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(t.name,
+                              style: AppTextStyles.labelSmall.copyWith(
+                                  color: AppColors.textPrimary,
+                                  fontWeight: FontWeight.w700)),
+                          Text(t.location, style: AppTextStyles.caption),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: List.generate(5,
+                          (_) => const Icon(Icons.star_rounded,
+                              color: AppColors.warning, size: 12)),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: Text(t.review,
+                      style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.textSecondary,
+                          fontStyle: FontStyle.italic, height: 1.4, fontSize: 11),
+                      maxLines: 3, overflow: TextOverflow.ellipsis),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
 
-  // ─── Pandit List ────────────────────────────────────────────────────────────────
-  Widget _buildPanditList() {
+  // ─── Section 5: Trusted Specialists ───────────────────────────────────────
+  Widget _buildTrustedSpecialists() {
     final pandits = [
-      _PanditData('Pt. Ramesh Sharma', 'Vedic Rituals', '⭐ 4.9', '15 yrs', '1.2 km', '👨‍🦳'),
-      _PanditData('Pt. Suresh Joshi', 'South Indian', '⭐ 4.7', '10 yrs', '2.5 km', '👨‍🦱'),
-      _PanditData('Pt. Anil Trivedi', 'North Indian', '⭐ 4.8', '20 yrs', '0.8 km', '🧔'),
+      _PanditCard('👨‍🦳', 'Pt. Ramesh Sharma', 'Vedic Rituals', 4.9, '15 Yrs', '1.2 km'),
+      _PanditCard('👨‍🦱', 'Pt. Suresh Joshi', 'South Indian', 4.7, '10 Yrs', '2.5 km'),
+      _PanditCard('🧔', 'Pt. Anil Trivedi', 'North Indian', 4.8, '20 Yrs', '0.8 km'),
     ];
 
     return SizedBox(
-      height: 140,
+      height: 155,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
@@ -781,7 +769,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return GestureDetector(
             onTap: () => context.push('/home/pandit-profile'),
             child: Container(
-              width: 220,
+              width: 230,
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: AppColors.card,
@@ -791,17 +779,32 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: Row(
                 children: [
-                  Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color: AppColors.accent,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.primaryDark, width: 2),
-                    ),
-                    child: Center(
-                      child: Text(p.emoji, style: const TextStyle(fontSize: 24)),
-                    ),
+                  Stack(
+                    children: [
+                      Container(
+                        width: 56, height: 56,
+                        decoration: BoxDecoration(
+                          color: AppColors.accent,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppColors.primaryDark, width: 2),
+                        ),
+                        child: Center(
+                          child: Text(p.emoji, style: const TextStyle(fontSize: 26))),
+                      ),
+                      Positioned(
+                        bottom: 0, right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            color: AppColors.success,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: AppColors.card, width: 1.5),
+                          ),
+                          child: const Icon(Icons.verified_rounded,
+                              size: 10, color: Colors.white),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -809,21 +812,44 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          p.name,
-                          style: AppTextStyles.labelMedium.copyWith(fontSize: 13),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 2),
-                        Text(p.specialty, style: AppTextStyles.caption),
-                        const SizedBox(height: 4),
+                        Text(p.name,
+                            style: AppTextStyles.labelSmall.copyWith(
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.w700, fontSize: 12),
+                            overflow: TextOverflow.ellipsis),
+                        Text(p.specialty,
+                            style: AppTextStyles.caption.copyWith(
+                                color: AppColors.textSecondary)),
+                        const SizedBox(height: 6),
                         Row(
                           children: [
-                            _Chip(p.rating, AppColors.primary),
+                            const Icon(Icons.star_rounded,
+                                color: AppColors.warning, size: 12),
+                            const SizedBox(width: 2),
+                            Text('${p.rating}',
+                                style: AppTextStyles.caption
+                                    .copyWith(fontWeight: FontWeight.w700)),
+                            const SizedBox(width: 6),
+                            _miniChip(p.experience, AppColors.primary),
                             const SizedBox(width: 4),
-                            _Chip(p.distance, AppColors.background),
+                            _miniChip(p.distance, AppColors.background),
                           ],
                         ),
+                        const SizedBox(height: 5),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 7, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppColors.success.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                                color: AppColors.success.withOpacity(0.3)),
+                          ),
+                          child: Text('✔ Verified Pandit',
+                              style: AppTextStyles.caption.copyWith(
+                                  color: AppColors.success,
+                                  fontWeight: FontWeight.w700, fontSize: 9.5)),
+                        ),
                       ],
                     ),
                   ),
@@ -836,149 +862,142 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ─── VIP Darshan ────────────────────────────────────────────────────────────────
+  Widget _miniChip(String label, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: color, borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Text(label,
+          style: AppTextStyles.caption.copyWith(
+              color: AppColors.textSecondary,
+              fontWeight: FontWeight.w600, fontSize: 9.5)),
+    );
+  }
+
+  // ─── Section 6: VIP Darshan Slider ────────────────────────────────────────
   Widget _buildVipDarshanSlider() {
     final temples = [
-      ('Kashi Vishwanath', 'Varanasi, UP'),
-      ('Tirupati Balaji', 'Andhra Pradesh'),
-      ('Shirdi Sai Baba', 'Maharashtra'),
-      ('Golden Temple', 'Punjab'),
+      _DarshanCard('🛕', 'Kashi Vishwanath', 'Varanasi, UP', 'Fast Entry Pass'),
+      _DarshanCard('🌟', 'Tirupati Balaji', 'Andhra Pradesh', 'QR Verification'),
+      _DarshanCard('✨', 'Shirdi Sai Baba', 'Maharashtra', 'VIP Darshan'),
+      _DarshanCard('💛', 'Golden Temple', 'Amritsar, Punjab', 'Skip Queue'),
     ];
 
-    return SizedBox(
-      height: 130,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        scrollDirection: Axis.horizontal,
-        itemCount: temples.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 12),
-        itemBuilder: (_, i) {
-          final t = temples[i];
-          return GestureDetector(
-            onTap: () {},
-            child: Container(
-              width: 230,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.primary.withOpacity(0.25),
-                    AppColors.accent.withOpacity(0.15),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+    return Column(
+      children: [
+        SizedBox(
+          height: 148,
+          child: PageView.builder(
+            controller: _darshanPageCtrl,
+            itemCount: temples.length,
+            onPageChanged: (i) => setState(() => _darshanPage = i),
+            itemBuilder: (_, i) {
+              final t = temples[i];
+              return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.primary.withOpacity(0.22),
+                      AppColors.accent.withOpacity(0.1),
+                    ],
+                    begin: Alignment.topLeft, end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.primary.withOpacity(0.35)),
                 ),
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(color: AppColors.primary.withOpacity(0.3)),
-              ),
-              child: Row(
-                children: [
-                  const Text('🛕', style: TextStyle(fontSize: 46)),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          t.$1,
-                          style: AppTextStyles.h4.copyWith(fontSize: 14),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 2),
-                        Text(t.$2, style: AppTextStyles.caption),
-                        const SizedBox(height: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary,
-                            borderRadius: BorderRadius.circular(8),
+                child: Row(
+                  children: [
+                    Text(t.emoji, style: const TextStyle(fontSize: 58)),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: AppColors.success,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(t.feature,
+                                style: AppTextStyles.caption.copyWith(
+                                    color: AppColors.card,
+                                    fontWeight: FontWeight.w700, fontSize: 9)),
                           ),
-                          child: Text(
-                            'Book Pass',
-                            style: AppTextStyles.caption.copyWith(
-                              color: AppColors.textPrimary,
-                              fontWeight: FontWeight.w800,
+                          const SizedBox(height: 6),
+                          Text(t.name,
+                              style: AppTextStyles.h4.copyWith(fontSize: 15)),
+                          Text(t.location, style: AppTextStyles.caption),
+                          const SizedBox(height: 10),
+                          GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text('Book Darshan →',
+                                  style: AppTextStyles.caption.copyWith(
+                                      color: AppColors.textPrimary,
+                                      fontWeight: FontWeight.w800)),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  // ─── Remedies ────────────────────────────────────────────────────────────────────
-  Widget _buildRemediesRow() {
-    final items = [
-      ('🔮', 'Astrology', AppColors.secondary, AppColors.secondary.withOpacity(0.08)),
-      ('💎', 'Gemstones', AppColors.info, AppColors.info.withOpacity(0.08)),
-      ('🏡', 'Vastu', AppColors.success, AppColors.success.withOpacity(0.08)),
-      ('🌿', 'Ayurveda', AppColors.warning, AppColors.warning.withOpacity(0.08)),
-    ];
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: items.map((item) {
-          return Expanded(
-            child: GestureDetector(
-              onTap: () {},
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                decoration: BoxDecoration(
-                  color: item.$4,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: item.$3.withOpacity(0.2)),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(item.$1, style: const TextStyle(fontSize: 26)),
-                    const SizedBox(height: 6),
-                    Text(
-                      item.$2,
-                      style: AppTextStyles.caption.copyWith(
-                        color: item.$3,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 10,
+                        ],
                       ),
                     ),
                   ],
                 ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(temples.length, (i) {
+            final active = i == _darshanPage;
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              margin: const EdgeInsets.symmetric(horizontal: 3),
+              width: active ? 20 : 6, height: 6,
+              decoration: BoxDecoration(
+                color: active ? AppColors.success : AppColors.border,
+                borderRadius: BorderRadius.circular(3),
               ),
-            ),
-          );
-        }).toList(),
-      ),
+            );
+          }),
+        ),
+      ],
     );
   }
 
-  // ─── Store ───────────────────────────────────────────────────────────────────────
-  Widget _buildStoreList() {
-    final items = [
-      ('Pooja Kit', '₹599', '📦', true),
-      ('Incense Sticks', '₹150', '🕯️', false),
-      ('Brass Diya', '₹299', '🪔', true),
-      ('Coconut', '₹40', '🥥', false),
+  // ─── Section 8: EMP Store ─────────────────────────────────────────────────
+  Widget _buildEmpStore() {
+    final products = [
+      _ProductCard('📦', 'Pooja Kit', '₹599', true),
+      _ProductCard('🕯️', 'Incense Set', '₹150', false),
+      _ProductCard('🪔', 'Brass Diya', '₹299', true),
+      _ProductCard('🥥', 'Coconut', '₹40', false),
+      _ProductCard('📿', 'Rudraksha', '₹799', true),
     ];
 
     return SizedBox(
-      height: 158,
+      height: 162,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
-        itemCount: items.length,
+        itemCount: products.length,
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (_, i) {
-          final item = items[i];
+          final p = products[i];
           return Container(
             width: 118,
             padding: const EdgeInsets.all(12),
@@ -994,66 +1013,50 @@ class _HomeScreenState extends State<HomeScreen> {
                   alignment: Alignment.topRight,
                   children: [
                     Container(
-                      width: 60,
-                      height: 60,
+                      width: 58, height: 58,
                       decoration: BoxDecoration(
                         color: AppColors.primary.withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
                       child: Center(
-                        child: Text(item.$3, style: const TextStyle(fontSize: 32)),
-                      ),
+                        child: Text(p.emoji,
+                            style: const TextStyle(fontSize: 30))),
                     ),
-                    if (item.$4)
+                    if (p.isBestseller)
                       Container(
-                        padding: const EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                          color: AppColors.secondary,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          '🔥',
-                          style: const TextStyle(fontSize: 9),
-                        ),
+                        padding: const EdgeInsets.all(3.5),
+                        decoration: const BoxDecoration(
+                            color: AppColors.secondary, shape: BoxShape.circle),
+                        child: const Text('🔥', style: TextStyle(fontSize: 8)),
                       ),
                   ],
                 ),
-                const SizedBox(height: 7),
-                Text(
-                  item.$1,
-                  style: AppTextStyles.labelSmall.copyWith(
-                    color: AppColors.textPrimary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  item.$2,
-                  style: AppTextStyles.caption.copyWith(
-                    color: AppColors.secondary,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      '+ Add',
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.caption.copyWith(
+                const SizedBox(height: 6),
+                Text(p.label,
+                    style: AppTextStyles.labelSmall.copyWith(
                         color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w800,
-                      ),
+                        fontWeight: FontWeight.w600, fontSize: 11),
+                    textAlign: TextAlign.center,
+                    maxLines: 1, overflow: TextOverflow.ellipsis),
+                Text(p.price,
+                    style: AppTextStyles.caption.copyWith(
+                        color: AppColors.secondary, fontWeight: FontWeight.w700)),
+                const Spacer(),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.textPrimary,
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      minimumSize: Size.zero,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      elevation: 0,
                     ),
+                    child: const Text('+ Add',
+                        style: TextStyle(fontWeight: FontWeight.w800, fontSize: 11)),
                   ),
                 ),
               ],
@@ -1064,107 +1067,193 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ─── Testimonial ──────────────────────────────────────────────────────────────
-  Widget _buildTestimonialBanner() {
+  // ─── Section 9: Remedies ──────────────────────────────────────────────────
+  Widget _buildRemedies() {
+    final remedies = [
+      ('🔮', 'Astrology', AppColors.secondary),
+      ('💎', 'Gemstones', AppColors.info),
+      ('🏡', 'Vastu', AppColors.success),
+      ('🌿', 'Ayurveda', AppColors.warning),
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: remedies.map((r) {
+          return Expanded(
+            child: GestureDetector(
+              onTap: () {},
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                decoration: BoxDecoration(
+                  color: r.$3.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: r.$3.withOpacity(0.2)),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(r.$1, style: const TextStyle(fontSize: 26)),
+                    const SizedBox(height: 6),
+                    Text(r.$2,
+                        style: AppTextStyles.caption.copyWith(
+                            color: r.$3, fontWeight: FontWeight.w700,
+                            fontSize: 9.5, height: 1.3),
+                        textAlign: TextAlign.center),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildFestivalOfferBanner() {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFFF8CB46), Color(0xFFFFBC00)],
+            begin: Alignment.topLeft, end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: AppColors.cardShadow,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text('🎊 FESTIVAL SPECIAL',
+                        style: AppTextStyles.caption.copyWith(
+                            color: AppColors.card, fontWeight: FontWeight.w800,
+                            fontSize: 9, letterSpacing: 0.5)),
+                  ),
+                  const SizedBox(height: 6),
+                  Text('Navratri Offers\nUp to 30% OFF',
+                      style: AppTextStyles.h3.copyWith(
+                          color: AppColors.textPrimary, fontSize: 18)),
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 7),
+                    decoration: BoxDecoration(
+                      color: AppColors.textPrimary,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text('Explore Offers →',
+                        style: AppTextStyles.caption.copyWith(
+                            color: AppColors.primary, fontWeight: FontWeight.w800)),
+                  ),
+                ],
+              ),
+            ),
+            const Text('🪔', style: TextStyle(fontSize: 72)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ─── Section 10: Blog ─────────────────────────────────────────────────────
+  Widget _buildBlogSection() {
+    final blogs = [
+      _BlogCard('📖', 'How to Perform Diwali Puja at Home',
+          'Step-by-step guide for perfect rituals...'),
+      _BlogCard('🌟', 'Festival Calendar 2025 — Key Dates',
+          'All important puja dates and muhuratas...'),
+      _BlogCard('🙏', 'Why Choose a Verified Pandit?',
+          'Benefits of booking certified priests...'),
+    ];
+
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: blogs.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 10),
+      itemBuilder: (_, i) {
+        final b = blogs[i];
+        return GestureDetector(
+          onTap: () {},
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.card,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.border),
+              boxShadow: AppColors.softShadow,
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 72, height: 72,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(b.emoji, style: const TextStyle(fontSize: 34))),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(b.title,
+                          style: AppTextStyles.labelMedium.copyWith(fontSize: 13),
+                          maxLines: 2, overflow: TextOverflow.ellipsis),
+                      const SizedBox(height: 4),
+                      Text(b.excerpt,
+                          style: AppTextStyles.caption,
+                          maxLines: 1, overflow: TextOverflow.ellipsis),
+                      const SizedBox(height: 6),
+                      Text('Read more →',
+                          style: AppTextStyles.caption.copyWith(
+                              color: AppColors.secondary,
+                              fontWeight: FontWeight.w700)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // ─── Section 11: Trust Indicators ─────────────────────────────────────────
+  Widget _buildTrustIndicators() {
+    final badges = [
+      (Icons.lock_outline_rounded, 'Safe &\nConfidential', AppColors.success),
+      (Icons.verified_user_outlined, 'Verified\nPandits', AppColors.info),
+      (Icons.security_outlined, 'Secure\nPayment', AppColors.secondary),
+      (Icons.support_agent_outlined, '24/7\nSupport', AppColors.warning),
+    ];
+
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 24, 16, 0),
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
       decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.border),
         boxShadow: AppColors.softShadow,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                'Hear from Devotees',
-                style: AppTextStyles.h4,
-              ),
-              const Spacer(),
-              Row(
-                children: List.generate(
-                  5,
-                  (_) => const Icon(Icons.star_rounded, color: AppColors.warning, size: 14),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            '"The pandit arrived exactly on time and performed the Satyanarayan Katha beautifully. Highly recommend EMP for all puja needs!"',
-            style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.textSecondary,
-              fontStyle: FontStyle.italic,
-              height: 1.6,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: AppColors.accent,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.primaryDark, width: 2),
-                ),
-                child: const Center(
-                  child: Text('👩', style: TextStyle(fontSize: 18)),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Aarti Sharma',
-                    style: AppTextStyles.labelSmall.copyWith(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  Text('Pune, Maharashtra', style: AppTextStyles.caption),
-                ],
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  color: AppColors.success.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppColors.success.withOpacity(0.3)),
-                ),
-                child: Text(
-                  '✅ Verified',
-                  style: AppTextStyles.caption.copyWith(
-                    color: AppColors.success,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─── Trust Row ───────────────────────────────────────────────────────────────────
-  Widget _buildTrustRow() {
-    final badges = [
-      (Icons.lock_outline, '100%\nSafe', AppColors.success),
-      (Icons.verified_user_outlined, 'Verified\nPandits', AppColors.info),
-      (Icons.security_outlined, 'Secure\nPayment', AppColors.secondary),
-      (Icons.support_agent_outlined, '24/7\nSupport', AppColors.warning),
-    ];
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
       child: Row(
         children: badges.map((b) {
           return Expanded(
@@ -1173,21 +1262,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: b.$3.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
+                    color: b.$3.withOpacity(0.1), shape: BoxShape.circle),
                   child: Icon(b.$1, color: b.$3, size: 22),
                 ),
                 const SizedBox(height: 6),
-                Text(
-                  b.$2,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.caption.copyWith(
-                    color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w600,
-                    height: 1.4,
-                  ),
-                ),
+                Text(b.$2,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.caption.copyWith(
+                        color: AppColors.textSecondary,
+                        fontWeight: FontWeight.w600, height: 1.3, fontSize: 10)),
               ],
             ),
           );
@@ -1195,224 +1278,52 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-  // ─── Bottom Nav ───────────────────────────────────────────────────────────────────
-  Widget _buildBottomNav() {
-    final items = [
-      (Icons.home_rounded, Icons.home_outlined, 'Home'),
-      (Icons.history_rounded, Icons.history_outlined, 'History'),
-      (Icons.add_circle_rounded, Icons.add_circle_outline_rounded, 'Book'),
-      (Icons.notifications_rounded, Icons.notifications_outlined, 'Alerts'),
-      (Icons.person_rounded, Icons.person_outline_rounded, 'Profile'),
-    ];
-
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        border: const Border(top: BorderSide(color: AppColors.border)),
-        boxShadow: AppColors.softShadow,
-      ),
-      child: SafeArea(
-        top: false,
-        child: Row(
-          children: List.generate(items.length, (i) {
-            final selected = _selectedNav == i;
-            final isCenter = i == 2;
-            return Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() => _selectedNav = i);
-                  if (i == 1) context.push('/home/history');
-                  if (i == 2) context.push('/home/create-request');
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: isCenter
-                      ? Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 48,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                gradient: AppColors.primaryGradient,
-                                shape: BoxShape.circle,
-                                boxShadow: AppColors.cardShadow,
-                              ),
-                              child: const Icon(
-                                Icons.add_rounded,
-                                color: AppColors.textPrimary,
-                                size: 28,
-                              ),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 200),
-                              child: Icon(
-                                selected ? items[i].$1 : items[i].$2,
-                                key: ValueKey(selected),
-                                color: selected
-                                    ? AppColors.secondary
-                                    : AppColors.textHint,
-                                size: 24,
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              items[i].$3,
-                              style: AppTextStyles.caption.copyWith(
-                                color: selected
-                                    ? AppColors.secondary
-                                    : AppColors.textHint,
-                                fontWeight: selected
-                                    ? FontWeight.w700
-                                    : FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                ),
-              ),
-            );
-          }),
-        ),
-      ),
-    );
-  }
 }
 
-// ─── Data Models ───────────────────────────────────────────────────────────────────
+// ─── Data Models ───────────────────────────────────────────────────────────────
 
 class _HeroSlide {
-  final String emoji, title, subtitle, ctaLabel;
+  final String emoji, title, subtitle;
   final LinearGradient gradient;
-  const _HeroSlide({
-    required this.emoji,
-    required this.title,
-    required this.subtitle,
-    required this.ctaLabel,
-    required this.gradient,
-  });
+  const _HeroSlide(this.emoji, this.title, this.subtitle, this.gradient);
 }
 
-class _QuickAction {
+class _ServiceItem {
   final String emoji, label;
-  final Color bgColor, accentColor;
-  const _QuickAction(this.emoji, this.label, this.bgColor, this.accentColor);
+  const _ServiceItem(this.emoji, this.label);
 }
 
-class _PanditData {
-  final String name, specialty, rating, experience, distance, emoji;
-  const _PanditData(
-    this.name,
-    this.specialty,
-    this.rating,
-    this.experience,
-    this.distance,
-    this.emoji,
-  );
+class _PoojasCard {
+  final String emoji, label, priceRange;
+  final double rating;
+  final bool isPopular;
+  const _PoojasCard(this.emoji, this.label, this.priceRange, this.rating, this.isPopular);
 }
 
-class _Chip extends StatelessWidget {
-  final String label;
-  final Color bgColor;
-  const _Chip(this.label, this.bgColor);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Text(
-        label,
-        style: AppTextStyles.caption.copyWith(
-          color: AppColors.textSecondary,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
+class _TestimonialCard {
+  final String emoji, name, location, review;
+  const _TestimonialCard(this.emoji, this.name, this.location, this.review);
 }
 
-class _ModeTab extends StatelessWidget {
-  final String icon, label, sublabel;
-  final bool selected;
-  final VoidCallback onTap;
-  final Color activeColor, activeBg;
-
-  const _ModeTab({
-    required this.icon,
-    required this.label,
-    required this.sublabel,
-    required this.selected,
-    required this.onTap,
-    required this.activeColor,
-    required this.activeBg,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeInOut,
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
-          decoration: BoxDecoration(
-            color: selected ? activeBg : Colors.transparent,
-            borderRadius: BorderRadius.circular(13),
-            boxShadow: selected
-                ? [
-                    BoxShadow(
-                      color: activeBg.withOpacity(0.25),
-                      blurRadius: 10,
-                      offset: const Offset(0, 3),
-                    )
-                  ]
-                : null,
-          ),
-          child: Row(
-            children: [
-              Text(icon, style: const TextStyle(fontSize: 22)),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      label,
-                      style: AppTextStyles.labelSmall.copyWith(
-                        color: selected ? AppColors.card : AppColors.textSecondary,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 13,
-                      ),
-                    ),
-                    Text(
-                      sublabel,
-                      style: AppTextStyles.caption.copyWith(
-                        color: selected
-                            ? AppColors.card.withOpacity(0.8)
-                            : AppColors.textHint,
-                        fontSize: 10,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+class _PanditCard {
+  final String emoji, name, specialty, experience, distance;
+  final double rating;
+  const _PanditCard(this.emoji, this.name, this.specialty, this.rating,
+      this.experience, this.distance);
 }
 
+class _DarshanCard {
+  final String emoji, name, location, feature;
+  const _DarshanCard(this.emoji, this.name, this.location, this.feature);
+}
+
+class _ProductCard {
+  final String emoji, label, price;
+  final bool isBestseller;
+  const _ProductCard(this.emoji, this.label, this.price, this.isBestseller);
+}
+
+class _BlogCard {
+  final String emoji, title, excerpt;
+  const _BlogCard(this.emoji, this.title, this.excerpt);
+}
