@@ -24,34 +24,75 @@ class ProfileScreen extends StatelessWidget {
                     _buildStatsRow(),
                     const SizedBox(height: 16),
                     _buildMenuSection('Account', [
-                      _MenuItem(Icons.person_outline_rounded, 'Edit Profile',
-                          'Update your details', AppColors.info),
-                      _MenuItem(Icons.location_on_outlined, 'Saved Addresses',
-                          'Home, work & more', AppColors.success),
-                      _MenuItem(Icons.notifications_outlined,
-                          'Notifications', 'Manage alerts', AppColors.warning),
+                      _MenuItem(
+                        Icons.person_outline_rounded,
+                        'Edit Profile',
+                        'Update your details',
+                        AppColors.info,
+                      ),
+                      _MenuItem(
+                        Icons.language_rounded,
+                        'Change Language',
+                        'Change app language',
+                        const Color(0xFFF8CB46),
+                        onTap: () => context.push(
+                          '/language_selection?isFromProfile=true',
+                        ),
+                      ),
+                      _MenuItem(
+                        Icons.location_on_outlined,
+                        'Saved Addresses',
+                        'Home, work & more',
+                        AppColors.success,
+                      ),
+                      _MenuItem(
+                        Icons.notifications_outlined,
+                        'Notifications',
+                        'Manage alerts',
+                        AppColors.warning,
+                      ),
                     ]),
                     const SizedBox(height: 8),
                     _buildMenuSection('Bookings & Payments', [
-                      _MenuItem(Icons.history_rounded, 'My Bookings',
-                          'Upcoming & past pujas', AppColors.primary),
-                      _MenuItem(Icons.payment_outlined, 'Payment Methods',
-                          'Cards, UPI & wallets', AppColors.success),
-                      _MenuItem(Icons.card_giftcard_outlined,
-                          'Offers & Coupons', 'Save with deals',
-                          AppColors.secondary),
+                      _MenuItem(
+                        Icons.history_rounded,
+                        'My Bookings',
+                        'Upcoming & past pujas',
+                        AppColors.primary,
+                      ),
+                      _MenuItem(
+                        Icons.payment_outlined,
+                        'Payment Methods',
+                        'Cards, UPI & wallets',
+                        AppColors.success,
+                      ),
+                      _MenuItem(
+                        Icons.card_giftcard_outlined,
+                        'Offers & Coupons',
+                        'Save with deals',
+                        AppColors.secondary,
+                      ),
                     ]),
                     const SizedBox(height: 8),
                     _buildMenuSection('Support & Legal', [
-                      _MenuItem(Icons.help_outline_rounded, 'Help Centre',
-                          'FAQs and support', AppColors.info),
                       _MenuItem(
-                          Icons.privacy_tip_outlined,
-                          'Privacy Policy',
-                          'How we use your data',
-                          AppColors.textSecondary),
-                      _MenuItem(Icons.description_outlined, 'Terms of Service',
-                          'Usage agreement', AppColors.textSecondary),
+                        Icons.help_outline_rounded,
+                        'Help Centre',
+                        'FAQs and support',
+                        AppColors.info,
+                      ),
+                      _MenuItem(
+                        Icons.privacy_tip_outlined,
+                        'Privacy Policy',
+                        'How we use your data',
+                        AppColors.textSecondary,
+                      ),
+                      _MenuItem(
+                        Icons.description_outlined,
+                        'Terms of Service',
+                        'Usage agreement',
+                        AppColors.textSecondary,
+                      ),
                     ]),
                     const SizedBox(height: 8),
                     _buildLogoutButton(context),
@@ -79,8 +120,11 @@ class ProfileScreen extends StatelessWidget {
           const Spacer(),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.settings_outlined,
-                color: AppColors.textPrimary, size: 22),
+            icon: const Icon(
+              Icons.settings_outlined,
+              color: AppColors.textPrimary,
+              size: 22,
+            ),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
           ),
@@ -129,11 +173,13 @@ class ProfileScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.textPrimary,
                     shape: BoxShape.circle,
-                    border:
-                        Border.all(color: AppColors.primary, width: 2),
+                    border: Border.all(color: AppColors.primary, width: 2),
                   ),
-                  child: const Icon(Icons.edit_rounded,
-                      size: 12, color: AppColors.primary),
+                  child: const Icon(
+                    Icons.edit_rounded,
+                    size: 12,
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
             ],
@@ -159,7 +205,9 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: 6),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 3),
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.card.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(8),
@@ -181,11 +229,7 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Widget _buildStatsRow() {
-    final stats = [
-      ('12', 'Pujas\nBooked'),
-      ('4.9', 'Avg\nRating'),
-      ('₹8.2K', 'Total\nSpent'),
-    ];
+    final stats = [('12', 'Pujas\nBooked'), ('4.9', 'Avg\nRating')];
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -257,11 +301,13 @@ class ProfileScreen extends StatelessWidget {
               return Column(
                 children: [
                   InkWell(
-                    onTap: () {},
+                    onTap: item.onTap ?? () {},
                     borderRadius: BorderRadius.circular(18),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 14),
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
                       child: Row(
                         children: [
                           Container(
@@ -271,8 +317,7 @@ class ProfileScreen extends StatelessWidget {
                               color: item.color.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Icon(item.icon,
-                                color: item.color, size: 20),
+                            child: Icon(item.icon, color: item.color, size: 20),
                           ),
                           const SizedBox(width: 14),
                           Expanded(
@@ -290,17 +335,21 @@ class ProfileScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Icon(Icons.chevron_right_rounded,
-                              color: AppColors.textHint, size: 20),
+                          Icon(
+                            Icons.chevron_right_rounded,
+                            color: AppColors.textHint,
+                            size: 20,
+                          ),
                         ],
                       ),
                     ),
                   ),
                   if (i < items.length - 1)
                     const Divider(
-                        height: 1,
-                        indent: 68,
-                        color: AppColors.border),
+                      height: 1,
+                      indent: 68,
+                      color: AppColors.border,
+                    ),
                 ],
               );
             }).toList(),
@@ -321,14 +370,16 @@ class ProfileScreen extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.secondary.withOpacity(0.08),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-                color: AppColors.secondary.withOpacity(0.3)),
+            border: Border.all(color: AppColors.secondary.withOpacity(0.3)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.logout_rounded,
-                  color: AppColors.secondary, size: 20),
+              const Icon(
+                Icons.logout_rounded,
+                color: AppColors.secondary,
+                size: 20,
+              ),
               const SizedBox(width: 8),
               Text(
                 'Log Out',
@@ -349,5 +400,12 @@ class _MenuItem {
   final IconData icon;
   final String label, sublabel;
   final Color color;
-  const _MenuItem(this.icon, this.label, this.sublabel, this.color);
+  final VoidCallback? onTap;
+  const _MenuItem(
+    this.icon,
+    this.label,
+    this.sublabel,
+    this.color, {
+    this.onTap,
+  });
 }

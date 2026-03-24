@@ -68,364 +68,449 @@ class LiveTrackingScreen extends StatelessWidget {
   Widget _BottomPanel(BuildContext context, ScrollController scrollController) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+        color: AppColors.background,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
         boxShadow: [
           BoxShadow(
-            color: AppColors.textPrimary.withOpacity(0.12),
-            blurRadius: 20,
-            offset: Offset(0, -4),
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 24,
+            offset: const Offset(0, -8),
           ),
         ],
       ),
       child: ListView(
         controller: scrollController,
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+        padding: const EdgeInsets.only(top: 12, bottom: 32),
         children: [
           // Drag handle
           Center(
             child: Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.only(bottom: 16),
+              width: 48,
+              height: 5,
+              margin: const EdgeInsets.only(bottom: 24),
               decoration: BoxDecoration(
                 color: AppColors.border,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(3),
               ),
             ),
           ),
 
-          // Status
-          Center(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.warning.withOpacity(0.12),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.warning.withOpacity(0.4)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 8,
-                    height: 8,
-                    margin: const EdgeInsets.only(right: 6),
-                    decoration: const BoxDecoration(
-                      color: AppColors.warning,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  Text(
-                    'Pandit is en route',
-                    style: AppTextStyles.labelMedium.copyWith(
-                      color: AppColors.warning,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // Pandit row
-          Row(
-            children: [
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: AppColors.accent,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.primary, width: 2),
-                ),
-                child: const Center(
-                  child: Text('👨‍🦳', style: TextStyle(fontSize: 26)),
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Pt. Ramesh Sharma', style: AppTextStyles.h4),
-                    const SizedBox(height: 2),
-                    RatingRow(rating: 4.9, reviewCount: 234),
-                    const SizedBox(height: 4),
-                    Text(
-                      '🪔 Satyanarayan Katha',
-                      style: AppTextStyles.bodySmall,
-                    ),
-                  ],
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text('12 min', style: AppTextStyles.h3),
-                  Text('ETA', style: AppTextStyles.caption),
-                  const SizedBox(height: 2),
-                  Text('1.2 km away', style: AppTextStyles.caption),
-                ],
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 16),
-
-          // Progress strip
-          const Row(
-            children: [
-              _Step(icon: '📋', label: 'Accepted', done: true),
-              _StepLine(done: true),
-              _Step(icon: '🚗', label: 'En Route', done: true, active: true),
-              _StepLine(done: false),
-              _Step(icon: '🏠', label: 'Arrived', done: false),
-              _StepLine(done: false),
-              _Step(icon: '🪔', label: 'Started', done: false),
-              _StepLine(done: false),
-              _Step(icon: '✅', label: 'Done', done: false),
-            ],
-          ),
-
-          const SizedBox(height: 20),
-
-          // Action buttons
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  icon: const Icon(Icons.call_outlined, size: 18),
-                  label: const Text('Call'),
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: OutlinedButton.icon(
-                  icon: const Icon(Icons.chat_bubble_outline_rounded, size: 18),
-                  label: const Text('Message'),
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.lock_outline_rounded, size: 18),
-                  label: const Text('OTP'),
-                  onPressed: () => context.push('/home/arrival-verification'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    backgroundColor: AppColors.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 24),
-          const Divider(height: 1, color: AppColors.border),
-          const SizedBox(height: 24),
-
-          // Booking Details Summary
-          Text('Booking Details', style: AppTextStyles.h4),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.border),
-            ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(
-                      Icons.calendar_today_outlined,
-                      size: 20,
-                      color: AppColors.textSecondary,
+                // Status Pill
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Date & Time', style: AppTextStyles.labelMedium),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Mon, 15 Oct • 10:00 AM',
-                            style: AppTextStyles.bodyMedium,
-                          ),
-                        ],
+                    decoration: BoxDecoration(
+                      color: AppColors.warning.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: AppColors.warning.withOpacity(0.3),
+                        width: 1,
                       ),
                     ),
-                  ],
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                  child: Divider(height: 1, color: AppColors.border),
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(
-                      Icons.location_on_outlined,
-                      size: 20,
-                      color: AppColors.textSecondary,
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Address', style: AppTextStyles.labelMedium),
-                          const SizedBox(height: 4),
-                          Text(
-                            '123, Sector 4, HSR Layout, Bengaluru, Karnataka 560102',
-                            style: AppTextStyles.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          // Ad banner (non-sticky)
-          Container(
-            height: 100,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.15), // Light background for ad
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.primaryDark.withOpacity(0.5)),
-            ),
-            child: Row(
-              children: [
-                const SizedBox(width: 16),
-                const Text('🔥', style: TextStyle(fontSize: 40)),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Get 50% Off on Puja Samagri',
-                        style: AppTextStyles.labelLarge,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Use code: DIWALI50',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 16),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          // Order Puja items
-          InkWell(
-            onTap: () {}, // Navigate to EMP store
-            borderRadius: BorderRadius.circular(16),
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                border: Border.all(color: AppColors.primary.withOpacity(0.3)),
-                borderRadius: BorderRadius.circular(16),
-                color: AppColors.primary.withOpacity(0.05),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: const BoxDecoration(
-                      color: AppColors.card,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.shopping_bag_outlined,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          'Order Puja Items',
-                          style: AppTextStyles.labelLarge,
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: AppColors.warning,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.warning.withOpacity(0.5),
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(width: 8),
                         Text(
-                          'Get pure samagri delivered from EMP Store',
-                          style: AppTextStyles.bodySmall.copyWith(
-                            color: AppColors.textSecondary,
+                          'Pandit is en route',
+                          style: AppTextStyles.labelMedium.copyWith(
+                            color: AppColors.warning,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const Icon(Icons.chevron_right, color: AppColors.primary),
-                ],
-              ),
-            ),
-          ),
+                ),
 
-          const SizedBox(height: 24),
+                const SizedBox(height: 28),
 
-          // More Content - Policies and Support
-          Text('Support & More', style: AppTextStyles.h4),
-          const SizedBox(height: 12),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(
-              Icons.support_agent_outlined,
-              color: AppColors.textSecondary,
+                // Pandit Card
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 64,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: AppColors.accent,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.border, width: 1),
+                        image: const DecorationImage(
+                          image: NetworkImage(
+                            'https://i.pravatar.cc/150?u=ramesh',
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Pt. Ramesh Sharma',
+                            style: AppTextStyles.h4.copyWith(
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          RatingRow(rating: 4.9, reviewCount: 234),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Satyanarayan Katha',
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.background,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: AppColors.border.withOpacity(0.5),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.02),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '12 min',
+                            style: AppTextStyles.h4.copyWith(
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.primaryDark,
+                            ),
+                          ),
+                          Text(
+                            '1.2 km away',
+                            style: AppTextStyles.caption.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 32),
+
+                // Progress timeline
+                const Row(
+                  children: [
+                    _Step(
+                      icon: Icons.check_circle,
+                      label: 'Accepted',
+                      done: true,
+                      isFirst: true,
+                    ),
+                    _StepLine(done: true),
+                    _Step(
+                      icon: Icons.directions_car,
+                      label: 'En Route',
+                      done: true,
+                      active: true,
+                    ),
+                    _StepLine(done: false),
+                    _Step(icon: Icons.home, label: 'Arrived', done: false),
+                    _StepLine(done: false),
+                    _Step(
+                      icon: Icons.local_fire_department,
+                      label: 'Started',
+                      done: false,
+                    ),
+                    _StepLine(done: false),
+                    _Step(
+                      icon: Icons.task_alt,
+                      label: 'Done',
+                      done: false,
+                      isLast: true,
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 32),
+
+                // Action buttons
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.call_rounded, size: 20),
+                        label: const Text('Call'),
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          side: const BorderSide(
+                            color: AppColors.border,
+                            width: 1.5,
+                          ),
+                          foregroundColor: AppColors.textPrimary,
+                          textStyle: AppTextStyles.labelLarge.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.chat_bubble_rounded, size: 20),
+                        label: const Text('Message'),
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          side: const BorderSide(
+                            color: AppColors.border,
+                            width: 1.5,
+                          ),
+                          foregroundColor: AppColors.textPrimary,
+                          textStyle: AppTextStyles.labelLarge.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        icon: const Icon(
+                          Icons.lock_outline_rounded,
+                          size: 20,
+                          color: AppColors.textPrimary,
+                        ),
+                        label: Text(
+                          'OTP',
+                          style: AppTextStyles.labelLarge.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                        onPressed: () =>
+                            context.push('/home/arrival-verification'),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          backgroundColor: AppColors.primary,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 32),
+
+                // Booking Details Card
+                Text(
+                  'Booking Details',
+                  style: AppTextStyles.h4.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: AppColors.card,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: AppColors.border.withOpacity(0.5),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.02),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      _DetailRow(
+                        icon: Icons.calendar_today_rounded,
+                        title: 'Date & Time',
+                        subtitle: 'Mon, 15 Oct • 10:00 AM',
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Divider(height: 1, color: AppColors.border),
+                      ),
+                      _DetailRow(
+                        icon: Icons.location_on_rounded,
+                        title: 'Address',
+                        subtitle:
+                            '123, Sector 4, HSR Layout, Bengaluru, Karnataka',
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // Ad banner
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.primary.withOpacity(0.2),
+                        AppColors.primary.withOpacity(0.05),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: AppColors.primary.withOpacity(0.3),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withOpacity(0.15),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: AppColors.background,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withOpacity(0.3),
+                              blurRadius: 8,
+                            ),
+                          ],
+                        ),
+                        child: const Text('✨', style: TextStyle(fontSize: 24)),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Get 50% Off on Samagri',
+                              style: AppTextStyles.labelLarge.copyWith(
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Use code: DIWALI50',
+                              style: AppTextStyles.bodySmall.copyWith(
+                                color: AppColors.textSecondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color: AppColors.primaryDark,
+                        size: 20,
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 32),
+
+                // Support & More Content
+                Text(
+                  'Support & More',
+                  style: AppTextStyles.h4.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.card,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: AppColors.border.withOpacity(0.5),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.02),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      _SupportActionRow(
+                        icon: Icons.support_agent_rounded,
+                        title: 'Support Chat',
+                        subtitle: 'Talk to our puja experts',
+                        onTap: () {},
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Divider(
+                          height: 1,
+                          color: AppColors.border.withOpacity(0.5),
+                        ),
+                      ),
+                      _SupportActionRow(
+                        icon: Icons.policy_rounded,
+                        title: 'Cancellation Policy',
+                        subtitle: 'Terms and conditions',
+                        onTap: () {},
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            title: const Text('Support Chat'),
-            trailing: const Icon(Icons.chevron_right, size: 20),
-            onTap: () {},
-          ),
-          const Divider(height: 1, color: AppColors.border),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(
-              Icons.policy_outlined,
-              color: AppColors.textSecondary,
-            ),
-            title: const Text('Cancellation Policy'),
-            trailing: const Icon(Icons.chevron_right, size: 20),
-            onTap: () {},
           ),
         ],
       ),
@@ -437,73 +522,128 @@ class _MapPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.62,
-      color: AppColors.border,
+      height: MediaQuery.of(context).size.height * 0.65,
+      decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.05)),
       child: Stack(
         children: [
-          // Grid lines simulating a map
+          // Simulated beautifully rendered map background
+          Container(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                center: const Alignment(0, 0),
+                radius: 1.0,
+                colors: [
+                  AppColors.primary.withOpacity(0.15),
+                  AppColors.background,
+                ],
+              ),
+            ),
+          ),
           CustomPaint(
             size: Size(
               MediaQuery.of(context).size.width,
-              MediaQuery.of(context).size.height * 0.62,
+              MediaQuery.of(context).size.height * 0.65,
             ),
             painter: _GridPainter(),
           ),
-          // Road overlays
+          // Route path simulation
+          CustomPaint(
+            size: Size(
+              MediaQuery.of(context).size.width,
+              MediaQuery.of(context).size.height * 0.65,
+            ),
+            painter: _RoutePainter(),
+          ),
+          // Pandit pin
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 80),
-                // Pandit pin
-                Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: AppColors.warning,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.warning.withOpacity(0.4),
-                            blurRadius: 12,
-                          ),
-                        ],
+                const SizedBox(height: 40),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.card,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.primary, width: 2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withOpacity(0.4),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
                       ),
-                      child: const Text('🚗', style: TextStyle(fontSize: 22)),
-                    ),
-                    Container(width: 2, height: 12, color: AppColors.warning),
-                  ],
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.directions_car,
+                    color: AppColors.primaryDark,
+                    size: 28,
+                  ),
+                ),
+                Container(
+                  width: 3,
+                  height: 16,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
                 ),
               ],
             ),
           ),
-          // User pin
+          // User Location Pin
           Positioned(
-            bottom: 120,
-            right: MediaQuery.of(context).size.width / 2 - 40,
+            bottom: 160,
+            right: MediaQuery.of(context).size.width / 2.5,
             child: Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.secondary,
+                    color: AppColors.textPrimary,
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.secondary.withOpacity(0.4),
+                        color: Colors.black.withOpacity(0.3),
                         blurRadius: 12,
+                        offset: const Offset(0, 4),
                       ),
                     ],
                   ),
                   child: const Icon(
                     Icons.home_rounded,
-                    color: AppColors.card,
-                    size: 20,
+                    color: AppColors.background,
+                    size: 24,
                   ),
                 ),
-                Container(width: 2, height: 12, color: AppColors.secondary),
+                Container(
+                  width: 3,
+                  height: 16,
+                  decoration: BoxDecoration(
+                    color: AppColors.textPrimary,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
               ],
+            ),
+          ),
+          // Top gradient overlay to blend with app bar
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 120,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppColors.background.withOpacity(0.9),
+                    AppColors.background.withOpacity(0.0),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
@@ -512,11 +652,37 @@ class _MapPlaceholder extends StatelessWidget {
   }
 }
 
+class _RoutePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final pathPaint = Paint()
+      ..color = AppColors.primary.withOpacity(0.8)
+      ..strokeWidth = 6
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
+
+    final path = Path();
+    path.moveTo(size.width / 2, size.height / 2 + 50); // Pandit pos
+    path.quadraticBezierTo(
+      size.width / 2 - 60,
+      size.height / 2 + 100,
+      size.width / 1.5,
+      size.height - 180, // User pos coords approx
+    );
+
+    // Draw dashed path
+    canvas.drawPath(path, pathPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
 class _GridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.border
+      ..color = AppColors.border.withOpacity(0.5)
       ..strokeWidth = 1;
 
     for (double x = 0; x < size.width; x += 40) {
@@ -525,21 +691,6 @@ class _GridPainter extends CustomPainter {
     for (double y = 0; y < size.height; y += 40) {
       canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
     }
-
-    // Horizontal roads
-    final roadPaint = Paint()
-      ..color = AppColors.card
-      ..strokeWidth = 16;
-    canvas.drawLine(
-      Offset(0, size.height * 0.4),
-      Offset(size.width, size.height * 0.4),
-      roadPaint,
-    );
-    canvas.drawLine(
-      Offset(size.width * 0.5, 0),
-      Offset(size.width * 0.5, size.height),
-      roadPaint,
-    );
   }
 
   @override
@@ -547,14 +698,17 @@ class _GridPainter extends CustomPainter {
 }
 
 class _Step extends StatelessWidget {
-  final String icon, label;
-  final bool done, active;
+  final IconData icon;
+  final String label;
+  final bool done, active, isFirst, isLast;
 
   const _Step({
     required this.icon,
     required this.label,
     required this.done,
     this.active = false,
+    this.isFirst = false,
+    this.isLast = false,
   });
 
   @override
@@ -562,8 +716,8 @@ class _Step extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: 32,
-          height: 32,
+          width: 38,
+          height: 38,
           decoration: BoxDecoration(
             color: done
                 ? (active ? AppColors.primary : AppColors.success)
@@ -573,19 +727,32 @@ class _Step extends StatelessWidget {
               color: done
                   ? (active ? AppColors.primary : AppColors.success)
                   : AppColors.border,
-              width: 2,
+              width: active ? 4 : 2,
             ),
+            boxShadow: active
+                ? [
+                    BoxShadow(
+                      color: AppColors.primary.withOpacity(0.4),
+                      blurRadius: 10,
+                    ),
+                  ]
+                : [],
           ),
           child: Center(
-            child: Text(icon, style: const TextStyle(fontSize: 14)),
+            child: Icon(
+              icon,
+              size: 20,
+              color: done ? AppColors.background : AppColors.textHint,
+            ),
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 8),
         Text(
           label,
           style: AppTextStyles.caption.copyWith(
             color: done ? AppColors.textPrimary : AppColors.textHint,
-            fontSize: 9,
+            fontWeight: done ? FontWeight.w700 : FontWeight.w500,
+            fontSize: 10,
           ),
         ),
       ],
@@ -601,9 +768,127 @@ class _StepLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        height: 2,
-        margin: const EdgeInsets.only(bottom: 18),
-        color: done ? AppColors.success : AppColors.border,
+        height: 3,
+        margin: const EdgeInsets.only(bottom: 22),
+        decoration: BoxDecoration(
+          color: done ? AppColors.success : AppColors.border,
+          borderRadius: BorderRadius.circular(1.5),
+        ),
+      ),
+    );
+  }
+}
+
+class _DetailRow extends StatelessWidget {
+  final IconData icon;
+  final String title, subtitle;
+
+  const _DetailRow({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: AppColors.background,
+            shape: BoxShape.circle,
+            border: Border.all(color: AppColors.border),
+          ),
+          child: Icon(icon, size: 20, color: AppColors.textSecondary),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: AppTextStyles.labelMedium.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: AppTextStyles.bodyMedium.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SupportActionRow extends StatelessWidget {
+  final IconData icon;
+  final String title, subtitle;
+  final VoidCallback onTap;
+
+  const _SupportActionRow({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Icon(icon, size: 20, color: AppColors.textSecondary),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyles.labelMedium.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: AppTextStyles.caption.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.chevron_right_rounded,
+              size: 24,
+              color: AppColors.textHint,
+            ),
+          ],
+        ),
       ),
     );
   }

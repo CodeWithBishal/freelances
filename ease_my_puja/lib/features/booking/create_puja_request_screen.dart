@@ -14,6 +14,7 @@ class CreatePujaRequestScreen extends StatefulWidget {
 
 class _CreatePujaRequestScreenState extends State<CreatePujaRequestScreen> {
   String? _selectedPuja;
+  bool _isScheduleForLater = false;
   String? _selectedDate;
   String? _selectedTime;
   double _offerPrice = 1500;
@@ -30,14 +31,91 @@ class _CreatePujaRequestScreenState extends State<CreatePujaRequestScreen> {
     ('☀️', 'Surya Puja'),
   ];
 
-  final _requirements = [
-    'Pandit will bring flowers',
-    'Devotee to arrange ghee',
-    'Incense and lamp needed',
-    'Fruits for prasad',
-  ];
+  final Map<String, List<String>> _pujaRequirements = {
+    'Satyanarayan Katha': [
+      'Pandit will bring flowers',
+      'Devotee to arrange ghee',
+      'Incense and lamp needed',
+      'Fruits and sweets for prasad',
+    ],
+    'Griha Pravesh': [
+      'Kalash and coconut needed',
+      'Pandit will bring havan samagri',
+      'Mango leaves',
+      'Rangoli items',
+    ],
+    'Namkaran Samskara': [
+      'Pandit will bring flowers',
+      'New clothes for baby',
+      'Sweets for distribution',
+    ],
+    'Vivah Puja': [
+      'Complete puja samagri (arranged by pandit)',
+      'Varmala',
+      'Sindoor and Mangalsutra',
+    ],
+    'Navgrah Puja': [
+      'Navgrah yantra',
+      'Nine types of grains',
+      'Black sesame seeds',
+      'Ghee for havan',
+    ],
+    'Rudrabhishek': [
+      'Milk, curd, honey, ghee, sugar (Panchamrit)',
+      'Bael leaves (Bilva patra)',
+      'Dhatura',
+      'Bhasma',
+    ],
+    'Lakshmi Puja': [
+      'Lotus flowers',
+      'Panchamrit',
+      'Kheel and Batasha',
+      'Silver coin',
+    ],
+    'Surya Puja': [
+      'Red flowers',
+      'Kumkum and Roli',
+      'Copper vessel for arghya',
+      'Jaggery',
+    ],
+  };
 
-  final _checkedReq = <int>{0, 2};
+  final Map<String, double> _pujaSuggestedPrices = {
+    'Satyanarayan Katha': 1500,
+    'Griha Pravesh': 3500,
+    'Namkaran Samskara': 2000,
+    'Vivah Puja': 7500,
+    'Navgrah Puja': 4000,
+    'Rudrabhishek': 2500,
+    'Lakshmi Puja': 2100,
+    'Surya Puja': 1100,
+  };
+
+  List<String> _currentRequirements = [];
+  final Set<int> _checkedReq = {0, 2};
+
+  @override
+  void initState() {
+    super.initState();
+    if (_pujaTypes.isNotEmpty) {
+      _selectPuja(_pujaTypes.first.$2);
+    }
+  }
+
+  void _selectPuja(String puja) {
+    setState(() {
+      _selectedPuja = puja;
+      _currentRequirements = _pujaRequirements[puja] ?? [];
+      _offerPrice = _pujaSuggestedPrices[puja] ?? 1500;
+      _checkedReq.clear();
+      if (_currentRequirements.isNotEmpty) {
+        _checkedReq.add(0); // Default check first item
+      }
+      if (_currentRequirements.length > 2) {
+        _checkedReq.add(2); // Default check third item if available
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -74,7 +152,7 @@ class _CreatePujaRequestScreenState extends State<CreatePujaRequestScreen> {
                     children: _pujaTypes.map((p) {
                       final selected = _selectedPuja == p.$2;
                       return GestureDetector(
-                        onTap: () => setState(() => _selectedPuja = p.$2),
+                        onTap: () => _selectPuja(p.$2),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           padding: const EdgeInsets.symmetric(
@@ -125,70 +203,171 @@ class _CreatePujaRequestScreenState extends State<CreatePujaRequestScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _FieldLabel('Date & Time', required: true),
+                  _FieldLabel('When do you need the Pandit?', required: true),
                   const SizedBox(height: 12),
                   Row(
                     children: [
                       Expanded(
-                        child: _SelectionTile(
-                          icon: Icons.calendar_today_outlined,
-                          label: _selectedDate ?? 'Select Date',
-                          placeholder: _selectedDate == null,
-                          onTap: () async {
-                            final d = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now().add(
-                                const Duration(days: 1),
+                        child: GestureDetector(
+                          onTap: () => setState(() {
+                            _isScheduleForLater = false;
+                            _selectedDate = null;
+                            _selectedTime = null;
+                          }),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: !_isScheduleForLater
+                                  ? AppColors.primary.withOpacity(0.12)
+                                  : AppColors.background,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: !_isScheduleForLater
+                                    ? AppColors.primaryDark
+                                    : AppColors.border,
+                                width: !_isScheduleForLater ? 2 : 1,
                               ),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime.now().add(
-                                const Duration(days: 90),
-                              ),
-                              builder: (ctx, child) => Theme(
-                                data: Theme.of(ctx).copyWith(
-                                  colorScheme: const ColorScheme.light(
-                                    primary: AppColors.primary,
+                            ),
+                            alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.flash_on_rounded,
+                                  size: 18,
+                                  color: !_isScheduleForLater
+                                      ? AppColors.primaryDark
+                                      : AppColors.textSecondary,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Right Now',
+                                  style: AppTextStyles.labelMedium.copyWith(
+                                    color: !_isScheduleForLater
+                                        ? AppColors.primaryDark
+                                        : AppColors.textSecondary,
                                   ),
                                 ),
-                                child: child!,
-                              ),
-                            );
-                            if (d != null) {
-                              setState(
-                                () => _selectedDate =
-                                    '${d.day}/${d.month}/${d.year}',
-                              );
-                            }
-                          },
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 12),
                       Expanded(
-                        child: _SelectionTile(
-                          icon: Icons.access_time_rounded,
-                          label: _selectedTime ?? 'Select Time',
-                          placeholder: _selectedTime == null,
-                          onTap: () async {
-                            final t = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.now(),
-                              builder: (ctx, child) => Theme(
-                                data: Theme.of(ctx).copyWith(
-                                  colorScheme: const ColorScheme.light(
-                                    primary: AppColors.primary,
+                        child: GestureDetector(
+                          onTap: () =>
+                              setState(() => _isScheduleForLater = true),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: _isScheduleForLater
+                                  ? AppColors.primary.withOpacity(0.12)
+                                  : AppColors.background,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: _isScheduleForLater
+                                    ? AppColors.primaryDark
+                                    : AppColors.border,
+                                width: _isScheduleForLater ? 2 : 1,
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.calendar_month_rounded,
+                                  size: 18,
+                                  color: _isScheduleForLater
+                                      ? AppColors.primaryDark
+                                      : AppColors.textSecondary,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Schedule',
+                                  style: AppTextStyles.labelMedium.copyWith(
+                                    color: _isScheduleForLater
+                                        ? AppColors.primaryDark
+                                        : AppColors.textSecondary,
                                   ),
                                 ),
-                                child: child!,
-                              ),
-                            );
-                            if (t != null) {
-                              setState(() => _selectedTime = t.format(context));
-                            }
-                          },
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
+                  if (_isScheduleForLater) ...[
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _SelectionTile(
+                            icon: Icons.calendar_today_outlined,
+                            label: _selectedDate ?? 'Select Date',
+                            placeholder: _selectedDate == null,
+                            onTap: () async {
+                              final d = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now().add(
+                                  const Duration(days: 1),
+                                ),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime.now().add(
+                                  const Duration(days: 90),
+                                ),
+                                builder: (ctx, child) => Theme(
+                                  data: Theme.of(ctx).copyWith(
+                                    colorScheme: const ColorScheme.light(
+                                      primary: AppColors.primary,
+                                    ),
+                                  ),
+                                  child: child!,
+                                ),
+                              );
+                              if (d != null) {
+                                setState(
+                                  () => _selectedDate =
+                                      '${d.day}/${d.month}/${d.year}',
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _SelectionTile(
+                            icon: Icons.access_time_rounded,
+                            label: _selectedTime ?? 'Select Time',
+                            placeholder: _selectedTime == null,
+                            onTap: () async {
+                              final t = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.now(),
+                                builder: (ctx, child) => Theme(
+                                  data: Theme.of(ctx).copyWith(
+                                    colorScheme: const ColorScheme.light(
+                                      primary: AppColors.primary,
+                                    ),
+                                  ),
+                                  child: child!,
+                                ),
+                              );
+                              if (t != null) {
+                                setState(
+                                  () => _selectedTime = t.format(context),
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -279,7 +458,7 @@ class _CreatePujaRequestScreenState extends State<CreatePujaRequestScreen> {
                           ),
                         ),
                         child: Text(
-                          '✅ Suggested: ₹1,800',
+                          '✅ Suggested: ₹${_pujaSuggestedPrices[_selectedPuja]?.toInt() ?? 1500}',
                           style: AppTextStyles.caption.copyWith(
                             color: AppColors.success,
                             fontWeight: FontWeight.w600,
@@ -299,8 +478,8 @@ class _CreatePujaRequestScreenState extends State<CreatePujaRequestScreen> {
                     ),
                     child: Slider(
                       min: 500,
-                      max: 10000,
-                      divisions: 95,
+                      max: 20000,
+                      divisions: 195,
                       value: _offerPrice,
                       onChanged: (v) => setState(() => _offerPrice = v),
                     ),
@@ -309,7 +488,7 @@ class _CreatePujaRequestScreenState extends State<CreatePujaRequestScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('₹500', style: AppTextStyles.caption),
-                      Text('₹10,000', style: AppTextStyles.caption),
+                      Text('₹20,000', style: AppTextStyles.caption),
                     ],
                   ),
                 ],
@@ -318,62 +497,69 @@ class _CreatePujaRequestScreenState extends State<CreatePujaRequestScreen> {
             const SizedBox(height: 14),
 
             // Requirements
-            _SectionCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _FieldLabel('Requirements'),
-                  const SizedBox(height: 10),
-                  ..._requirements.asMap().entries.map((e) {
-                    final i = e.key;
-                    final text = e.value;
-                    return InkWell(
-                      onTap: () => setState(() {
-                        if (_checkedReq.contains(i)) {
-                          _checkedReq.remove(i);
-                        } else {
-                          _checkedReq.add(i);
-                        }
-                      }),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        child: Row(
-                          children: [
-                            AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              width: 22,
-                              height: 22,
-                              decoration: BoxDecoration(
-                                color: _checkedReq.contains(i)
-                                    ? AppColors.primary
-                                    : AppColors.card,
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
+            if (_currentRequirements.isNotEmpty) ...[
+              _SectionCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _FieldLabel('Requirements'),
+                    const SizedBox(height: 10),
+                    ..._currentRequirements.asMap().entries.map((e) {
+                      final i = e.key;
+                      final text = e.value;
+                      return InkWell(
+                        onTap: () => setState(() {
+                          if (_checkedReq.contains(i)) {
+                            _checkedReq.remove(i);
+                          } else {
+                            _checkedReq.add(i);
+                          }
+                        }),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: Row(
+                            children: [
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                width: 22,
+                                height: 22,
+                                decoration: BoxDecoration(
                                   color: _checkedReq.contains(i)
-                                      ? AppColors.primaryDark
-                                      : AppColors.border,
-                                  width: 2,
+                                      ? AppColors.primary
+                                      : AppColors.card,
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: _checkedReq.contains(i)
+                                        ? AppColors.primaryDark
+                                        : AppColors.border,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: _checkedReq.contains(i)
+                                    ? const Icon(
+                                        Icons.check_rounded,
+                                        size: 14,
+                                        color: AppColors.textPrimary,
+                                      )
+                                    : null,
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  text,
+                                  style: AppTextStyles.bodyMedium,
                                 ),
                               ),
-                              child: _checkedReq.contains(i)
-                                  ? const Icon(
-                                      Icons.check_rounded,
-                                      size: 14,
-                                      color: AppColors.textPrimary,
-                                    )
-                                  : null,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(text, style: AppTextStyles.bodyMedium),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  }),
-                ],
+                      );
+                    }),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 14),
+              const SizedBox(height: 14),
+            ],
 
             // Instructions
             _SectionCard(

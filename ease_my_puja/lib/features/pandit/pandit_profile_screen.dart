@@ -100,45 +100,70 @@ class _PanditProfileScreenState extends State<PanditProfileScreen>
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [AppColors.primary.withOpacity(0.4), AppColors.primary.withOpacity(0.1)],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                ),
+                color: AppColors.background,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 60),
+                    const SizedBox(height: 50),
                     // Avatar
-                    Container(
-                      width: 96,
-                      height: 96,
-                      decoration: BoxDecoration(
-                        color: AppColors.accent,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.primary, width: 3),
-                        boxShadow: AppColors.cardShadow,
-                      ),
-                      child: const Center(
-                        child: Text('👨‍🦳', style: TextStyle(fontSize: 48)),
+                    Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                        Container(
+                          width: 104,
+                          height: 104,
+                          decoration: BoxDecoration(
+                            color: AppColors.card,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.primary,
+                              width: 3,
+                            ),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              '👨‍🦳',
+                              style: TextStyle(fontSize: 54),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: AppColors.success,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.background,
+                              width: 3,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.verified_rounded,
+                            size: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Pt. Ramesh Sharma',
+                      style: AppTextStyles.h2.copyWith(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 22,
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    Text('Pt. Ramesh Sharma', style: AppTextStyles.h2),
-                    const SizedBox(height: 4),
-                    RatingRow(rating: 4.9, reviewCount: 234),
                     const SizedBox(height: 8),
+                    RatingRow(rating: 4.9, reviewCount: 234),
+                    const SizedBox(height: 12),
                     // Badges row
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _Badge('✅ Aadhaar Verified', AppColors.success),
+                        _Badge('🏅 15 Yrs Exp', AppColors.primary),
                         const SizedBox(width: 8),
-                        _Badge('🏅 15 Years Exp', AppColors.statusBidding),
-                        const SizedBox(width: 8),
-                        _Badge('🪔 312 Pujas', AppColors.statusAssigned),
+                        _Badge('🪔 312 Pujas', AppColors.secondary),
                       ],
                     ),
                   ],
@@ -152,27 +177,35 @@ class _PanditProfileScreenState extends State<PanditProfileScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Stats strip
-                Container(
-                  margin: const EdgeInsets.symmetric(
+                Padding(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 16,
-                    vertical: 16,
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  decoration: BoxDecoration(
-                    color: AppColors.card,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.border),
-                    boxShadow: AppColors.softShadow,
+                    vertical: 20,
                   ),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _StatItem('₹1,500', 'Starting Price'),
-                      _Divider(),
-                      _StatItem('12 min', 'Avg. ETA'),
-                      _Divider(),
-                      _StatItem('4.9 ⭐', 'Rating'),
-                      _Divider(),
-                      _StatItem('1.2 km', 'Distance'),
+                      _StatCard(
+                        icon: Icons.currency_rupee_rounded,
+                        value: '₹1,500',
+                        label: 'Starts at',
+                      ),
+                      _StatCard(
+                        icon: Icons.timer_outlined,
+                        value: '12 min',
+                        label: 'Avg ETA',
+                      ),
+                      _StatCard(
+                        icon: Icons.star_rounded,
+                        value: '4.9',
+                        label: 'Rating',
+                        iconColor: Colors.orange,
+                      ),
+                      _StatCard(
+                        icon: Icons.location_on_outlined,
+                        value: '1.2 km',
+                        label: 'Distance',
+                      ),
                     ],
                   ),
                 ),
@@ -183,18 +216,34 @@ class _PanditProfileScreenState extends State<PanditProfileScreen>
                   decoration: BoxDecoration(
                     color: AppColors.card,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.border),
+                    border: Border.all(
+                      color: AppColors.border.withOpacity(0.5),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.textPrimary.withOpacity(0.03),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: TabBar(
                     controller: _tab,
+                    labelStyle: AppTextStyles.labelMedium.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                    unselectedLabelStyle: AppTextStyles.labelMedium,
+                    labelColor: AppColors.textPrimary,
+                    unselectedLabelColor: AppColors.textSecondary,
+                    indicatorPadding: const EdgeInsets.all(4),
                     tabs: const [
                       Tab(text: 'About'),
-                      Tab(text: 'Specializations'),
+                      Tab(text: 'Specialties'),
                       Tab(text: 'Reviews'),
                     ],
                     indicator: BoxDecoration(
                       color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     indicatorSize: TabBarIndicatorSize.tab,
                     dividerColor: Colors.transparent,
@@ -224,7 +273,12 @@ class _PanditProfileScreenState extends State<PanditProfileScreen>
         decoration: BoxDecoration(
           color: AppColors.card,
           border: Border(top: BorderSide(color: AppColors.border)),
-          boxShadow: [BoxShadow(color: AppColors.textPrimary.withOpacity(0.12), blurRadius: 8)],
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.textPrimary.withOpacity(0.12),
+              blurRadius: 8,
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -259,41 +313,79 @@ class _AboutTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('About', style: AppTextStyles.h3),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Text(
             'Pandit Ramesh Sharma is a highly experienced Vedic scholar with over 15 years of practice. He is well-versed in all major Hindu rituals and can conduct ceremonies in Sanskrit and regional languages.',
-            style: AppTextStyles.bodyMedium,
+            style: AppTextStyles.bodyMedium.copyWith(
+              height: 1.5,
+              color: AppColors.textSecondary,
+            ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           Text('Languages', style: AppTextStyles.h4),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Wrap(
-            spacing: 8,
-            children: [
-              'Hindi',
-              'Marathi',
-              'Sanskrit',
-              'English',
-            ].map((l) => Chip(label: Text(l))).toList(),
+            spacing: 10,
+            runSpacing: 10,
+            children: ['Hindi', 'Marathi', 'Sanskrit', 'English']
+                .map(
+                  (l) => Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.accent,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      l,
+                      style: AppTextStyles.labelSmall.copyWith(
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                  ),
+                )
+                .toList(),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           Text('Certifications', style: AppTextStyles.h4),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           ...[
             'Vedic Rituals – Sanskrit College, Varanasi',
             'Jyotish Shastra – Astrology Board of India',
           ].map(
-            (c) => Padding(
-              padding: const EdgeInsets.only(bottom: 6),
+            (c) => Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.card,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.border.withOpacity(0.5)),
+              ),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.verified_rounded,
-                    size: 16,
-                    color: AppColors.success,
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.success.withOpacity(0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.workspace_premium_rounded,
+                      size: 20,
+                      color: AppColors.success,
+                    ),
                   ),
-                  const SizedBox(width: 6),
-                  Expanded(child: Text(c, style: AppTextStyles.bodySmall)),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      c,
+                      style: AppTextStyles.bodySmall.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -313,9 +405,48 @@ class _SpecializationsTab extends StatelessWidget {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Wrap(
-        spacing: 8,
-        runSpacing: 8,
-        children: items.map((s) => Chip(label: Text(s))).toList(),
+        spacing: 12,
+        runSpacing: 12,
+        children: items
+            .map(
+              (s) => Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: AppColors.primary.withOpacity(0.5)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withOpacity(0.05),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.star_border_rounded,
+                      size: 18,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      s,
+                      style: AppTextStyles.labelMedium.copyWith(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+            .toList(),
       ),
     );
   }
@@ -330,15 +461,22 @@ class _ReviewsTab extends StatelessWidget {
     return ListView.separated(
       padding: const EdgeInsets.all(16),
       itemCount: reviews.length,
-      separatorBuilder: (_, _) => const SizedBox(height: 10),
+      separatorBuilder: (_, _) => const SizedBox(height: 12),
       itemBuilder: (_, i) {
         final r = reviews[i];
         return Container(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: AppColors.card,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.border),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.border.withOpacity(0.5)),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.textPrimary.withOpacity(0.03),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -346,21 +484,76 @@ class _ReviewsTab extends StatelessWidget {
               Row(
                 children: [
                   CircleAvatar(
-                    radius: 16,
-                    backgroundColor: AppColors.accent,
-                    child: Text(r.name[0], style: AppTextStyles.labelMedium),
+                    radius: 20,
+                    backgroundColor: AppColors.primary.withOpacity(0.15),
+                    child: Text(
+                      r.name[0],
+                      style: AppTextStyles.labelMedium.copyWith(
+                        color: AppColors.primaryDark,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 12),
                   Expanded(
-                    child: Text(r.name, style: AppTextStyles.labelMedium),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          r.name,
+                          style: AppTextStyles.labelMedium.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          r.date,
+                          style: AppTextStyles.caption.copyWith(
+                            color: AppColors.textHint,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  RatingRow(rating: r.rating),
-                  const SizedBox(width: 6),
-                  Text(r.date, style: AppTextStyles.caption),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.orange.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.star_rounded,
+                          size: 16,
+                          color: Colors.orange,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          r.rating.toString(),
+                          style: AppTextStyles.labelSmall.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: Colors.orange.shade800,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-              const SizedBox(height: 8),
-              Text(r.text, style: AppTextStyles.bodySmall),
+              const SizedBox(height: 12),
+              Text(
+                r.text,
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.textSecondary,
+                  height: 1.4,
+                ),
+              ),
             ],
           ),
         );
@@ -383,47 +576,79 @@ class _Badge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
+        color: color.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Text(
         label,
         style: AppTextStyles.caption.copyWith(
           color: color,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );
   }
 }
 
-class _StatItem extends StatelessWidget {
+class _StatCard extends StatelessWidget {
+  final IconData icon;
   final String value, label;
-  const _StatItem(this.value, this.label);
+  final Color? iconColor;
+  const _StatCard({
+    required this.icon,
+    required this.value,
+    required this.label,
+    this.iconColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Column(
-        children: [
-          Text(value, style: AppTextStyles.h4),
-          Text(
-            label,
-            style: AppTextStyles.caption,
-            textAlign: TextAlign.center,
-          ),
-        ],
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+        decoration: BoxDecoration(
+          color: AppColors.card,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.border.withOpacity(0.5)),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.textPrimary.withOpacity(0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Icon(icon, size: 22, color: iconColor ?? AppColors.primary),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: AppTextStyles.labelMedium.copyWith(
+                fontWeight: FontWeight.w800,
+                color: AppColors.textPrimary,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: AppTextStyles.caption.copyWith(
+                fontSize: 10,
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
-  }
-}
-
-class _Divider extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(width: 1, height: 32, color: AppColors.border);
   }
 }

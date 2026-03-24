@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import '../../features/auth/splash_screen.dart';
+import '../../features/onboarding/language_selection_screen.dart';
 import '../../features/auth/login_screen.dart';
 import '../../features/auth/otp_screen.dart';
 import '../../features/auth/profile_screen.dart';
@@ -25,9 +26,12 @@ class AppRouter {
         builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
+        path: '/language_selection',
+        builder: (context, state) => LanguageSelectionScreen(
+          isFromProfile: state.uri.queryParameters['isFromProfile'] == 'true',
+        ),
       ),
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(
         path: '/otp',
         builder: (context, state) =>
