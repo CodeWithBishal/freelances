@@ -5,9 +5,25 @@ const CODING_PROMPT = "I will show you a coding question/problem from a webpage.
 
 const SELECTION_PROMPT = "I will upload you the questions of my quiz. Please answer them accurately and concisely without any explanation with option number and question number. If the question is multiple choice, give all the correct option which you are surely confident about. Don't explain just answer with the correct option";
 
+function hasRuntimeMessaging() {
+  return typeof chrome !== 'undefined'
+    && !!chrome.runtime
+    && typeof chrome.runtime.sendMessage === 'function';
+}
+
+function safeSendMessage(payload, callback) {
+  if (!hasRuntimeMessaging()) {
+    callback({ __runtimeUnavailable: true, error: 'Extension messaging is unavailable in this frame.' });
+    return;
+  }
+
+  chrome.runtime.sendMessage(payload, callback);
+}
+
 // ── Main Init ────────────────────────────────────
 chrome.storage.local.get([
   'GEMINI_API_KEY',
+  'NVIDIA_API_KEY', 'SELECTED_MODEL',
   'EXTENSION_ENABLED', 'ACTIVE_MODE', 'QUIZ_AUTO_CAPTURE'
 ], (result) => {
   if (result.EXTENSION_ENABLED === false) {
@@ -15,8 +31,13 @@ chrome.storage.local.get([
     return;
   }
 
-  if (!result.GEMINI_API_KEY) {
-    console.log("Page Analyzer: Gemini API Key not configured.");
+  const selectedModel = result.SELECTED_MODEL || 'gemini';
+  const hasGeminiKey = !!(result.GEMINI_API_KEY && result.GEMINI_API_KEY.trim());
+  const hasQwenKey = !!(result.NVIDIA_API_KEY && result.NVIDIA_API_KEY.trim());
+  const hasRequiredKey = selectedModel === 'qwen' ? hasQwenKey : hasGeminiKey;
+
+  if (!hasRequiredKey) {
+    console.log(`Page Analyzer: ${selectedModel.toUpperCase()} API key not configured.`);
     return;
   }
 
@@ -42,12 +63,14 @@ chrome.storage.local.get([
 });
 
 // Listen for mode changes from popup
-chrome.runtime.onMessage.addListener((message) => {
-  if (message.action === 'MODE_CHANGED') {
-    // Reload the page to apply the new mode
-    location.reload();
-  }
-});
+if (hasRuntimeMessaging()) {
+  chrome.runtime.onMessage.addListener((message) => {
+    if (message.action === 'MODE_CHANGED') {
+      // Reload the page to apply the new mode
+      location.reload();
+    }
+  });
+}
 
 // ── Quiz Analysis (single screenshot) ────────────
 function initQuizAnalysis(updateUI) {
@@ -61,12 +84,17 @@ function initQuizAnalysis(updateUI) {
     }
   }, 30000);
 
-  chrome.runtime.sendMessage(
+  safeSendMessage(
     { action: "ANALYZE_PAGE", prompt: QUIZ_PROMPT },
     (response) => {
       if (responseHandled) return;
       responseHandled = true;
       clearTimeout(timeoutId);
+
+      if (response && response.__runtimeUnavailable) {
+        updateUI('error', { error: 'Cannot talk to extension background from this page/frame. Try reloading the extension and page.' });
+        return;
+      }
 
       if (chrome.runtime.lastError) {
         updateUI('error', { error: "Connection Error: " + chrome.runtime.lastError.message });
@@ -102,7 +130,7 @@ async function initCodingAnalysis(updateUI) {
       }
     }, 60000); // Longer timeout for multi-capture
 
-    chrome.runtime.sendMessage(
+    safeSendMessage(
       {
         action: "ANALYZE_PAGE_MULTI",
         prompt: CODING_PROMPT,
@@ -113,6 +141,11 @@ async function initCodingAnalysis(updateUI) {
         if (responseHandled) return;
         responseHandled = true;
         clearTimeout(timeoutId);
+
+        if (response && response.__runtimeUnavailable) {
+          updateUI('error', { error: 'Cannot talk to extension background from this page/frame. Try reloading the extension and page.' });
+          return;
+        }
 
         if (chrome.runtime.lastError) {
           updateUI('error', { error: "Connection Error: " + chrome.runtime.lastError.message });
@@ -143,7 +176,7 @@ function initSelectionMode(updateUI) {
     analyzeBtn.id = btnId;
     analyzeBtn.className = 'page-analyzer-hover-btn';
     analyzeBtn.innerHTML = '✨ Analyze';
-    analyzeBtn.title = 'Analyze selected text with Gemini';
+    analyzeBtn.title = 'Analyze selected text with AI';
 
     const style = document.createElement('style');
     style.textContent = `
@@ -211,12 +244,17 @@ function initSelectionMode(updateUI) {
       }
     }, 30000);
 
-    chrome.runtime.sendMessage(
+    safeSendMessage(
       { action: "ANALYZE_SELECTION", text: text, prompt: SELECTION_PROMPT },
       (response) => {
         if (responseHandled) return;
         responseHandled = true;
         clearTimeout(timeoutId);
+
+        if (response && response.__runtimeUnavailable) {
+          updateUI('error', { error: 'Cannot talk to extension background from this page/frame. Try reloading the extension and page.' });
+          return;
+        }
 
         if (chrome.runtime.lastError) {
           updateUI('error', { error: "Connection Error: " + chrome.runtime.lastError.message });
@@ -255,9 +293,14 @@ function captureScrollingScreenshots() {
       // Ask background to capture this viewport
       try {
         const dataUrl = await new Promise((res, rej) => {
-          chrome.runtime.sendMessage(
+          safeSendMessage(
             { action: "CAPTURE_VIEWPORT" },
             (response) => {
+              if (response && response.__runtimeUnavailable) {
+                rej(new Error('Extension messaging unavailable in this frame.'));
+                return;
+              }
+
               if (chrome.runtime.lastError) {
                 rej(new Error(chrome.runtime.lastError.message));
               } else if (response && response.dataUrl) {
@@ -284,9 +327,14 @@ function captureScrollingScreenshots() {
     if (screenshots.length === 0) {
       try {
         const fallback = await new Promise((res, rej) => {
-          chrome.runtime.sendMessage({ action: "CAPTURE_VIEWPORT" }, (r) => {
-            if (r && r.dataUrl) res(r.dataUrl);
-            else rej(new Error("fallback capture failed"));
+          safeSendMessage({ action: "CAPTURE_VIEWPORT" }, (r) => {
+            if (r && r.__runtimeUnavailable) {
+              rej(new Error('Extension messaging unavailable in this frame.'));
+            } else if (r && r.dataUrl) {
+              res(r.dataUrl);
+            } else {
+              rej(new Error("fallback capture failed"));
+            }
           });
         });
         screenshots.push(fallback);
@@ -571,6 +619,12 @@ function createSidebarUI(mode) {
     handle.classList.remove('loading');
 
     if (status === 'success') {
+      // Rebuild tabs from the latest response so stale loading tabs don't hide results.
+      tabsContainer.innerHTML = '';
+      contentContainer.innerHTML = '';
+      Object.keys(tabsData).forEach(k => delete tabsData[k]);
+      activeTab = null;
+
       data.forEach(aiResult => {
         const { provider, result, error } = aiResult;
 
@@ -682,5 +736,7 @@ function createSidebarUI(mode) {
 }
 
 function getProviderDisplayName(provider) {
-  return provider === 'gemini' ? 'Gemini' : provider;
+  if (provider === 'gemini') return 'Gemini';
+  if (provider === 'qwen') return 'Qwen';
+  return provider;
 }

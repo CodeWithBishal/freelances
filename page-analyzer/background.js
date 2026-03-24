@@ -29,16 +29,30 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
+function resolveSelectedModel(data) {
+  if (data.SELECTED_MODEL) return data.SELECTED_MODEL;
+
+  const hasGeminiKey = !!(data.GEMINI_API_KEY && data.GEMINI_API_KEY.trim());
+  const hasQwenKey = !!(data.NVIDIA_API_KEY && data.NVIDIA_API_KEY.trim());
+  if (hasQwenKey && !hasGeminiKey) return 'qwen';
+
+  return 'gemini';
+}
+
 // ── Single Screenshot Analysis (Quiz Mode) ──────
 async function handleAnalysis(tabId, customPrompt) {
   try {
-    const data = await chrome.storage.local.get(['GEMINI_API_KEY', 'EXTENSION_ENABLED']);
+    const data = await chrome.storage.local.get(['GEMINI_API_KEY', 'NVIDIA_API_KEY', 'SELECTED_MODEL', 'EXTENSION_ENABLED']);
 
     if (data.EXTENSION_ENABLED === false) {
       return { error: "Extension is disabled. Please enable it in the extension popup." };
     }
 
-    if (!data.GEMINI_API_KEY) {
+    const selectedModel = resolveSelectedModel(data);
+    if (selectedModel === 'qwen' && !data.NVIDIA_API_KEY) {
+      return { error: "Qwen API Key not configured. Please open the extension popup and save your NVIDIA API key." };
+    }
+    if (selectedModel === 'gemini' && !data.GEMINI_API_KEY) {
       return { error: "Gemini API Key not configured. Please open the extension popup and save your API key." };
     }
 
@@ -53,25 +67,37 @@ async function handleAnalysis(tabId, customPrompt) {
       return { error: "Screenshot failed (undefined result)." };
     }
 
-    const result = await callGeminiAPI(data.GEMINI_API_KEY, [dataUrl], customPrompt, null);
-    return { success: true, data: [{ provider: 'gemini', result, error: null }] };
+    let result;
+    if (selectedModel === 'qwen') {
+      result = await callQwenAPI(data.NVIDIA_API_KEY, [dataUrl], customPrompt, null);
+    } else {
+      result = await callGeminiAPI(data.GEMINI_API_KEY, [dataUrl], customPrompt, null);
+    }
+    
+    return { success: true, data: [{ provider: selectedModel, result, error: null }] };
 
   } catch (error) {
     console.error("Analysis failed:", error);
-    return { success: true, data: [{ provider: 'gemini', result: null, error: error.message }] };
+    const fallbackData = await chrome.storage.local.get(['GEMINI_API_KEY', 'NVIDIA_API_KEY', 'SELECTED_MODEL']);
+    const selectedModel = resolveSelectedModel(fallbackData);
+    return { success: true, data: [{ provider: selectedModel, result: null, error: error.message }] };
   }
 }
 
 // ── Multi-Screenshot Analysis (Coding Mode) ─────
 async function handleMultiAnalysis(screenshots, pageText, customPrompt) {
   try {
-    const data = await chrome.storage.local.get(['GEMINI_API_KEY', 'EXTENSION_ENABLED']);
+    const data = await chrome.storage.local.get(['GEMINI_API_KEY', 'NVIDIA_API_KEY', 'SELECTED_MODEL', 'EXTENSION_ENABLED']);
 
     if (data.EXTENSION_ENABLED === false) {
       return { error: "Extension is disabled." };
     }
 
-    if (!data.GEMINI_API_KEY) {
+    const selectedModel = resolveSelectedModel(data);
+    if (selectedModel === 'qwen' && !data.NVIDIA_API_KEY) {
+      return { error: "Qwen API Key not configured." };
+    }
+    if (selectedModel === 'gemini' && !data.GEMINI_API_KEY) {
       return { error: "Gemini API Key not configured." };
     }
 
@@ -79,25 +105,37 @@ async function handleMultiAnalysis(screenshots, pageText, customPrompt) {
       return { error: "No screenshots captured." };
     }
 
-    const result = await callGeminiAPI(data.GEMINI_API_KEY, screenshots, customPrompt, pageText);
-    return { success: true, data: [{ provider: 'gemini', result, error: null }] };
+    let result;
+    if (selectedModel === 'qwen') {
+      result = await callQwenAPI(data.NVIDIA_API_KEY, screenshots, customPrompt, pageText);
+    } else {
+      result = await callGeminiAPI(data.GEMINI_API_KEY, screenshots, customPrompt, pageText);
+    }
+    
+    return { success: true, data: [{ provider: selectedModel, result, error: null }] };
 
   } catch (error) {
     console.error("Multi-analysis failed:", error);
-    return { success: true, data: [{ provider: 'gemini', result: null, error: error.message }] };
+    const fallbackData = await chrome.storage.local.get(['GEMINI_API_KEY', 'NVIDIA_API_KEY', 'SELECTED_MODEL']);
+    const selectedModel = resolveSelectedModel(fallbackData);
+    return { success: true, data: [{ provider: selectedModel, result: null, error: error.message }] };
   }
 }
 
 // ── Text Selection Analysis (Selection Mode) ─────
 async function handleSelectionAnalysis(text, customPrompt) {
   try {
-    const data = await chrome.storage.local.get(['GEMINI_API_KEY', 'EXTENSION_ENABLED']);
+    const data = await chrome.storage.local.get(['GEMINI_API_KEY', 'NVIDIA_API_KEY', 'SELECTED_MODEL', 'EXTENSION_ENABLED']);
 
     if (data.EXTENSION_ENABLED === false) {
       return { error: "Extension is disabled." };
     }
 
-    if (!data.GEMINI_API_KEY) {
+    const selectedModel = resolveSelectedModel(data);
+    if (selectedModel === 'qwen' && !data.NVIDIA_API_KEY) {
+      return { error: "Qwen API Key not configured." };
+    }
+    if (selectedModel === 'gemini' && !data.GEMINI_API_KEY) {
       return { error: "Gemini API Key not configured." };
     }
 
@@ -105,14 +143,22 @@ async function handleSelectionAnalysis(text, customPrompt) {
       return { error: "No text selected." };
     }
 
-    console.log("Selection mode - sending text to Gemini:", text.substring(0, 100));
+    console.log("Selection mode - sending text to " + selectedModel + ":", text.substring(0, 100));
 
-    const result = await callGeminiTextOnly(data.GEMINI_API_KEY, customPrompt, text);
-    return { success: true, data: [{ provider: 'gemini', result, error: null }] };
+    let result;
+    if (selectedModel === 'qwen') {
+      result = await callQwenTextOnly(data.NVIDIA_API_KEY, customPrompt, text);
+    } else {
+      result = await callGeminiTextOnly(data.GEMINI_API_KEY, customPrompt, text);
+    }
+    
+    return { success: true, data: [{ provider: selectedModel, result, error: null }] };
 
   } catch (error) {
     console.error("Selection analysis failed:", error);
-    return { success: true, data: [{ provider: 'gemini', result: null, error: error.message }] };
+    const fallbackData = await chrome.storage.local.get(['GEMINI_API_KEY', 'NVIDIA_API_KEY', 'SELECTED_MODEL']);
+    const selectedModel = resolveSelectedModel(fallbackData);
+    return { success: true, data: [{ provider: selectedModel, result: null, error: error.message }] };
   }
 }
 
@@ -230,4 +276,156 @@ async function callGeminiAPI(apiKey, screenshotUrls, promptText, pageText) {
   }
 
   return json.candidates[0].content.parts[0].text;
+}
+
+// ── Qwen API (multi-image support) ──────────────
+async function callQwenAPI(apiKey, screenshotUrls, promptText, pageText) {
+  const invokeUrl = "https://integrate.api.nvidia.com/v1/chat/completions";
+  const model = "qwen/qwen3.5-122b-a10b";
+
+  // Build combined prompt with page text if available
+  const fullPrompt = pageText
+    ? `${promptText}\n\n--- PAGE TEXT ---\n${pageText.substring(0, 8000)}`
+    : promptText;
+
+  // Build content parts: text + images
+  const content = [{ type: "text", text: fullPrompt }];
+
+  if (screenshotUrls && screenshotUrls.length > 0) {
+    for (const dataUrl of screenshotUrls) {
+      if (dataUrl) {
+        const base64Data = dataUrl.split(',')[1];
+        if (base64Data) {
+          content.push({
+            type: "image_url",
+            image_url: {
+              url: dataUrl
+            }
+          });
+        }
+      }
+    }
+  }
+
+  const headers = {
+    "Authorization": `Bearer ${apiKey}`,
+    "Content-Type": "application/json"
+  };
+
+  const payload = {
+    model: model,
+    messages: [
+      {
+        role: "user",
+        content: content
+      }
+    ],
+    max_tokens: 16384,
+    temperature: 0.60,
+    top_p: 0.95,
+    stream: false
+  };
+
+  const response = await fetch(invokeUrl, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    let errorMsg = `Qwen API Error (${response.status})`;
+    try {
+      const errorBody = await response.json();
+      if (errorBody.error && errorBody.error.message) {
+        errorMsg += `: ${errorBody.error.message}`;
+      }
+    } catch (e) {
+      if (response.statusText) errorMsg += `: ${response.statusText}`;
+    }
+    throw new Error(errorMsg);
+  }
+
+  const json = await response.json();
+
+  if (!json.choices || !json.choices[0] || !json.choices[0].message) {
+    throw new Error("Qwen API generated no content.");
+  }
+
+  return json.choices[0].message.content;
+}
+
+// ── Qwen Text-Only API (Selection Mode) ─────────
+async function callQwenTextOnly(apiKey, promptText, selectedText) {
+  const invokeUrl = "https://integrate.api.nvidia.com/v1/chat/completions";
+  const model = "qwen/qwen3.5-122b-a10b";
+
+  const fullPrompt = `${promptText}\n\n${selectedText.substring(0, 8000)}`;
+
+  const headers = {
+    "Authorization": `Bearer ${apiKey}`,
+    "Content-Type": "application/json"
+  };
+
+  const payload = {
+    model: model,
+    messages: [
+      {
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: fullPrompt
+          }
+        ]
+      }
+    ],
+    max_tokens: 16384,
+    temperature: 0.60,
+    top_p: 0.95,
+    stream: false
+  };
+
+  console.log("Calling Qwen API for text-only...");
+
+  const controller = new AbortController();
+  const timeoutHandle = setTimeout(() => controller.abort(), 25000);
+
+  try {
+    const response = await fetch(invokeUrl, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutHandle);
+
+    if (!response.ok) {
+      let errorMsg = `Qwen API Error (${response.status})`;
+      try {
+        const errorBody = await response.json();
+        if (errorBody.error && errorBody.error.message) {
+          errorMsg += `: ${errorBody.error.message}`;
+        }
+      } catch (e) {
+        if (response.statusText) errorMsg += `: ${response.statusText}`;
+      }
+      throw new Error(errorMsg);
+    }
+
+    const json = await response.json();
+
+    if (!json.choices || !json.choices[0] || !json.choices[0].message) {
+      throw new Error("Qwen API generated no content.");
+    }
+
+    console.log("Qwen API response received.");
+    return json.choices[0].message.content;
+  } catch (err) {
+    clearTimeout(timeoutHandle);
+    if (err.name === 'AbortError') {
+      throw new Error('Qwen API request timed out after 25 seconds.');
+    }
+    throw err;
+  }
 }

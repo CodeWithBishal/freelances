@@ -13,7 +13,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-  bool _isOnlinePuja = false;
   final PageController _heroPageCtrl = PageController();
   final PageController _darshanPageCtrl = PageController();
   int _heroPage = 0;
@@ -22,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen>
   late TabController _serviceTabCtrl;
 
   final List<String> _serviceTabs = [
-    'All', 'Satyanarayan', 'Griha Pravesh', 'Marriage', 'Online', 'Darshan',
+    'All', 'Satyanarayan', 'Griha Pravesh', 'Marriage', 'Darshan',
   ];
 
   @override
@@ -100,35 +99,7 @@ class _HomeScreenState extends State<HomeScreen>
                     ],
                   ),
                   const Spacer(),
-                  // Online / Offline toggle
-                  GestureDetector(
-                    onTap: () => setState(() => _isOnlinePuja = !_isOnlinePuja),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: _isOnlinePuja ? AppColors.secondary : AppColors.primary,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: AppColors.softShadow,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(_isOnlinePuja ? '💻' : '📍',
-                              style: const TextStyle(fontSize: 12)),
-                          const SizedBox(width: 5),
-                          Text(
-                            _isOnlinePuja ? 'Online' : 'Offline',
-                            style: AppTextStyles.caption.copyWith(
-                              color: _isOnlinePuja ? AppColors.card : AppColors.textPrimary,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // Online / Offline toggle removed
                   const SizedBox(width: 8),
                   Stack(
                     clipBehavior: Clip.none,
@@ -303,9 +274,6 @@ class _HomeScreenState extends State<HomeScreen>
       _HeroSlide('🛕', 'VIP Temple\nDarshan Booking', 'Skip queues — fast entry QR pass',
           const LinearGradient(colors: [Color(0xFF0C831F), Color(0xFF0A6018)],
               begin: Alignment.topLeft, end: Alignment.bottomRight)),
-      _HeroSlide('💻', 'Online Pooja\nServices', 'Live sacred rituals from anywhere',
-          const LinearGradient(colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
-              begin: Alignment.topLeft, end: Alignment.bottomRight)),
       _HeroSlide('🎊', 'Festival Special\nPoojas', 'Exclusive packages for every occasion',
           const LinearGradient(colors: [Color(0xFFE23744), Color(0xFFC02030)],
               begin: Alignment.topLeft, end: Alignment.bottomRight)),
@@ -413,7 +381,7 @@ class _HomeScreenState extends State<HomeScreen>
     final allServices = <String, List<_ServiceItem>>{
       'All': [
         _ServiceItem('🪔', 'Satyanarayan'), _ServiceItem('🏠', 'Griha Pravesh'),
-        _ServiceItem('💍', 'Marriage'), _ServiceItem('💻', 'Online Pooja'),
+        _ServiceItem('💍', 'Marriage'),
         _ServiceItem('🛕', 'Darshan'), _ServiceItem('🌙', 'Navgrah Shanti'),
         _ServiceItem('🔱', 'Rudrabhishek'), _ServiceItem('🌺', 'Durga Puja'),
       ],
@@ -428,10 +396,6 @@ class _HomeScreenState extends State<HomeScreen>
       'Marriage': [
         _ServiceItem('💍', 'Vivah Puja'), _ServiceItem('📿', 'Kundali Match'),
         _ServiceItem('🎊', 'Mehendi Ritual'),
-      ],
-      'Online': [
-        _ServiceItem('💻', 'Live Satyanarayan'), _ServiceItem('📱', 'Video Havan'),
-        _ServiceItem('🙏', 'E-Prasad'),
       ],
       'Darshan': [
         _ServiceItem('🛕', 'Tirupati'), _ServiceItem('✨', 'Kashi'),
@@ -990,7 +954,7 @@ class _HomeScreenState extends State<HomeScreen>
     ];
 
     return SizedBox(
-      height: 162,
+      height: 178, // Increased from 162
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
@@ -999,15 +963,22 @@ class _HomeScreenState extends State<HomeScreen>
         itemBuilder: (_, i) {
           final p = products[i];
           return Container(
-            width: 118,
+            width: 124, // Slightly wider
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: AppColors.card,
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(20), // Modernized border radius
               border: Border.all(color: AppColors.border),
-              boxShadow: AppColors.softShadow,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withOpacity(0.08),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                )
+              ], // Slightly more pronounced vibrant shadow
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distribute space instead of Spacer()
               children: [
                 Stack(
                   alignment: Alignment.topRight,
@@ -1015,7 +986,7 @@ class _HomeScreenState extends State<HomeScreen>
                     Container(
                       width: 58, height: 58,
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
+                        color: AppColors.primary.withOpacity(0.12), // Slightly richer background
                         shape: BoxShape.circle,
                       ),
                       child: Center(
@@ -1035,28 +1006,30 @@ class _HomeScreenState extends State<HomeScreen>
                 Text(p.label,
                     style: AppTextStyles.labelSmall.copyWith(
                         color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w600, fontSize: 11),
+                        fontWeight: FontWeight.w700, // Boldened
+                        fontSize: 12), // Slightly larger
                     textAlign: TextAlign.center,
                     maxLines: 1, overflow: TextOverflow.ellipsis),
                 Text(p.price,
                     style: AppTextStyles.caption.copyWith(
-                        color: AppColors.secondary, fontWeight: FontWeight.w700)),
-                const Spacer(),
+                        color: AppColors.secondary, fontWeight: FontWeight.w800)), // Thicker price font
+                const SizedBox(height: 6),
                 SizedBox(
                   width: double.infinity,
+                  height: 32, // Fixed height for button
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.textPrimary,
-                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      padding: EdgeInsets.zero, // Removed vertical padding as height is fixed
                       minimumSize: Size.zero,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
+                          borderRadius: BorderRadius.circular(10)), // Matched radius
                       elevation: 0,
                     ),
                     child: const Text('+ Add',
-                        style: TextStyle(fontWeight: FontWeight.w800, fontSize: 11)),
+                        style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12)),
                   ),
                 ),
               ],

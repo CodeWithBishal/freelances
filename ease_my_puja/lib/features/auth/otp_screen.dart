@@ -107,21 +107,67 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
               ),
 
-              // Animated icon / Graphic area
+              // Modern Animated Graphic Area
               Expanded(
                 child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(32),
-                    decoration: BoxDecoration(
-                      color: AppColors.card.withOpacity(0.95),
-                      shape: BoxShape.circle,
-                      boxShadow: AppColors.cardShadow,
-                    ),
-                    child: const Icon(
-                      Icons.mark_email_read_rounded,
-                      size: 80,
-                      color: AppColors.primaryDark,
-                    ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Outer glow
+                      TweenAnimationBuilder<double>(
+                        tween: Tween(begin: 0.0, end: 1.0),
+                        duration: const Duration(seconds: 2),
+                        builder: (context, value, child) {
+                          return Container(
+                            width: 180 + (value * 20),
+                            height: 180 + (value * 20),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: RadialGradient(
+                                colors: [
+                                  AppColors.primary.withOpacity(0.3 * (1 - value)),
+                                  AppColors.primary.withOpacity(0.0),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      // Middle circle
+                      Container(
+                        width: 140,
+                        height: 140,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.card.withOpacity(0.8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withOpacity(0.2),
+                              blurRadius: 30,
+                              spreadRadius: 10,
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Core icon container
+                      Container(
+                        padding: const EdgeInsets.all(28),
+                        decoration: BoxDecoration(
+                          color: AppColors.card,
+                          shape: BoxShape.circle,
+                          boxShadow: AppColors.cardShadow,
+                          border: Border.all(
+                            color: AppColors.primary.withOpacity(0.1),
+                            width: 2,
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.mark_email_read_rounded,
+                          size: 64,
+                          color: AppColors.primaryDark,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -138,28 +184,36 @@ class _OtpScreenState extends State<OtpScreen> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Verify OTP 🔐', style: AppTextStyles.h1.copyWith(fontSize: 28)),
+                    Row(
+                      children: [
+                        Text('Verify OTP', style: AppTextStyles.h1.copyWith(fontSize: 28)),
+                        const SizedBox(width: 8),
+                        const Text('🔐', style: TextStyle(fontSize: 24)),
+                      ],
+                    ),
                     const SizedBox(height: 12),
                     RichText(
                       text: TextSpan(
                         style: AppTextStyles.bodyMedium.copyWith(
                           color: AppColors.textSecondary,
-                          height: 1.4,
+                          height: 1.5,
+                          letterSpacing: 0.2,
                         ),
                         children: [
-                          const TextSpan(text: 'We\'ve sent a 6-digit code to\n'),
+                          const TextSpan(text: 'We\'ve sent a 6-digit verification code to\n'),
                           TextSpan(
                             text: '+91 ${widget.phone}',
-                            style: AppTextStyles.bodyMedium.copyWith(
+                            style: AppTextStyles.bodyLarge.copyWith(
                               color: AppColors.textPrimary,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 0.5,
                             ),
                           ),
                         ],
                       ),
                     ),
 
-                    const SizedBox(height: 36),
+                    const SizedBox(height: 40),
 
                     // 6-digit OTP boxes
                     Row(
@@ -178,7 +232,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
                     const SizedBox(height: 24),
 
-                    // Resend
+                    // Resend Section
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -190,35 +244,51 @@ class _OtpScreenState extends State<OtpScreen> {
                           ),
                         ),
                         _resendCountdown > 0
-                            ? Text(
-                                '00:${_resendCountdown.toString().padLeft(2, '0')}',
-                                style: AppTextStyles.bodyLarge.copyWith(
-                                  color: AppColors.textHint,
-                                  fontWeight: FontWeight.w600,
+                            ? Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: AppColors.border.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.timer_outlined, size: 14, color: AppColors.textHint),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      '00:${_resendCountdown.toString().padLeft(2, '0')}',
+                                      style: AppTextStyles.bodySmall.copyWith(
+                                        color: AppColors.textSecondary,
+                                        fontWeight: FontWeight.w700,
+                                        fontFeatures: [const FontFeature.tabularFigures()],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               )
-                            : GestureDetector(
-                                onTap: () => setState(() => _resendCountdown = 30),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.secondary.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(color: AppColors.secondary.withOpacity(0.3)),
+                            : TextButton(
+                                onPressed: () {
+                                  setState(() => _resendCountdown = 30);
+                                  _startTimer();
+                                },
+                                style: TextButton.styleFrom(
+                                  foregroundColor: AppColors.primaryDark,
+                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
-                                  child: Text(
-                                    'Resend OTP',
-                                    style: AppTextStyles.bodySmall.copyWith(
-                                      color: AppColors.secondary,
-                                      fontWeight: FontWeight.w800,
-                                    ),
+                                ),
+                                child: Text(
+                                  'Resend OTP',
+                                  style: AppTextStyles.bodySmall.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    decoration: TextDecoration.underline,
                                   ),
                                 ),
                               ),
                       ],
                     ),
 
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 48),
 
                     PrimaryButton(
                       label: 'Verify & Continue',
@@ -226,27 +296,36 @@ class _OtpScreenState extends State<OtpScreen> {
                       isLoading: _isLoading,
                     ),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 28),
                     SafeArea(
                       top: false,
                       child: Center(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.verified_user_rounded,
-                              size: 16,
-                              color: AppColors.success,
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Your number is strictly confidential',
-                              style: AppTextStyles.caption.copyWith(
-                                color: AppColors.textSecondary,
-                                fontWeight: FontWeight.w500,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: AppColors.success.withOpacity(0.05),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: AppColors.success.withOpacity(0.1)),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.security_rounded,
+                                size: 14,
+                                color: AppColors.success,
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 8),
+                              Text(
+                                'Your number is strictly confidential',
+                                style: AppTextStyles.caption.copyWith(
+                                  color: AppColors.success.withOpacity(0.8),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -261,7 +340,7 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 }
 
-class _OtpBox extends StatelessWidget {
+class _OtpBox extends StatefulWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
   final ValueChanged<String> onChanged;
@@ -277,49 +356,122 @@ class _OtpBox extends StatelessWidget {
   });
 
   @override
+  State<_OtpBox> createState() => _OtpBoxState();
+}
+
+class _OtpBoxState extends State<_OtpBox> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    )..repeat(reverse: true);
+
+    widget.focusNode.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange() {
+    if (mounted) setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    widget.focusNode.removeListener(_onFocusChange);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    bool hasFocus = widget.focusNode.hasFocus;
+
     return KeyboardListener(
       focusNode: FocusNode(),
-      onKeyEvent: onKey,
-      child: SizedBox(
-        width: 40,
-        height: 56,
-        child: TextField(
-          controller: controller,
-          focusNode: focusNode,
-          onChanged: onChanged,
-          keyboardType: TextInputType.number,
-          maxLength: 1,
-          textAlign: TextAlign.center,
-          style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
-          buildCounter:
-              (_, {required currentLength, required isFocused, maxLength}) =>
-                  null,
-          decoration: InputDecoration(
-            counterText: '',
-            filled: true,
-            fillColor: filled ? AppColors.success.withOpacity(0.08) : AppColors.background,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide.none,
+      onKeyEvent: widget.onKey,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOutCubic,
+            width: 52,
+            height: 64,
+            decoration: BoxDecoration(
+              color: hasFocus 
+                  ? AppColors.card 
+                  : (widget.filled ? AppColors.primary.withOpacity(0.08) : AppColors.background),
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: hasFocus
+                    ? AppColors.primaryDark
+                    : (widget.filled ? AppColors.primaryDark.withOpacity(0.6) : AppColors.border),
+                width: hasFocus ? 2.5 : 1.5,
+              ),
+              boxShadow: hasFocus
+                  ? [
+                      BoxShadow(
+                        color: AppColors.primary.withOpacity(0.2),
+                        blurRadius: 15,
+                        offset: const Offset(0, 8),
+                      )
+                    ]
+                  : (widget.filled
+                      ? [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.03),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          )
+                        ]
+                      : null),
             ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(
-                color: filled ? AppColors.success.withOpacity(0.6) : AppColors.border,
-                width: filled ? 2 : 1,
+            child: Center(
+              child: TextField(
+                controller: widget.controller,
+                focusNode: widget.focusNode,
+                onChanged: widget.onChanged,
+                keyboardType: TextInputType.number,
+                maxLength: 1,
+                textAlign: TextAlign.center,
+                cursorWidth: 0, // Custom cursor via Stack
+                showCursor: false,
+                style: AppTextStyles.h2.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 26,
+                  letterSpacing: 2,
+                ),
+                buildCounter:
+                    (_, {required currentLength, required isFocused, maxLength}) =>
+                        null,
+                decoration: const InputDecoration(
+                  counterText: '',
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.zero,
+                ),
               ),
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(
-                color: AppColors.secondary,
-                width: 2.5,
-              ),
-            ),
-            contentPadding: EdgeInsets.zero,
           ),
-        ),
+          // Animated Underline Indicator
+          if (hasFocus && !widget.filled)
+            Positioned(
+              bottom: 12,
+              child: FadeTransition(
+                opacity: _animationController,
+                child: Container(
+                  width: 20,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryDark,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Setup page
   const setupGeminiInput = document.getElementById('setup-gemini');
+  const setupNvidiaInput = document.getElementById('setup-nvidia');
+  const setupModelSelect = document.getElementById('setup-model');
   const setupSaveBtn = document.getElementById('setup-save-btn');
 
   // Home page
@@ -25,10 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const settingsBack = document.getElementById('settings-back');
   const settingsEnabled = document.getElementById('settings-enabled');
   const settingsGeminiInput = document.getElementById('settings-gemini');
+  const settingsNvidiaInput = document.getElementById('settings-nvidia');
+  const settingsModelSelect = document.getElementById('settings-model');
   const settingsSaveBtn = document.getElementById('settings-save-btn');
 
   // ── State ─────────────────────────────────────
   let selectedQuizOption = null; // 'auto' | 'manual'
+  let selectedModel = 'gemini'; // 'gemini' | 'qwen'
 
   // ── Navigation ────────────────────────────────
   function showPage(id) {
@@ -45,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Storage helpers ───────────────────────────
   const STORAGE_KEYS = [
-    'GEMINI_API_KEY',
+    'GEMINI_API_KEY', 'NVIDIA_API_KEY', 'SELECTED_MODEL',
     'EXTENSION_ENABLED', 'SETUP_COMPLETE', 'ACTIVE_MODE', 'QUIZ_AUTO_CAPTURE'
   ];
 
@@ -65,8 +70,29 @@ document.addEventListener('DOMContentLoaded', () => {
   async function init() {
     const data = await loadStorage();
 
-    if (!data.SETUP_COMPLETE || !data.GEMINI_API_KEY) {
+    const hasGeminiKey = !!(data.GEMINI_API_KEY && data.GEMINI_API_KEY.trim());
+    const hasQwenKey = !!(data.NVIDIA_API_KEY && data.NVIDIA_API_KEY.trim());
+
+    if (!data.SELECTED_MODEL && hasQwenKey && !hasGeminiKey) {
+      selectedModel = 'qwen';
+    }
+
+    // Load selected model
+    if (data.SELECTED_MODEL) {
+      selectedModel = data.SELECTED_MODEL;
+      if (setupModelSelect) setupModelSelect.value = selectedModel;
+      if (settingsModelSelect) settingsModelSelect.value = selectedModel;
+    }
+
+    if (setupModelSelect) setupModelSelect.value = selectedModel;
+    if (settingsModelSelect) settingsModelSelect.value = selectedModel;
+
+    const hasRequiredKey = selectedModel === 'qwen' ? hasQwenKey : hasGeminiKey;
+    const isSetupComplete = !!data.SETUP_COMPLETE && hasRequiredKey;
+
+    if (!isSetupComplete) {
       if (data.GEMINI_API_KEY) setupGeminiInput.value = data.GEMINI_API_KEY;
+      if (data.NVIDIA_API_KEY) setupNvidiaInput.value = data.NVIDIA_API_KEY;
       validateSetup();
       showPage('page-setup');
     } else {
@@ -87,19 +113,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Setup Page Logic ──────────────────────────
   function validateSetup() {
-    setupSaveBtn.disabled = !setupGeminiInput.value.trim();
+    const model = setupModelSelect?.value || 'gemini';
+    const hasRequiredKey = model === 'qwen'
+      ? setupNvidiaInput.value.trim()
+      : setupGeminiInput.value.trim();
+    setupSaveBtn.disabled = !hasRequiredKey;
   }
 
-  setupGeminiInput.addEventListener('input', validateSetup);
+  setupGeminiInput?.addEventListener('input', validateSetup);
+  setupNvidiaInput?.addEventListener('input', validateSetup);
+  setupModelSelect?.addEventListener('change', validateSetup);
 
   setupSaveBtn.addEventListener('click', async () => {
+    const model = setupModelSelect?.value || 'gemini';
     const config = {
-      GEMINI_API_KEY: setupGeminiInput.value.trim(),
       EXTENSION_ENABLED: true,
-      SETUP_COMPLETE: true
+      SETUP_COMPLETE: true,
+      SELECTED_MODEL: model
     };
+    
+    if (model === 'qwen') {
+      config.NVIDIA_API_KEY = setupNvidiaInput.value.trim();
+    } else {
+      config.GEMINI_API_KEY = setupGeminiInput.value.trim();
+    }
+    
     await saveStorage(config);
-    showToast('Setup complete! 🎉');
+    showToast(`Setup complete with ${model.toUpperCase()}! 🎉`);
     setTimeout(() => showHomePage(config), 300);
   });
 
@@ -128,6 +168,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = await loadStorage();
     settingsEnabled.checked = data.EXTENSION_ENABLED !== false;
     if (data.GEMINI_API_KEY) settingsGeminiInput.value = data.GEMINI_API_KEY;
+    if (data.NVIDIA_API_KEY) settingsNvidiaInput.value = data.NVIDIA_API_KEY;
+    if (data.SELECTED_MODEL) {
+      settingsModelSelect.value = data.SELECTED_MODEL;
+      selectedModel = data.SELECTED_MODEL;
+    }
     showPage('page-settings');
   });
 
@@ -173,17 +218,35 @@ document.addEventListener('DOMContentLoaded', () => {
     showHomePage(data);
   });
 
+  settingsModelSelect?.addEventListener('change', async (e) => {
+    selectedModel = e.target.value;
+    await saveStorage({ SELECTED_MODEL: selectedModel });
+  });
+
   settingsSaveBtn.addEventListener('click', async () => {
-    const key = settingsGeminiInput.value.trim();
-    if (!key) {
-      showToast('Enter your Gemini API key');
-      return;
+    const model = settingsModelSelect?.value || 'gemini';
+    const config = {
+      EXTENSION_ENABLED: settingsEnabled.checked,
+      SELECTED_MODEL: model
+    };
+    
+    if (model === 'qwen') {
+      const nvidiaKey = settingsNvidiaInput.value.trim();
+      if (!nvidiaKey) {
+        showToast('Enter your NVIDIA API key');
+        return;
+      }
+      config.NVIDIA_API_KEY = nvidiaKey;
+    } else {
+      const geminiKey = settingsGeminiInput.value.trim();
+      if (!geminiKey) {
+        showToast('Enter your Gemini API key');
+        return;
+      }
+      config.GEMINI_API_KEY = geminiKey;
     }
 
-    await saveStorage({
-      GEMINI_API_KEY: key,
-      EXTENSION_ENABLED: settingsEnabled.checked
-    });
+    await saveStorage(config);
     showToast('Settings saved! ✅');
   });
 

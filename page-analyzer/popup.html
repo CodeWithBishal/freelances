@@ -177,6 +177,26 @@
       box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
     }
 
+    .api-input[type="text"],
+    .api-input[type="password"],
+    .api-input[type="email"],
+    .api-input select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 32px;
+    }
+
+    select.api-input {
+      cursor: pointer;
+    }
+
+    select.api-input option {
+      background: #1a1a2e;
+      color: #e0e0e8;
+    }
+
     /* ── Buttons ──────────────────────────────────── */
     .btn-primary {
       width: 100%;
@@ -529,7 +549,18 @@
     <div class="setup-hero">
       <div class="emoji">🚀</div>
       <h2>Welcome!</h2>
-      <p>Add your Gemini API key to get started.<br>You can always change it later.</p>
+      <p>Choose an AI model and add your API key to get started.<br>You can always change it later.</p>
+    </div>
+
+    <div class="api-group glass">
+      <div class="api-group-header">
+        <span class="badge">🤖</span>
+        <span>Select AI Model</span>
+      </div>
+      <select class="api-input" id="setup-model" style="padding: 10px 14px;">
+        <option value="gemini">Gemini (Google)</option>
+        <option value="qwen">Qwen 3.5 (NVIDIA)</option>
+      </select>
     </div>
 
     <div class="api-group glass">
@@ -539,9 +570,19 @@
         <a href="https://aistudio.google.com/app/apikey" target="_blank">Get key →</a>
       </div>
       <input type="password" class="api-input" id="setup-gemini" placeholder="AIzaSy..." />
-      <button class="btn-primary" id="setup-save-btn" disabled>Get Started</button>
-      <div class="hint">Enter your Gemini API key to continue</div>
     </div>
+
+    <div class="api-group glass">
+      <div class="api-group-header">
+        <span class="badge">🟦</span>
+        <span>NVIDIA API Key</span>
+        <a href="https://build.nvidia.com/" target="_blank">Get key →</a>
+      </div>
+      <input type="password" class="api-input" id="setup-nvidia" placeholder="nvapi-..." />
+    </div>
+
+    <button class="btn-primary" id="setup-save-btn" disabled>Get Started</button>
+    <div class="hint">Enter your API key for the selected model</div>
   </div>
 
   <!-- ═══════ PAGE: HOME ═══════ -->
@@ -579,7 +620,7 @@
       </div>
     </div>
 
-    <div class="footer"><span>Page Insight Analyzer • Gemini AI</span></div>
+    <div class="footer"><span>Page Insight Analyzer • Multi-AI</span></div>
   </div>
 
   <!-- ═══════ PAGE: QUIZ OPTIONS ═══════ -->
@@ -626,11 +667,31 @@
 
       <div class="api-group glass">
         <div class="api-group-header">
+          <span class="badge">🤖</span>
+          <span>Select AI Model</span>
+        </div>
+        <select class="api-input" id="settings-model" style="padding: 10px 14px;">
+          <option value="gemini">Gemini (Google)</option>
+          <option value="qwen">Qwen 3.5 (NVIDIA)</option>
+        </select>
+      </div>
+
+      <div class="api-group glass">
+        <div class="api-group-header">
           <span class="badge">🔷</span>
           <span>Gemini</span>
           <a href="https://aistudio.google.com/app/apikey" target="_blank">Get key →</a>
         </div>
         <input type="password" class="api-input" id="settings-gemini" placeholder="AIzaSy..." />
+      </div>
+
+      <div class="api-group glass">
+        <div class="api-group-header">
+          <span class="badge">🟦</span>
+          <span>NVIDIA API Key</span>
+          <a href="https://build.nvidia.com/" target="_blank">Get key →</a>
+        </div>
+        <input type="password" class="api-input" id="settings-nvidia" placeholder="nvapi-..." />
       </div>
 
       <button class="btn-primary" id="settings-save-btn">Save Changes</button>
