@@ -39,6 +39,9 @@ function resolveSelectedModel(data) {
   return 'gemini';
 }
 
+// Use one stable Gemini model across all request types.
+const GEMINI_MODEL = 'gemini-2.5-flash';
+
 // ── Single Screenshot Analysis (Quiz Mode) ──────
 async function handleAnalysis(tabId, customPrompt) {
   try {
@@ -164,7 +167,7 @@ async function handleSelectionAnalysis(text, customPrompt) {
 
 // ── Gemini Text-Only API (Selection Mode) ───────
 async function callGeminiTextOnly(apiKey, promptText, selectedText) {
-  const modelVersion = 'gemini-3-flash-preview';
+  const modelVersion = GEMINI_MODEL;
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelVersion}:generateContent?key=${apiKey}`;
 
   const fullPrompt = `${promptText}\n\n${selectedText.substring(0, 8000)}`;
@@ -221,7 +224,7 @@ async function callGeminiTextOnly(apiKey, promptText, selectedText) {
 
 // ── Gemini API (multi-image support) ────────────
 async function callGeminiAPI(apiKey, screenshotUrls, promptText, pageText) {
-  const modelVersion = 'gemini-2.5-flash';
+  const modelVersion = GEMINI_MODEL;
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelVersion}:generateContent?key=${apiKey}`;
 
   // Build combined prompt with page text if available

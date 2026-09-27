@@ -13,7 +13,7 @@ A Chrome extension that captures page screenshots and analyzes them using multip
 ## Supported AI Models
 
 ### 1. Gemini (Google AI)
-- **Model**: `gemini-2.0-flash-exp`
+- **Model**: `gemini-2.5-flash`
 - **Get API Key**: [Google AI Studio](https://aistudio.google.com/app/apikey)
 - **Free Tier**: Generous free usage limit
 
